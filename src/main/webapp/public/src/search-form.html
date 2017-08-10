@@ -1,0 +1,99 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+<dom-module id="search-form">
+  <template>
+
+    <style>
+
+      * {
+        font-family: 'Roboto', sans-serif;
+      }
+
+      p {
+        color: white;
+        display: inline-block;
+        float: right;
+        margin: 0 10px 0 0;
+      }
+
+      #container {
+        width: 200px;
+        height: 300px;
+        background-color: #328D4B;
+        padding: 10px;
+      }
+
+      input {
+        float: right;
+        width: 100px;
+      }
+
+      .form-line-container {
+        height: 50px;
+      }
+
+      .form-line-content {
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
+
+      #search-button {
+        background-color: rgb(107, 107, 107);
+        color: white;
+        float: right;
+      }
+
+      #search-button:hover {
+        background-color: #479C5E;
+      }
+
+    </style>
+
+    <div id="container">
+      <div class="form-line-container">
+        <input type="text"></input>
+        <p>Titel</p>
+      </div>
+
+      <div class="form-line-container">
+        <input type="text"></input>
+        <p>Auteur</p>
+      </div>
+
+      <div class="form-line-container">
+        <input type="text"></input>
+        <p>Categorie</p>
+      </div>
+
+
+      <div class="form-line-container">
+        <input type="text"></input>
+        <p>Uitgever</p>
+      </div>
+
+      <div class="form-line-container">
+        <input type="text"></input>
+        <p>ISBN</p>
+      </div>
+
+      <paper-button raised id="search-button" on-tap="showallbooks">Search</paper-button>
+    </div>
+
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "search-form",
+      showallbooks: function() {
+        window.location.href = "/SogyoLibrary/rest/books"
+      }
+    });
+  </script>
+
+</dom-module>
