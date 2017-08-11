@@ -1,8 +1,13 @@
 package com.model;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public class Book {
-	private int id;
-	private String title;
+	
+	@XmlElement private int id;
+	@XmlElement private String title;
+	
+	public Book() {}
 
 	public Book(int id, String title) {
 		this.id = id;

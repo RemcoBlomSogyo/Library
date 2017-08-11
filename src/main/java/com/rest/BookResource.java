@@ -1,5 +1,7 @@
 package com.rest;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -12,18 +14,28 @@ import com.model.Library;
 
 @Path("books")
 public class BookResource {
+	
+//	public BookResource() {
+//		
+//	}
+	
 	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String getAllBooks() {
+	@Produces("application/json")
+	public Collection<Book> getAllBooks() {
 		List<Book> allBooks = Library.getAllBooks();
-		
-		String response = "<ul>";
-		
 		for (Book book : allBooks) {
-			response += ("<li>" + book.getId() + " - " + book.getTitle() + "</li>");
+			System.out.println(book.getId() + " " + book.getTitle());
 		}
+//		allBooks = Library.getAllBooks();
 		
-		response += "</ul>";
-		return response;
+//		String response = "<ul>";
+//		
+//		for (Book book : allBooks) {
+//			response += ("<li>" + book.getId() + " - " + book.getTitle() + "</li>");
+//		}
+//		
+//		response += "</ul>";
+//		return response;
+		return allBooks;
 	}
 }
