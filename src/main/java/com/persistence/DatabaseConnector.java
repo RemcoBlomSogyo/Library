@@ -11,7 +11,11 @@ public class DatabaseConnector {
 		try {
 //			Driver d = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			connection = DriverManager.getConnection("jdbc:sqlserver://localhost;databaseName=Library;user=javaLogin;password=javaLogin;integratedSecurity=true;");
+//			connection = DriverManager.getConnection("jdbc:sqlserver://localhost;databaseName=Library;user=javaLogin;password=javaLogin;integratedSecurity=true;");
+			String url = "jdbc:sqlserver://10.10.2.95:1433;databaseName=Library";
+			String sqlLogin = "javaLogin";
+			String sqlPassword = "javaLogin";
+			connection = DriverManager.getConnection(url, sqlLogin, sqlPassword);
 		} catch (SQLException se) {
 			se.printStackTrace();
 		} catch (ClassNotFoundException ce) {
