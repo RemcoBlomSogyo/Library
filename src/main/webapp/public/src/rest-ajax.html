@@ -1,0 +1,35 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="rest-ajax">
+  <template>
+    <template is="dom-repeat" items="[[books]]">
+   	  <span>{{item.id}}</span>
+      <span>{{item.title}}</span>
+      <br/>
+    </template>
+    <iron-ajax
+      id="requestBooks"
+      url="/SogyoLibrary/rest/books"
+      handle-as="json"
+      on-response="handleResponse">
+    </iron-ajax>
+  </template>
+
+  <script>
+    Polymer({
+      is:"rest-ajax",
+      properties: {
+        books: {
+          type: Array
+        }
+      },
+      ready: function() {
+        this.$.requestBooks.generateRequest();
+      },
+      handleResponse: function(data) {
+        this.books = data.detail.response;
+      }
+    })
+  </script>
+</dom-module>

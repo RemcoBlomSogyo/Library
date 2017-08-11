@@ -27,7 +27,7 @@ public class SearchServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("public/search.html");
+        RequestDispatcher view = request.getRequestDispatcher("public/src/search.html");
         System.out.println("getServlet");
 		view.forward(request, response);
 	}
