@@ -2,6 +2,7 @@ package com.persistence;
 
 import java.sql.*;
 //import com.microsoft.sqlserver.jdbc.*;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 public class DatabaseConnector {
 	private static Connection connection;
