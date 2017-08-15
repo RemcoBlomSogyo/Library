@@ -1,0 +1,26 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="library-header">
+  <template>
+    <style>
+    img {
+      float: left;
+    }
+      #navigation-bar {
+        height: 50px;
+        width: 100%;
+        background-color: green;
+        float: right;
+      }
+    </style>
+
+    <img src="public/images/logo_sogyo.jpg"/>
+    <div id="navigation-bar"></div>
+  </template>
+
+  <script>
+    Polymer({
+      is: "library-header"
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,57 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="list-item.html">
+
+<dom-module id="scrollable-list">
+  <template>
+
+    <style>
+      nav ul {
+        height: 400px;
+        width: 600px;
+        padding: 0;
+        overflow: hidden;
+        overflow-y: scroll;
+      }
+
+      list-item {
+        cursor: pointer;
+        cursor: hand;
+      }
+    </style>
+
+    <iron-ajax
+      id="requestBooks"
+      url="/SogyoLibrary/rest/books"
+      handle-as="json"
+      on-response="handleResponse">
+    </iron-ajax>
+
+    <nav>
+      <ul>
+        <template is="dom-repeat" items="[[books]]">
+          <list-item title={{item.title}} author={{item.title}} available={{item.id}} existing={{item.id}} on-tap="showDetailsBook"></list-item>
+        </template>
+      </ul>
+    </nav>
+  </template>
+
+  <script>
+    Polymer({
+      is: "scrollable-list",
+      properties: {
+        books: Array
+      },
+      ready: function() {
+        this.$.requestBooks.generateRequest();
+      },
+      handleResponse: function(data) {
+        this.books = data.detail.response;
+      },
+      showDetailsBook: function() {
+        window.location.href = "/SogyoLibrary"
+      }
+    });
+  </script>
+
+</dom-module>

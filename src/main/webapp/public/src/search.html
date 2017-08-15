@@ -1,9 +1,19 @@
+<!DOCTYPE html>
 <html>
   <head>
     <script src="public/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="public/src/library-header.html">
     <link rel="import" href="public/src/rest-ajax.html">
+    <link rel="import" href="public/src/search-form.html">
+    <link rel="import" href="public/src/scrollable-list.html">
+    <link rel="import" href="public/src/list-item.html">
+    <link rel="stylesheet" type="text/css" href="public/src/css/container-content.css">
   </head>
   <body>
-    <rest-ajax></rest-ajax>
+    <div id="container-content">
+      <library-header></library-header>
+      <search-form></search-form>
+      <scrollable-list></scrollable-list>
+    </div>
   </body>
 </html>
