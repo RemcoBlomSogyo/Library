@@ -9,8 +9,8 @@ import com.model.Book;
 public class DatabaseHandler {
 	
 	public static List<Book> getAllBooks() {
-		String query = "Select * from Book";
-		ResultSet resultSet = DatabaseConnector.executeQuery(query);
+		String sqlStatement = "Select * from Test;";
+		ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
 		
 		List<Book> books = new ArrayList<Book>();
 		try {
@@ -27,4 +27,20 @@ public class DatabaseHandler {
 			DatabaseConnector.disconnect();
 		}
 	}
+	
+	public static boolean addBook(Book book) {
+		String sqlStatement = "Insert into Books values (" 
+				+ book.getTitle() + ", "
+				+ book.getSubtitle() + ", "
+				+ book.getCategoryID() + ", "
+				+ book.getPublisherID() + ", "
+				+ book.getYearFirstPublication() + ", "
+				+ book.getISBN() + ", "
+				+ book.getPages() + ", "
+				+ book.getLanguage() + ", "
+				+ book.getImageCover() + ");";
+		int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
+		return rowsAffected >= 1;
+	}
 }
+

@@ -1,0 +1,44 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+<dom-module id="form-line">
+  <template>
+
+    <style>
+
+      p {
+        font-family: 'Roboto', sans-serif;
+        color: white;
+        display: inline-block;
+        float: right;
+        margin: 0 10px 0 0;
+      }
+
+      input {
+        float: right;
+        width: 200px;
+      }
+
+      .form-line-container {
+        height: 50px;
+      }
+
+    </style>
+
+    <div class="form-line-container">
+      <input type="text"></input>
+      <p>{{name}}</p>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "form-line",
+      properties: {
+        name: String
+      }
+    });
+  </script>
+
+</dom-module>

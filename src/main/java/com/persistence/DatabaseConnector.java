@@ -36,13 +36,14 @@ public class DatabaseConnector {
 	}
 	
 	// for insert, update and delete
-	public static void executeNonQuery(String sqlStatement) {
+	public static int executeNonQuery(String sqlStatement) {
 		connect();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
-			preparedStatement.executeUpdate();
+			return preparedStatement.executeUpdate();
 		} catch (SQLException se) {
 			se.printStackTrace();
+			return -1;
 		}
 	}
 	

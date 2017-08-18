@@ -1,41 +1,22 @@
 package com.rest;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import com.model.Book;
 import com.model.Library;
+import com.model.SuccessMessage;
 
-@Path("books")
+@Path("book")
 public class BookResource {
-	
-//	public BookResource() {
-//		
-//	}
-	
-	@GET
-	@Produces("application/json")
-	public Collection<Book> getAllBooks() {
-		List<Book> allBooks = Library.getAllBooks();
-		for (Book book : allBooks) {
-			System.out.println(book.getId() + " " + book.getTitle());
-		}
-//		allBooks = Library.getAllBooks();
 		
-//		String response = "<ul>";
-//		
-//		for (Book book : allBooks) {
-//			response += ("<li>" + book.getId() + " - " + book.getTitle() + "</li>");
-//		}
-//		
-//		response += "</ul>";
-//		return response;
-		return allBooks;
+	@POST @Path("/add")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public SuccessMessage addBook(Book book) {
+		boolean commandSucceeded = Library.addBook(book);
+		return new SuccessMessage(commandSucceeded);
 	}
 }

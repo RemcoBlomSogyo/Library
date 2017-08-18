@@ -9,7 +9,7 @@ import org.glassfish.jersey.test.TestProperties;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
-import com.rest.BookResource;
+import com.rest.BooksResource;
 
 public class RestTest extends JerseyTest {
 	
@@ -17,7 +17,7 @@ public class RestTest extends JerseyTest {
 	public Application configure() {
 		enable(TestProperties.LOG_TRAFFIC);
 		enable(TestProperties.DUMP_ENTITY);
-		return new ResourceConfig(BookResource.class);
+		return new ResourceConfig(BooksResource.class);
 	}
 	
 	@Test

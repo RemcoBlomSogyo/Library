@@ -1,21 +1,42 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 <dom-module id="library-header">
   <template>
     <style>
-    img {
-      float: left;
-    }
+      #container-content {
+        overflow: auto;
+      }
+
+      #container-logo {
+
+      }
+
+      img {
+
+      }
+
+      h1 {
+        font-family: "Roboto", sans-serif;
+        display: inline-block;
+        
+
+      }
+
       #navigation-bar {
         height: 50px;
         width: 100%;
-        background-color: green;
-        float: right;
+        background-color: #007936;
       }
     </style>
 
-    <img src="public/images/logo_sogyo.jpg"/>
-    <div id="navigation-bar"></div>
+    <div id="container-content">
+      <div id="container-logo">
+        <img src="public/images/logo_sogyo.jpg"/>
+        <h1>Library</h1>
+      </div>
+      <div id="navigation-bar"></div>
+    </div>
   </template>
 
   <script>
