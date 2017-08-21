@@ -11,7 +11,7 @@ import com.model.SuccessMessage;
 
 @Path("book")
 public class BookResource {
-		
+
 	@POST @Path("/add")
 	@Consumes("application/json")
 	@Produces("application/json")

@@ -21,7 +21,7 @@ public class RestTest extends JerseyTest {
 	}
 	
 	@Test
-	public void bla() {
+	public void testMethodMakesDatabaseConnectionGivesStatus200() {
 		Response output = target("/books").request().get();
 		System.out.println(output.getStatus());
 		Assert.assertEquals(200, output.getStatus());

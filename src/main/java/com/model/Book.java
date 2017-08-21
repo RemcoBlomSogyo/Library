@@ -33,7 +33,7 @@ public class Book {
 	public Book(int id, String title, String subtitle, int categoryID, 
 			int publisherID, int yearFirstPublication, String ISBN,
 			int pages, String language, Image imageCover) {
-		if (inputIsValid(title, categoryID, publisherID, ISBN)) {
+//		if (inputIsValid(title, categoryID, publisherID, ISBN)) {
 			this.id = id;
 			this.title = title;
 			this.subtitle = subtitle;
@@ -44,9 +44,9 @@ public class Book {
 			this.pages = pages;
 			this.language = language;
 			this.imageCover = imageCover;
-		} else {
-			throw new IllegalArgumentException();
-		}
+//		} else {
+//			throw new IllegalArgumentException();
+//		}
 	}
 	
 	public int getId() {

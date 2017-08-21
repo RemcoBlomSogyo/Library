@@ -1,22 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="form-line.html">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 <dom-module id="search-form">
   <template>
 
     <style>
-
-      * {
-        font-family: 'Roboto', sans-serif;
-      }
-
-      p {
-        color: white;
-        display: inline-block;
-        float: right;
-        margin: 0 10px 0 0;
-      }
 
       #container {
         width: 280px;
@@ -25,24 +15,8 @@
         padding: 10px;
       }
 
-      input {
-        float: right;
-        width: 200px;
-      }
-
-      .form-line-container {
-        height: 50px;
-      }
-
-      .form-line-content {
-        margin: auto;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-      }
-
       #search-button {
+        font-family: 'Roboto', sans-serif;
         background-color: rgb(107, 107, 107);
         color: white;
         float: right;
@@ -55,22 +29,11 @@
     </style>
 
     <div id="container">
-      <div class="form-line-container">
-        <input type="text"></input>
-        <p>Titel</p>
-      </div>
+      <form-line name="Titel"></form-line>
+      <form-line name="Auteur"></form-line>
+      <form-line name="ISBN"></form-line>
 
-      <div class="form-line-container">
-        <input type="text"></input>
-        <p>Auteur</p>
-      </div>
-
-      <div class="form-line-container">
-        <input type="text"></input>
-        <p>ISBN</p>
-      </div>
-
-      <paper-button raised id="search-button" on-tap="showAllBooks">Search</paper-button>
+      <paper-button raised id="search-button" on-tap="showAllBooks">Zoeken</paper-button>
     </div>
 
   </template>

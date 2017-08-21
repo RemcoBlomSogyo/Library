@@ -13,9 +13,9 @@ import com.model.Library;
 @Path("books")
 public class BooksResource {
 	
-//	public BookResource() {
-//		
-//	}
+	public BooksResource() {
+		//register(CORSResponseFilter.class);
+	}
 	
 	@GET
 	@Produces("application/json")
