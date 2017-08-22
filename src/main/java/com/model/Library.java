@@ -15,22 +15,22 @@ public class Library {
 		return DatabaseHandler.addBook(book);
 	}
 	
-	public static List<Book> getBooks(String titleInput, 
-			String authorInput, String isbnInput) {
-		ISBN isbn;
-		try {
-			isbn = new ISBN(isbnInput);
-		} catch (IllegalArgumentException e) {
-			return new ArrayList<Book>();
-		}
-		return DatabaseHandler.getBooks(titleInput, authorInput, isbn);
-	}
-	
-	private boolean isbnIsValid(String isbnInput) {
-		return stringHasOnlyNumbers(isbnInput) && stringHasThirteenChars(isbnInput);
-	}
-	
-	private boolean stringHasOnlyNumbers(String isbnInput) {
-		return
-	}
+//	public static List<Book> getBooks(String titleInput, 
+//			String authorInput, String isbnInput) {
+//		ISBN isbn;
+//		try {
+//			isbn = new ISBN(isbnInput);
+//		} catch (IllegalArgumentException e) {
+//			return new ArrayList<Book>();
+//		}
+//		return DatabaseHandler.getBooks(titleInput, authorInput, isbn);
+//	}
+//	
+//	private boolean isbnIsValid(String isbnInput) {
+//		return stringHasOnlyNumbers(isbnInput) && stringHasThirteenChars(isbnInput);
+//	}
+//	
+//	private boolean stringHasOnlyNumbers(String isbnInput) {
+//		return
+//	}
 }

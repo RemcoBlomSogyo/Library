@@ -17,13 +17,13 @@ import com.model.SuccessMessage;
 @Path("book")
 public class BookResource {
 	
-	@GET
-	@Produces("application/json")
-	public List<Book> getBooks(@QueryParam("title") String titleInput,
-			@QueryParam("author") String authorInput, 
-			@QueryParam("isbn") String isbnInput) {
-		return Library.getBooks(titleInput, authorInput, isbnInput);
-	}
+//	@GET
+//	@Produces("application/json")
+//	public List<Book> getBooks(@QueryParam("title") String titleInput,
+//			@QueryParam("author") String authorInput, 
+//			@QueryParam("isbn") String isbnInput) {
+//		return Library.getBooks(titleInput, authorInput, isbnInput);
+//	}
 
 	@POST @Path("/add")
 	@Consumes("application/json")
