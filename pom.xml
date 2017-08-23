@@ -7,9 +7,9 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>SogyoLibrary Maven Webapp</name>
   <url>http://maven.apache.org</url>
-  
+
   <properties>
-    <build.number>SNAPSHOT</build.number>
+	<build.number>unknown</build.number>
   </properties>
 
   <dependencies>
@@ -61,6 +61,16 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+					<manifest>
+						<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+					</manifest>
+					<archive>
+						<manifestEntries>
+							<Specification-Title>${project.name}</Specification-Title>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Implementation-Version>${build.number}</Implementation-Version>
+						</manifestEntries>
+					</archive>
                 </configuration>
             </plugin>
             <plugin>
