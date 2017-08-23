@@ -7,6 +7,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>SogyoLibrary Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -69,7 +70,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>test</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>cobertura</goal>
                         </goals>
