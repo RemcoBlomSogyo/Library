@@ -8,10 +8,6 @@
   <name>SogyoLibrary Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
-  <properties>
-	<build.number>unknown</build.number>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -50,8 +46,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>SogyoLibrary</finalName>
-        
+    <finalName>$\{project.artifactId}-$\{project.version}-r$\{buildNumber}</finalName>
         
         <plugins>
             <plugin>
@@ -61,18 +56,25 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-					<manifest>
-						<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-					</manifest>
-					<archive>
-						<manifestEntries>
-							<Specification-Title>${project.name}</Specification-Title>
-							<Specification-Version>${project.version}</Specification-Version>
-							<Implementation-Version>${build.number}</Implementation-Version>
-						</manifestEntries>
-					</archive>
                 </configuration>
             </plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+				  <execution>
+					<phase>compile</phase>
+					<goals>
+					  <goal>create</goal>
+					</goals>
+				  </execution>
+				</executions>
+				<configuration>
+				  <doCheck>true</doCheck>
+				  <doUpdate>true</doUpdate>
+				</configuration>
+			</plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
@@ -93,7 +95,6 @@
             </plugin>
         </plugins>
         
-    
   </build>
 
 </project>
