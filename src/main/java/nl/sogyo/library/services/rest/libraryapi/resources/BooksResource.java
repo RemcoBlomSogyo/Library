@@ -7,8 +7,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import nl.sogyo.library.model.command.Book;
-import nl.sogyo.library.model.command.Library;
+import nl.sogyo.library.model.query.QueryHelper;
+import nl.sogyo.library.services.rest.libraryapi.json.TestBook;
 
 @Path("books")
 public class BooksResource {
@@ -19,10 +19,10 @@ public class BooksResource {
 	
 	@GET
 	@Produces("application/json")
-	public Collection<Book> getAllBooks() {
-		List<Book> allBooks = Library.getAllBooks();
-		for (Book book : allBooks) {
-			System.out.println(book.getId() + " " + book.getTitle());
+	public Collection<TestBook> getAllBooks() {
+		List<TestBook> allBooks = QueryHelper.getAllBooks();
+		for (TestBook testBook : allBooks) {
+			System.out.println(testBook.getId() + " " + testBook.getTitle());
 		}
 //		allBooks = Library.getAllBooks();
 		

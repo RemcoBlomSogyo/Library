@@ -6,7 +6,7 @@ import java.util.List;
 
 import nl.sogyo.library.model.command.Author;
 import nl.sogyo.library.model.command.Book;
-import nl.sogyo.library.model.command.ISBN;
+import nl.sogyo.library.services.rest.libraryapi.json.TestBook;
 
 public class DatabaseHandler {
 	
@@ -18,19 +18,22 @@ public class DatabaseHandler {
 			+ "inner join Authors on BooksAuthors.AuthorID = Authors.ID "
 			+ "inner join Categories on Books.CategoryID = Categories.ID "
 			+ "inner join Publishers on Books.PublisherID = Publishers.ID ";
+	private static final String selectIdAuthorForename = "Select ID from Authors where Forename = ";
+	private static final String selectIdCategory = "Select ID from Categories where Name = ";
+	private static final String selectIdPublisher = "Select ID from Publishers where Name = ";
 	
-	public static List<Book> getAllBooksTest() {
+	public static List<TestBook> getAllBooksTest() {
 		String sqlStatement = "Select * from Test;";
 		ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
 		
-		List<Book> books = new ArrayList<Book>();
+		List<TestBook> testBooks = new ArrayList<TestBook>();
 		try {
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
 				String title = resultSet.getString("name");
-				books.add(new Book(id, title));
+				testBooks.add(new TestBook(id, title));
 			}
-			return books;
+			return testBooks;
 		} catch (SQLException se) {
 			se.printStackTrace();
 			return null;
@@ -39,19 +42,68 @@ public class DatabaseHandler {
 		}
 	}
 	
-//	public static boolean addBook(Book book) {
-//		String sqlStatement = "Insert into Books values (" 
-//				+ book.getTitle() + ", "
-//				+ book.getSubtitle() + ", "
-//				+ book.getCategoryID() + ", "
-//				+ book.getPublisherID() + ", "
-//				+ book.getYearFirstPublication() + ", "
-//				+ book.getISBN() + ", "
-//				+ book.getPages() + ", "
-//				+ book.getLanguage() + ", "
-//				/*+ book.getImageCover()*/ + ");";
-//		int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
-//		return rowsAffected >= 1;
+	public static boolean addBook(Book book) {
+		try {
+			String sqlStatement = "begin tran"
+			+ "if ((" + selectIdAuthorForename + book.getAuthor().getForename() + " and Surname = " + book.getAuthor().getSurname() + ") = null)"
+				+ "Insert into Authors values (" + book.getAuthor().getForename() + ", " + book.getAuthor().getSurname() + ");"
+
+			+ "if ((" + selectIdCategory + book.getCategory() + ") = null)"
+				+ "Insert into Categories values (" + book.getCategory() + ");"
+
+			+ "if ((" + selectIdPublisher + book.getPublisher() + ") = null)"
+				+ "Insert into Publishers values (" + book.getPublisher() + ");"
+
+			+ "Insert into Books values (" + book.getTitle() + ", " + book.getSubtitle() + ", " + book.getCategory() + ")"
+			+ "commit tran";
+			
+//			String sqlStatement = "Insert into Books values (" 
+//					+ book.getTitle() + ", "
+//					+ book.getSubtitle() + ", ("
+//					+ selectIdAuthorForename + book.getAuthor().getForename() 
+//					+ " and Surname = " + book.getAuthor().getSurname() + "), ("
+//					+ selectIdCategory + book.getCategory() + "), ("
+//					+ selectIdPublisher + book.getPublisher() + "), "
+//					+ book.getYearFirstPublication() + ", "
+//					+ book.getISBN() + ", "
+//					+ book.getPages() + ", "
+//					+ book.getLanguage() + ", "
+//					/*+ book.getImageCover()*/ + ");";
+			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
+			return rowsAffected >= 1;
+		} catch (SQLException e) {
+			//return addMissingRows(book);
+		}
+	}
+	
+//	private static boolean addMissingRows(Book book) {
+//		if (DatabaseConnector.executeQuery(selectIdAuthorForename + book.getAuthor().getForename() 
+//				+ " and Surname = " + book.getAuthor().getSurname()) == null) {
+//			try {
+//				DatabaseConnector.executeNonQuery("Insert into Authors values (" 
+//					+ book.getAuthor().getForename() + ", " + book.getAuthor().getSurname() + ")");
+//			} catch (SQLException e) {
+//				// send error to user
+//			}
+//		}
+//		
+//		if (DatabaseConnector.executeQuery(selectIdCategory + book.getCategory()) == null) {
+//			try {
+//				DatabaseConnector.executeNonQuery("Insert into Categories values (" 
+//					+ book.getCategory() + ")");
+//			} catch (SQLException e) {
+//				// send error
+//			}
+//		}
+//		
+//		if (DatabaseConnector.executeQuery(selectIdPublisher + book.getPublisher()) == null) {
+//			try {
+//				DatabaseConnector.executeNonQuery("Insert into Publishers values (" 
+//					+ book.getPublisher() + ")");
+//			} catch (SQLException e) {
+//				// send error
+//			}
+//		}
 //	}
 	
 //	public static List<Book> getAllBooks() {

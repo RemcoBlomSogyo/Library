@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.sogyo.library.persistence.DatabaseHandler;
-import nl.sogyo.library.services.rest.libraryapi.json.AddBookInput;
+import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 
 public class Library {
 	
-	public static List<Book> getAllBooks() {
-		return DatabaseHandler.getAllBooksTest();
+	public static boolean addBook(BookFormInput bookFormInput) {
+		Book book;
+		try {
+			book = new Book(bookFormInput.getTitle(), bookFormInput.getSubtitle(),
+					bookFormInput.getAuthorForname(), bookFormInput.getAuthorSurname(),
+					bookFormInput.getCategory(), bookFormInput.getPublisher(),
+					Short.parseShort(bookFormInput.getYearFirstPublication()), bookFormInput.getIsbn(),
+					Short.parseShort(bookFormInput.getPages()), bookFormInput.getLanguage());
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+		return DatabaseHandler.addBook(book);
 	}
-	
-//	public static boolean addBook(AddBookInput addBookInput) {
-//		Book book;
-//		try {
-//			book = new Book(/* arguments */);
-//		} catch (IllegalArgumentException e) {
-//			return false;
-//		}
-//		return DatabaseHandler.addBook(book);
-//	}
 	
 //	public static List<Book> getBooks(String titleInput, 
 //			String authorInput, String isbnInput) {

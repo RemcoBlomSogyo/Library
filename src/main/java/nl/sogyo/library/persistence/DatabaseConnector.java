@@ -36,15 +36,10 @@ public class DatabaseConnector {
 	}
 	
 	// for insert, update and delete
-	public static int executeNonQuery(String sqlStatement) {
+	public static int executeNonQuery(String sqlStatement) throws SQLException {
 		connect();
-		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
-			return preparedStatement.executeUpdate();
-		} catch (SQLException se) {
-			se.printStackTrace();
-			return -1;
-		}
+		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+		return preparedStatement.executeUpdate();
 	}
 	
 	// only for select
