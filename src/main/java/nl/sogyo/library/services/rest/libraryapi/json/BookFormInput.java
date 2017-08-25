@@ -26,31 +26,31 @@ public class BookFormInput {
 	}
 	
 	public String getAuthorForname() {
-		return subtitle;
+		return authorForename;
 	}
 	
 	public String getAuthorSurname() {
-		return subtitle;
+		return authorSurname;
 	}
 	
 	public String getCategory() {
-		return subtitle;
+		return category;
 	}
 	
 	public String getPublisher() {
-		return subtitle;
+		return publisher;
 	}
 	
 	public String getYearFirstPublication() {
-		return subtitle;
+		return yearFirstPublication;
 	}
 	
 	public String getIsbn() {
-		return subtitle;
+		return isbn;
 	}
 	
 	public String getPages() {
-		return subtitle;
+		return pages;
 	}
 	
 	public String getLanguage() {

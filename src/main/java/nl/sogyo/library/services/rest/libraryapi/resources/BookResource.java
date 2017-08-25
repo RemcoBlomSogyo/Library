@@ -35,7 +35,17 @@ public class BookResource {
 		//ObjectMapper mapper = new ObjectMapper();
 //		boolean commandSucceeded = Library.addBook(addBookInput);
 //		return new SuccessMessage(commandSucceeded);
-		Library.addBook(bookFormInput);
 		System.out.println(bookFormInput.getTitle());
+		System.out.println(bookFormInput.getSubtitle());
+		System.out.println(bookFormInput.getAuthorForname());
+		System.out.println(bookFormInput.getAuthorSurname());
+		System.out.println(bookFormInput.getCategory());
+		System.out.println(bookFormInput.getPublisher());
+		System.out.println(bookFormInput.getYearFirstPublication());
+		System.out.println(bookFormInput.getIsbn());
+		System.out.println(bookFormInput.getPages());
+		System.out.println(bookFormInput.getLanguage());
+		
+		Library.addBook(bookFormInput);
 	}
 }

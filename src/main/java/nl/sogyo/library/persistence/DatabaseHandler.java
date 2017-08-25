@@ -18,9 +18,9 @@ public class DatabaseHandler {
 			+ "inner join Authors on BooksAuthors.AuthorID = Authors.ID "
 			+ "inner join Categories on Books.CategoryID = Categories.ID "
 			+ "inner join Publishers on Books.PublisherID = Publishers.ID ";
-	private static final String selectIdAuthorForename = "Select ID from Authors where Forename = ";
-	private static final String selectIdCategory = "Select ID from Categories where Name = ";
-	private static final String selectIdPublisher = "Select ID from Publishers where Name = ";
+	private static final String selectIdAuthorForename = "Select ID from Authors where Forename = \'";
+	private static final String selectIdCategory = "Select ID from Categories where Name = \'";
+	private static final String selectIdPublisher = "Select ID from Publishers where Name = \'";
 	
 	public static List<TestBook> getAllBooksTest() {
 		String sqlStatement = "Select * from Test;";
@@ -44,18 +44,39 @@ public class DatabaseHandler {
 	
 	public static boolean addBook(Book book) {
 		try {
-			String sqlStatement = "begin tran"
-			+ "if ((" + selectIdAuthorForename + book.getAuthor().getForename() + " and Surname = " + book.getAuthor().getSurname() + ") = null)"
-				+ "Insert into Authors values (" + book.getAuthor().getForename() + ", " + book.getAuthor().getSurname() + ");"
-
-			+ "if ((" + selectIdCategory + book.getCategory() + ") = null)"
-				+ "Insert into Categories values (" + book.getCategory() + ");"
-
-			+ "if ((" + selectIdPublisher + book.getPublisher() + ") = null)"
-				+ "Insert into Publishers values (" + book.getPublisher() + ");"
-
-			+ "Insert into Books values (" + book.getTitle() + ", " + book.getSubtitle() + ", " + book.getCategory() + ")"
-			+ "commit tran";
+			String sqlStatement = 
+					"begin tran "
+					
+					+ "Declare @idAuthor int "
+					+ "Declare @idCategory int "
+					+ "Declare @idPublisher int "
+					+ "Declare @idBook int "
+					+ "Declare @tableAuthor table (ID int) "
+					+ "Declare @tableCategory table (ID int) "
+					+ "Declare @tablePublisher table (ID int) "
+					+ "Declare @tableBook table (ID int) "
+					
+					+ "Set @idAuthor = (" + selectIdAuthorForename + book.getAuthor().getForename() + "\' and Surname = \'" + book.getAuthor().getSurname() + "\')"
+					+ "if (@idAuthor = null) "
+						+ "Insert into Authors output inserted.ID into @tableAuthor values (\'" + book.getAuthor().getForename() + "\', \'" + book.getAuthor().getSurname() + "\')"
+						+ "Set @idAuthor = (Select ID from @tableAuthor);"
+		
+					+ "Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
+					+ "if (@idCategory = null) "
+						+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\')"
+						+ "Set @idCategory = (Select ID from @tableCategory);"
+		
+					+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
+					+ "if (@idPublisher = null) "
+						+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
+						+ "Set @idPublisher = (Select ID from @tablePublisher);"
+		
+					+ "Insert into Books(Title, Subtitle, CategoryID, PublisherID, YearFirstPublication, ISBN, Pages, Language) output inserted.ID into @tableBook values (\'" + book.getTitle() + "\', \'" + book.getSubtitle() + "\', " + "@idCategory, @idPublisher, \'" 
+					+ book.getYearFirstPublication() + "\', \'" + book.getISBN() + "\', \'" + book.getPages() + "\', \'" + book.getLanguage() + "\')"
+					+ "Set @idBook = (Select ID from @tableBook)"
+					+ "Insert into BooksAuthors values (@idBook, @idAuthor)"
+					
+					+ "commit tran";
 			
 //			String sqlStatement = "Insert into Books values (" 
 //					+ book.getTitle() + ", "
@@ -70,41 +91,14 @@ public class DatabaseHandler {
 //					+ book.getLanguage() + ", "
 //					/*+ book.getImageCover()*/ + ");";
 			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
-			return rowsAffected >= 1;
+			System.out.println("insert success");
+			return rowsAffected >= 2;
 		} catch (SQLException e) {
-			//return addMissingRows(book);
+			System.err.println(e.getMessage());
+			System.out.println("sqlexcep");
+			return false;
 		}
 	}
-	
-//	private static boolean addMissingRows(Book book) {
-//		if (DatabaseConnector.executeQuery(selectIdAuthorForename + book.getAuthor().getForename() 
-//				+ " and Surname = " + book.getAuthor().getSurname()) == null) {
-//			try {
-//				DatabaseConnector.executeNonQuery("Insert into Authors values (" 
-//					+ book.getAuthor().getForename() + ", " + book.getAuthor().getSurname() + ")");
-//			} catch (SQLException e) {
-//				// send error to user
-//			}
-//		}
-//		
-//		if (DatabaseConnector.executeQuery(selectIdCategory + book.getCategory()) == null) {
-//			try {
-//				DatabaseConnector.executeNonQuery("Insert into Categories values (" 
-//					+ book.getCategory() + ")");
-//			} catch (SQLException e) {
-//				// send error
-//			}
-//		}
-//		
-//		if (DatabaseConnector.executeQuery(selectIdPublisher + book.getPublisher()) == null) {
-//			try {
-//				DatabaseConnector.executeNonQuery("Insert into Publishers values (" 
-//					+ book.getPublisher() + ")");
-//			} catch (SQLException e) {
-//				// send error
-//			}
-//		}
-//	}
 	
 //	public static List<Book> getAllBooks() {
 //		String sqlStatement = selectBooksStatement;

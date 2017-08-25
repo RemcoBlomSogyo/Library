@@ -22,39 +22,48 @@ public class Book {
 	
 	public Book(String title, String subtitle, String authorForename, 
 			String authorSurname, String category, String publisher, short yearFirstPublication, 
-			String isbn, short pages, String language /*, Image imageCover*/) {
+			String isbn, short pages, String language /*, Image imageCover*/) throws IllegalArgumentException {
 		if (!title.isEmpty()) {
 			this.title = title;
 		} else {
+			System.out.println("invalid title");
 			throw new IllegalArgumentException("Title is empty");
 		}
+		
 		this.subtitle = subtitle;
 		
 		if (!authorForename.isEmpty() && !authorSurname.isEmpty()) {
 			this.author = new Author(authorForename, authorSurname);
+		} else {
+			System.out.println("invalid author");
+			throw new IllegalArgumentException("Author is empty");
 		}
 		
 		if (!category.isEmpty()) {
 			this.category = category;
 		} else {
+			System.out.println("invalid category");
 			throw new IllegalArgumentException("Category is empty");
 		}
 		
 		if (!publisher.isEmpty()) {
 			this.publisher = publisher;
 		} else {
-			throw new IllegalArgumentException("Category is empty");
+			System.out.println("invalid publisher");
+			throw new IllegalArgumentException("Publisher is empty");
 		}
 		
 		if (yearIsValid(yearFirstPublication)) {
 			this.yearFirstPublication = yearFirstPublication;
 		} else {
+			System.out.println("invalid year");
 			throw new IllegalArgumentException("Invalid year");
 		}
 		
 		if (isbnIsValid(isbn)) {
 			this.isbn = isbn;
 		} else {
+			System.out.println("invalid isbn");
 			throw new IllegalArgumentException("Invalid ISBN");
 		}
 		
@@ -116,10 +125,6 @@ public class Book {
 //	public Image getImageCover() {
 //		return imageCover;
 //	}
-	
-	private boolean titleIsNotValid(String title) {
-		return title.isEmpty();
-	}
 	
 	private boolean isbnIsValid(String isbnInput) {
 		return stringHasOnlyNumbers(isbnInput) && stringHasThirteenChars(isbnInput);

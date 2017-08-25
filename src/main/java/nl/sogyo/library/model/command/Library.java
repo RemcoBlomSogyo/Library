@@ -17,8 +17,11 @@ public class Library {
 					Short.parseShort(bookFormInput.getYearFirstPublication()), bookFormInput.getIsbn(),
 					Short.parseShort(bookFormInput.getPages()), bookFormInput.getLanguage());
 		} catch (IllegalArgumentException e) {
+			System.err.println(e.getMessage());
+			System.out.println("library illargexcp");
 			return false;
 		}
+		System.out.println("go to databasehandler");
 		return DatabaseHandler.addBook(book);
 	}
 	
