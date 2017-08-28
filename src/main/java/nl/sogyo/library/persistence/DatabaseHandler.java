@@ -45,7 +45,8 @@ public class DatabaseHandler {
 	public static boolean addBook(Book book) {
 		try {
 			String sqlStatement = 
-					"begin tran "
+					"Set xact_abort on "
+					+ "begin tran "
 					
 					+ "Declare @idAuthor int "
 					+ "Declare @idCategory int "
@@ -56,25 +57,31 @@ public class DatabaseHandler {
 					+ "Declare @tablePublisher table (ID int) "
 					+ "Declare @tableBook table (ID int) "
 					
-					+ "Set @idAuthor = (" + selectIdAuthorForename + book.getAuthor().getForename() + "\' and Surname = \'" + book.getAuthor().getSurname() + "\')"
-					+ "if (@idAuthor = null) "
-						+ "Insert into Authors output inserted.ID into @tableAuthor values (\'" + book.getAuthor().getForename() + "\', \'" + book.getAuthor().getSurname() + "\')"
-						+ "Set @idAuthor = (Select ID from @tableAuthor);"
+					+ "Set @idAuthor = (" + selectIdAuthorForename + book.getAuthor().getForename() + "\' and Surname = \'" + book.getAuthor().getSurname() + "\') "
+					+ "if (@idAuthor is null) "
+						+ "Begin "
+						+ "Insert into Authors output inserted.ID into @tableAuthor values (\'" + book.getAuthor().getForename() + "\', \'" + book.getAuthor().getSurname() + "\') "
+						+ "Set @idAuthor = (Select ID from @tableAuthor); "
+						+ "End "
 		
 					+ "Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
-					+ "if (@idCategory = null) "
-						+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\')"
-						+ "Set @idCategory = (Select ID from @tableCategory);"
+					+ "if (@idCategory is null) "
+						+ "Begin "
+						+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
+						+ "Set @idCategory = (Select ID from @tableCategory); "
+						+ "End "
 		
 					+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
-					+ "if (@idPublisher = null) "
+					+ "if (@idPublisher is null) "
+						+ "Begin "
 						+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
-						+ "Set @idPublisher = (Select ID from @tablePublisher);"
+						+ "Set @idPublisher = (Select ID from @tablePublisher); "
+						+ "End "
 		
 					+ "Insert into Books(Title, Subtitle, CategoryID, PublisherID, YearFirstPublication, ISBN, Pages, Language) output inserted.ID into @tableBook values (\'" + book.getTitle() + "\', \'" + book.getSubtitle() + "\', " + "@idCategory, @idPublisher, \'" 
-					+ book.getYearFirstPublication() + "\', \'" + book.getISBN() + "\', \'" + book.getPages() + "\', \'" + book.getLanguage() + "\')"
-					+ "Set @idBook = (Select ID from @tableBook)"
-					+ "Insert into BooksAuthors values (@idBook, @idAuthor)"
+					+ book.getYearFirstPublication() + "\', \'" + book.getISBN() + "\', \'" + book.getPages() + "\', \'" + book.getLanguage() + "\') "
+					+ "Set @idBook = (Select ID from @tableBook) "
+					+ "Insert into BooksAuthors values (@idBook, @idAuthor) "
 					
 					+ "commit tran";
 			
