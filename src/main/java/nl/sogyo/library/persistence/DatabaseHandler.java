@@ -99,7 +99,8 @@ public class DatabaseHandler {
 //					/*+ book.getImageCover()*/ + ");";
 			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
 			System.out.println("insert success");
-			return rowsAffected >= 2;
+			System.out.println("rows affected: " + rowsAffected);
+			return rowsAffected >= 1;
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 			System.out.println("sqlexcep");

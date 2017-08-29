@@ -23,68 +23,22 @@ public class Book {
 	public Book(String title, String subtitle, String authorForename, 
 			String authorSurname, String category, String publisher, short yearFirstPublication, 
 			String isbn, short pages, String language /*, Image imageCover*/) throws IllegalArgumentException {
-		if (!title.isEmpty()) {
+		if (variablesAreValid(title, authorForename, authorSurname, 
+				category, publisher, yearFirstPublication, isbn)) {
 			this.title = title;
-		} else {
-			System.out.println("invalid title");
-			throw new IllegalArgumentException("Title is empty");
-		}
-		
-		this.subtitle = subtitle;
-		
-		if (!authorForename.isEmpty() && !authorSurname.isEmpty()) {
+			this.subtitle = subtitle;
 			this.author = new Author(authorForename, authorSurname);
-		} else {
-			System.out.println("invalid author");
-			throw new IllegalArgumentException("Author is empty");
-		}
-		
-		if (!category.isEmpty()) {
 			this.category = category;
-		} else {
-			System.out.println("invalid category");
-			throw new IllegalArgumentException("Category is empty");
-		}
-		
-		if (!publisher.isEmpty()) {
 			this.publisher = publisher;
-		} else {
-			System.out.println("invalid publisher");
-			throw new IllegalArgumentException("Publisher is empty");
-		}
-		
-		if (yearIsValid(yearFirstPublication)) {
 			this.yearFirstPublication = yearFirstPublication;
-		} else {
-			System.out.println("invalid year");
-			throw new IllegalArgumentException("Invalid year");
-		}
-		
-		if (isbnIsValid(isbn)) {
 			this.isbn = isbn;
+			this.pages = pages;
+			this.language = language;
+//			this.imageCover = imageCover;
 		} else {
-			System.out.println("invalid isbn");
-			throw new IllegalArgumentException("Invalid ISBN");
+			throw new IllegalArgumentException("A variable is invalid");
 		}
-		
-		this.pages = pages;
-		this.language = language;
-//		this.imageCover = imageCover;
 	}
-	
-//	public Book(String title, String subtitle, Author author, String category, 
-//			String publisher, short yearFirstPublication, String isbn,
-//			short pages, String language) {
-//		this.title = title;
-//		this.subtitle = subtitle;
-//		this.author = author;
-//		this.category = category;
-//		this.publisher = publisher;
-//		this.yearFirstPublication = yearFirstPublication;
-//		this.isbn = isbn;
-//		this.pages = pages;
-//		this.language = language;
-//	}
 	
 	public String getTitle() {
 		return title;
@@ -126,6 +80,46 @@ public class Book {
 //		return imageCover;
 //	}
 	
+	private boolean variablesAreValid(String title, String authorForename, String authorSurname,
+			String category, String publisher, short yearFirstPublication, String isbn) {
+		if (title.isEmpty()) {
+			System.out.println("invalid title");
+			throw new IllegalArgumentException("Title is empty");
+		}
+		
+		if (authorForename.isEmpty() && !authorSurname.isEmpty()) {
+			System.out.println("invalid author");
+			throw new IllegalArgumentException("Forename author is empty");
+		}
+		
+		if (authorSurname.isEmpty()) {
+			System.out.println("invalid author");
+			throw new IllegalArgumentException("Surname author is empty");
+		}
+		
+		if (category.isEmpty()) {
+			System.out.println("invalid category");
+			throw new IllegalArgumentException("Category is empty");
+		}
+		
+		if (publisher.isEmpty()) {
+			System.out.println("invalid publisher");
+			throw new IllegalArgumentException("Publisher is empty");
+		}
+		
+		if (!yearIsValid(yearFirstPublication)) {
+			System.out.println("invalid year");
+			throw new IllegalArgumentException("Invalid year");
+		}
+		
+		if (!isbnIsValid(isbn)) {
+			System.out.println("invalid isbn");
+			throw new IllegalArgumentException("Invalid ISBN");
+		}
+		
+		return true;
+	}
+	
 	private boolean isbnIsValid(String isbnInput) {
 		return stringHasOnlyNumbers(isbnInput) && stringHasThirteenChars(isbnInput);
 	}
@@ -140,5 +134,5 @@ public class Book {
 	
 	private boolean yearIsValid(short yearFirstPublication) {
 		return yearFirstPublication <= Year.now().getValue();
-	}	
+	}
 }

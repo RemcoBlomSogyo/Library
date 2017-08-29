@@ -3,6 +3,7 @@ package nl.sogyo.library.services.rest.libraryapi.resources;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -27,11 +28,20 @@ public class BookResource {
 //			@QueryParam("isbn") String isbnInput) {
 //		return Library.getBooks(titleInput, authorInput, isbnInput);
 //	}
+	
+	@GET @Path("/add")
+	@Produces("application/json")
+	public SuccessMessage testBook(BookFormInput bookFormInput) {
+	
+		boolean commandSucceeded = false;
+
+		return new SuccessMessage(commandSucceeded);
+	}
 
 	@POST @Path("/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public void addBook(BookFormInput bookFormInput) {
+	public SuccessMessage addBook(BookFormInput bookFormInput) {
 		//ObjectMapper mapper = new ObjectMapper();
 //		boolean commandSucceeded = Library.addBook(addBookInput);
 //		return new SuccessMessage(commandSucceeded);
@@ -46,6 +56,7 @@ public class BookResource {
 		System.out.println(bookFormInput.getPages());
 		System.out.println(bookFormInput.getLanguage());
 		
-		Library.addBook(bookFormInput);
+		SuccessMessage successMessage = Library.addBook(bookFormInput);
+		return successMessage;
 	}
 }

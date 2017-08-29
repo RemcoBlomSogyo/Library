@@ -1,9 +1,13 @@
 package nl.sogyo.library.services.rest.libraryapi.json;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public class SuccessMessage {
 	
-	private boolean commandSucceeded;
-	private String message;
+	@XmlElement private boolean commandSucceeded;
+	@XmlElement private String message;
+	
+	public SuccessMessage() {}
 	
 	public SuccessMessage(boolean commandSucceeded) {
 		this.commandSucceeded = commandSucceeded;
