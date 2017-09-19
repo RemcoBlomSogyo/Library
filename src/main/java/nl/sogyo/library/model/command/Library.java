@@ -17,8 +17,8 @@ public class Library {
 			book = new Book(bookFormInput.getTitle(), bookFormInput.getSubtitle(),
 					bookFormInput.getAuthorForname(), bookFormInput.getAuthorSurname(),
 					bookFormInput.getCategory(), bookFormInput.getPublisher(),
-					Short.parseShort(bookFormInput.getYearFirstPublication()), bookFormInput.getIsbn(),
-					Short.parseShort(bookFormInput.getPages()), bookFormInput.getLanguage());
+					bookFormInput.getYearFirstPublication(), bookFormInput.getIsbn(),
+					bookFormInput.getPages(), bookFormInput.getLanguage());
 			commandSucceeded = DatabaseHandler.addBook(book);
 		} catch (IllegalArgumentException e) {
 			System.err.println(e.getMessage());
@@ -26,14 +26,6 @@ public class Library {
 			commandSucceeded = false;
 		}
 		return new SuccessMessage(commandSucceeded);
-	}
-	
-	public static List<BookPreview> getBooks(String titleInput, 
-			String authorInput, String isbnInput) {
-
-		
-		if 
-		return DatabaseHandler.getBooks(titleInput, authorInput, isbn);
 	}
 	
 }
