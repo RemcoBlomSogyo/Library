@@ -43,14 +43,9 @@ public class DatabaseConnector {
 	}
 	
 	// only for select
-	public static ResultSet executeQuery(String sqlStatement) {
-		DatabaseConnector.connect();
-		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
-			return preparedStatement.executeQuery();
-		} catch (SQLException se) {
-			se.printStackTrace();
-			return null;
-		}
+	public static ResultSet executeQuery(String sqlStatement) throws SQLException {
+		connect();
+		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+		return preparedStatement.executeQuery();
 	}
 }

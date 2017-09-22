@@ -2,20 +2,26 @@ package nl.sogyo.library.model.command;
 
 import java.awt.Image;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import nl.sogyo.library.model.helper.InputValidator;
 
 public class Book {
 	
-	private String title;
-	private String subtitle;
-	private Author author;
-	private String category;
-	private String publisher;
-	private short yearFirstPublication;
-	private String isbn;
-	private short pages;
-	private String language;
+	@XmlElement private String title;
+	@XmlElement private String subtitle;
+//	private Author author;
+	@XmlElement private String authorForename;
+	@XmlElement private String authorSurname;
+	@XmlElement private String category;
+	@XmlElement private String publisher;
+	@XmlElement private short yearFirstPublication;
+	@XmlElement private String isbn;
+	@XmlElement private short pages;
+	@XmlElement private String language;
 //	private Image imageCover;
+	
+	public Book() {}
 	
 	public Book(String title, String subtitle, String authorForename, 
 			String authorSurname, String category, String publisher, String yearFirstPublication, 
@@ -24,7 +30,9 @@ public class Book {
 				category, publisher, yearFirstPublication, isbn, pages)) {
 			this.title = title;
 			this.subtitle = subtitle;
-			this.author = new Author(authorForename, authorSurname);
+//			this.author = new Author(authorForename, authorSurname);
+			this.authorForename = authorForename;
+			this.authorSurname = authorSurname;
 			this.category = category;
 			this.publisher = publisher;
 			this.yearFirstPublication = Short.parseShort(emptyToZero(yearFirstPublication));
@@ -37,6 +45,23 @@ public class Book {
 		}
 	}
 	
+	public Book(String title, String subtitle, String authorForename, 
+			String authorSurname, String category, String publisher, short yearFirstPublication, 
+			String isbn, short pages, String language /*, Image imageCover*/) {
+		this.title = title;
+		this.subtitle = subtitle;
+//		this.author = new Author(authorForename, authorSurname);
+		this.authorForename = authorForename;
+		this.authorSurname = authorSurname;
+		this.category = category;
+		this.publisher = publisher;
+		this.yearFirstPublication = yearFirstPublication;
+		this.isbn = isbn;
+		this.pages = pages;
+		this.language = language;
+//		this.imageCover = imageCover;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -45,8 +70,16 @@ public class Book {
 		return subtitle;
 	}
 	
-	public Author getAuthor() {
-		return author;
+//	public Author getAuthor() {
+//		return author;
+//	}
+	
+	public String getAuthorForename() {
+		return authorForename;
+	}
+	
+	public String getAuthorSurname() {
+		return authorSurname;
 	}
 	
 	public String getCategory() {

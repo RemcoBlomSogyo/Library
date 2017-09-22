@@ -1,11 +1,11 @@
 package nl.sogyo.library.model.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
-import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
+import nl.sogyo.library.services.rest.libraryapi.json.BookId;
+import nl.sogyo.library.services.rest.libraryapi.json.DeleteBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.DeleteCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.SuccessMessage;
 
 public class Library {
@@ -19,7 +19,7 @@ public class Library {
 					bookFormInput.getCategory(), bookFormInput.getPublisher(),
 					bookFormInput.getYearFirstPublication(), bookFormInput.getIsbn(),
 					bookFormInput.getPages(), bookFormInput.getLanguage());
-			commandSucceeded = DatabaseHandler.addBook(book);
+			commandSucceeded = DatabaseHandler.insertBook(book);
 		} catch (IllegalArgumentException e) {
 			System.err.println(e.getMessage());
 			System.out.println("library illargexcp");
@@ -28,4 +28,18 @@ public class Library {
 		return new SuccessMessage(commandSucceeded);
 	}
 	
+	public static AddCopyMessage addCopy(BookId addCopyCommand) {
+		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(addCopyCommand.getBookId());
+		return addCopyMessage;
+	}
+	
+	public static DeleteCopyMessage deleteCopy(BookId deleteCopyCommand) {
+		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(deleteCopyCommand.getBookId());
+		return deleteCopyMessage;
+	}
+	
+	public static DeleteBookMessage deleteBook(BookId deleteBookCommand) {
+		DeleteBookMessage deleteBookMessage = DatabaseHandler.deleteBookAndCopies(deleteBookCommand.getBookId());
+		return deleteBookMessage;
+	}
 }
