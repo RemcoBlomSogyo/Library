@@ -39,7 +39,8 @@ public class Library {
 	}
 	
 	public static DeleteBookMessage deleteBook(BookId deleteBookCommand) {
-		DeleteBookMessage deleteBookMessage = DatabaseHandler.deleteBookAndCopies(deleteBookCommand.getBookId());
+		boolean commandSucceeded = DatabaseHandler.deleteBookAndCopies(deleteBookCommand.getBookId());
+		DeleteBookMessage deleteBookMessage = new DeleteBookMessage(commandSucceeded);
 		return deleteBookMessage;
 	}
 }

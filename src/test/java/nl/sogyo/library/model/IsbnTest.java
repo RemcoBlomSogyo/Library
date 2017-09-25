@@ -1,4 +1,4 @@
-package nl.sogyo.library;
+package nl.sogyo.library.model;
 
 import org.junit.Assert;
 import org.junit.Test;

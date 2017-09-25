@@ -77,7 +77,6 @@ public class BookResource {
 		System.out.println("deleteBook " + copyCommand.getBookId());
 		DeleteBookMessage deleteBookMessage = Library.deleteBook(copyCommand);
 		System.out.println(" " + deleteBookMessage.getCommandSucceeded()
-				+ deleteBookMessage.getCopiesOfBook()
 				+ deleteBookMessage.getMessage());
 		return deleteBookMessage;
 	}

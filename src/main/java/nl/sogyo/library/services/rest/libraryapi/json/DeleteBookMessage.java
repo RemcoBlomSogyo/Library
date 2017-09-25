@@ -5,28 +5,22 @@ import javax.xml.bind.annotation.XmlElement;
 public class DeleteBookMessage {
 
 	@XmlElement private boolean commandSucceeded;
-	@XmlElement private int copiesOfBook;
 	@XmlElement private String message;
 	
 	public DeleteBookMessage() {}
 	
-	public DeleteBookMessage(boolean commandSucceeded, int copiesOfBook) {
+	public DeleteBookMessage(boolean commandSucceeded) {
 		this.commandSucceeded = commandSucceeded;
-		this.copiesOfBook = copiesOfBook;
-		
+
 		if (commandSucceeded) {
-			this.message = "Exemplaar is verwijderd uit de database";
+			this.message = "Boek en exemplaren zijn verwijderd uit de database";
 		} else {
-			this.message = "Exemplaar verwijderen mislukt";
+			this.message = "Boek en exemplaren verwijderen mislukt";
 		}
 	}
 	
 	public boolean getCommandSucceeded() {
 		return commandSucceeded;
-	}
-	
-	public int getCopiesOfBook() {
-		return copiesOfBook;
 	}
 	
 	public String getMessage() {

@@ -326,7 +326,6 @@ public class DatabaseHandler {
 //			return new AddCopyMessage(false, 0);
 //		}
 
-		
 	}
 	
 	public static DeleteCopyMessage deleteCopy(int bookId) {
@@ -358,9 +357,24 @@ public class DatabaseHandler {
 		}
 	}
 	
-//	public static DeleteBookMessage deleteBookAndCopies(int bookId) {
-//		String sqlStatement = 
-//				
-//	}
+	public static boolean deleteBookAndCopies(int bookId) {
+		String sqlStatement = 
+				"Set xact_abort on "
+				+ "begin tran "
+				+ "Delete from Copies where BookID = " + bookId + " "
+				+ "Delete from BooksAuthors where BookID = " + bookId + " "
+				+ "Delete from Books where ID = " + bookId + " "
+				+ "commit tran";
+		
+		try {
+			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
+			return rowsAffected >= 1;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return false;
+		}
+				
+	}
 }
 
