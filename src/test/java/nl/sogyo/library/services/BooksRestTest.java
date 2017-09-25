@@ -52,29 +52,4 @@ public class BooksRestTest extends JerseyTest {
 		String output = target("/books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889370").request().get(String.class);
 		Assert.assertTrue(output.contains("Polymer"));
 	}
-	
-	@Test
-	public void getBookInfoOfProRestfulApis() {
-//		System.out.println("test");
-//	    Client client = ClientBuilder.newClient();
-//	    WebTarget target = null;
-//	    try {
-//	    	target=client.target(new URI("http://localhost:9998/SogyoLibrary/rest/book/46"));
-//	    }catch (Exception e){}
-//	    Builder builder =   target.request();
-//	        //Response response  = builder.get();
-//	    String result  = builder.get(String.class);
-//		System.out.println("output: " + result);
-		
-		System.out.println(target("/book").path("46"));
-		String output = target("/book").path("46").request().get(String.class);
-		Assert.assertTrue(output.contains("RESTful") && output.contains("9781484226643") 
-				&& output.contains("Design, Build and Integrate with REST, JSON, XML and JAX-RS") && output.contains("Engels"));
-		
-//		//		.request().get(String.class);
-//		
-//		
-//		Assert.assertTrue(output.contains("RESTful") && output.contains("9781484226643") 
-//				&& output.contains("Design, Build and Integrate with REST, JSON, XML and JAX-RS") && output.contains("Engels"));
-	}
 }
