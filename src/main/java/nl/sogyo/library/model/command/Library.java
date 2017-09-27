@@ -3,34 +3,50 @@ package nl.sogyo.library.model.command;
 import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.BookId;
-import nl.sogyo.library.services.rest.libraryapi.json.DeleteBookMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.DeleteCopyMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.AddCopyMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.SuccessMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
 
 public class Library {
 	
-	public static SuccessMessage addBook(BookFormInput bookFormInput) {
-		Book book;
-		boolean commandSucceeded;
+	public static AddBookMessage addBook(BookFormInput bookFormInput) {
+		int bookId;
 		try {
-			book = new Book(bookFormInput.getTitle(), bookFormInput.getSubtitle(),
-					bookFormInput.getAuthorForname(), bookFormInput.getAuthorSurname(),
-					bookFormInput.getCategory(), bookFormInput.getPublisher(),
-					bookFormInput.getYearFirstPublication(), bookFormInput.getIsbn(),
-					bookFormInput.getPages(), bookFormInput.getLanguage());
-			commandSucceeded = DatabaseHandler.insertBook(book);
+			Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
+					bookFormInput.getSubtitle(), bookFormInput.getAuthorForname(),
+					bookFormInput.getAuthorSurname(), bookFormInput.getCategory(),
+					bookFormInput.getPublisher(), bookFormInput.getYearFirstPublication(),
+					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
+			bookId = DatabaseHandler.insertBook(book);
 		} catch (IllegalArgumentException e) {
 			System.err.println(e.getMessage());
 			System.out.println("library illargexcp");
-			commandSucceeded = false;
+			bookId = -2;
 		}
-		return new SuccessMessage(commandSucceeded);
+		return new AddBookMessage(bookId);
 	}
 	
 	public static AddCopyMessage addCopy(BookId addCopyCommand) {
 		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(addCopyCommand.getBookId());
 		return addCopyMessage;
+	}
+	
+	public static EditBookMessage editBook(BookFormInput bookFormInput) {
+		boolean commandSucceeded;
+		try {
+			Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
+					bookFormInput.getSubtitle(), bookFormInput.getAuthorForname(),
+					bookFormInput.getAuthorSurname(), bookFormInput.getCategory(),
+					bookFormInput.getPublisher(), bookFormInput.getYearFirstPublication(),
+					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
+			commandSucceeded = DatabaseHandler.updateBook(book);
+		} catch (IllegalArgumentException e) {
+			System.err.println(e.getMessage());
+			commandSucceeded = false;
+		}
+		return new EditBookMessage(commandSucceeded);
 	}
 	
 	public static DeleteCopyMessage deleteCopy(BookId deleteCopyCommand) {

@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class BookFormInput {
 
+	@XmlElement private int id;
 	@XmlElement private String title;
 	@XmlElement private String subtitle;
 	@XmlElement private String authorForename;
@@ -16,6 +17,10 @@ public class BookFormInput {
 	@XmlElement private String language;
 	
 	public BookFormInput() {}
+	
+	public int getId() {
+		return id;
+	}
 	
 	public String getTitle() {
 		return title;

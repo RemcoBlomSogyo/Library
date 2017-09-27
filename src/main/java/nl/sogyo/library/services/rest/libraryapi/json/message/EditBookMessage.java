@@ -1,21 +1,21 @@
-package nl.sogyo.library.services.rest.libraryapi.json;
+package nl.sogyo.library.services.rest.libraryapi.json.message;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class DeleteBookMessage {
+public class EditBookMessage {
 
 	@XmlElement private boolean commandSucceeded;
 	@XmlElement private String message;
 	
-	public DeleteBookMessage() {}
+	public EditBookMessage() {}
 	
-	public DeleteBookMessage(boolean commandSucceeded) {
+	public EditBookMessage(boolean commandSucceeded) {
 		this.commandSucceeded = commandSucceeded;
 
 		if (commandSucceeded) {
-			this.message = "Boek en exemplaren zijn verwijderd uit de database";
+			this.message = "Boek is succesvol aangepast";
 		} else {
-			this.message = "Boek en exemplaren verwijderen mislukt";
+			this.message = "Aanpassen boek is mislukt";
 		}
 	}
 	

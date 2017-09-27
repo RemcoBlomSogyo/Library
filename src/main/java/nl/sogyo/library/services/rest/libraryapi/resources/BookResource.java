@@ -1,6 +1,7 @@
 package nl.sogyo.library.services.rest.libraryapi.resources;
 
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
@@ -14,10 +15,11 @@ import nl.sogyo.library.model.query.QueryHelper;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookId;
-import nl.sogyo.library.services.rest.libraryapi.json.DeleteBookMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.DeleteCopyMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.AddCopyMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.SuccessMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
 
 @Path("book")
 public class BookResource {
@@ -51,7 +53,7 @@ public class BookResource {
 	@POST 
 	@Consumes("application/json")
 	@Produces("application/json")
-	public SuccessMessage addBook(BookFormInput bookFormInput) {
+	public AddBookMessage addBook(BookFormInput bookFormInput) {
 		//ObjectMapper mapper = new ObjectMapper();
 //		boolean commandSucceeded = Library.addBook(addBookInput);
 //		return new SuccessMessage(commandSucceeded);
@@ -66,7 +68,29 @@ public class BookResource {
 		System.out.println(bookFormInput.getPages());
 		System.out.println(bookFormInput.getLanguage());
 		
-		SuccessMessage successMessage = Library.addBook(bookFormInput);
+		AddBookMessage successMessage = Library.addBook(bookFormInput);
+		return successMessage;
+	}
+	
+	@PUT 
+	@Consumes("application/json")
+	@Produces("application/json")
+	public EditBookMessage editBook(BookFormInput bookFormInput) {
+		//ObjectMapper mapper = new ObjectMapper();
+//		boolean commandSucceeded = Library.addBook(addBookInput);
+//		return new SuccessMessage(commandSucceeded);
+		System.out.println(bookFormInput.getTitle());
+		System.out.println(bookFormInput.getSubtitle());
+		System.out.println(bookFormInput.getAuthorForname());
+		System.out.println(bookFormInput.getAuthorSurname());
+		System.out.println(bookFormInput.getCategory());
+		System.out.println(bookFormInput.getPublisher());
+		System.out.println(bookFormInput.getYearFirstPublication());
+		System.out.println(bookFormInput.getIsbn());
+		System.out.println(bookFormInput.getPages());
+		System.out.println(bookFormInput.getLanguage());
+		
+		EditBookMessage successMessage = Library.editBook(bookFormInput);
 		return successMessage;
 	}
 	

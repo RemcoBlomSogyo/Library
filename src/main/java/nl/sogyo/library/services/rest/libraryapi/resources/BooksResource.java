@@ -1,6 +1,5 @@
 package nl.sogyo.library.services.rest.libraryapi.resources;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.GET;

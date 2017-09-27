@@ -1,23 +1,23 @@
-package nl.sogyo.library.services.rest.libraryapi.json;
+package nl.sogyo.library.services.rest.libraryapi.json.message;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class DeleteCopyMessage {
+public class AddCopyMessage {
 
 	@XmlElement private boolean commandSucceeded;
 	@XmlElement private int copiesOfBook;
 	@XmlElement private String message;
 	
-	public DeleteCopyMessage() {}
+	public AddCopyMessage() {}
 	
-	public DeleteCopyMessage(boolean commandSucceeded, int copiesOfBook) {
+	public AddCopyMessage(boolean commandSucceeded, int copiesOfBook) {
 		this.commandSucceeded = commandSucceeded;
 		this.copiesOfBook = copiesOfBook;
 		
 		if (commandSucceeded) {
-			this.message = "Exemplaar is verwijderd uit de database";
+			this.message = "Exemplaar is toegevoegd aan de database";
 		} else {
-			this.message = "Exemplaar verwijderen mislukt";
+			this.message = "Exemplaar toevoegen mislukt";
 		}
 	}
 	

@@ -9,8 +9,8 @@ import javax.ws.rs.Produces;
 
 import nl.sogyo.library.model.command.Library;
 import nl.sogyo.library.services.rest.libraryapi.json.BookId;
-import nl.sogyo.library.services.rest.libraryapi.json.DeleteCopyMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 
 @Path("copy")
 public class CopyResource {

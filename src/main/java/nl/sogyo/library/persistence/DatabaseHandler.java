@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.sogyo.library.model.command.Book;
-import nl.sogyo.library.services.rest.libraryapi.json.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
-import nl.sogyo.library.services.rest.libraryapi.json.DeleteBookMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.TestBook;
+import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 
 public class DatabaseHandler {
 	
@@ -52,49 +52,51 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public static boolean insertBook(Book book) {
-		try {
-			String sqlStatement = 
-					"Set xact_abort on "
-					+ "begin tran "
-					
-					+ "Declare @idAuthor int "
-					+ "Declare @idCategory int "
-					+ "Declare @idPublisher int "
-					+ "Declare @idBook int "
-					+ "Declare @tableAuthor table (ID int) "
-					+ "Declare @tableCategory table (ID int) "
-					+ "Declare @tablePublisher table (ID int) "
-					+ "Declare @tableBook table (ID int) "
-					
-					+ "Set @idAuthor = (" + selectIdAuthorForename + book.getAuthorForename() + "\' and Surname = \'" + book.getAuthorSurname() + "\') "
-					+ "if (@idAuthor is null) "
-						+ "Begin "
-						+ "Insert into Authors output inserted.ID into @tableAuthor values (\'" + book.getAuthorForename() + "\', \'" + book.getAuthorSurname() + "\') "
-						+ "Set @idAuthor = (Select ID from @tableAuthor); "
-						+ "End "
+	public static int insertBook(Book book) {
 		
-					+ "Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
-					+ "if (@idCategory is null) "
-						+ "Begin "
-						+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
-						+ "Set @idCategory = (Select ID from @tableCategory); "
-						+ "End "
+		String sqlStatement = 
+				"Set xact_abort on "
+				+ "begin tran "
+				
+				+ "Declare @idAuthor int "
+				+ "Declare @idCategory int "
+				+ "Declare @idPublisher int "
+				+ "Declare @idBook int "
+				+ "Declare @tableAuthor table (ID int) "
+				+ "Declare @tableCategory table (ID int) "
+				+ "Declare @tablePublisher table (ID int) "
+				+ "Declare @tableBook table (ID int) "
+				
+				+ "Set @idAuthor = (" + selectIdAuthorForename + book.getAuthorForename() + "\' and Surname = \'" + book.getAuthorSurname() + "\') "
+				+ "if (@idAuthor is null) "
+					+ "Begin "
+					+ "Insert into Authors output inserted.ID into @tableAuthor values (\'" + book.getAuthorForename() + "\', \'" + book.getAuthorSurname() + "\') "
+					+ "Set @idAuthor = (Select ID from @tableAuthor); "
+					+ "End "
+	
+				+ "Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
+				+ "if (@idCategory is null) "
+					+ "Begin "
+					+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
+					+ "Set @idCategory = (Select ID from @tableCategory); "
+					+ "End "
+	
+				+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
+				+ "if (@idPublisher is null) "
+					+ "Begin "
+					+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
+					+ "Set @idPublisher = (Select ID from @tablePublisher); "
+					+ "End "
+	
+				+ "Insert into Books(Title, Subtitle, CategoryID, PublisherID, YearFirstPublication, ISBN, Pages, Language) output inserted.ID into @tableBook "
+				+ "values (\'" + book.getTitle() + "\', \'" + book.getSubtitle() + "\', " + "@idCategory, @idPublisher, \'" 
+				+ book.getYearFirstPublication() + "\', \'" + book.getIsbn() + "\', \'" + book.getPages() + "\', \'" + book.getLanguage() + "\') "
+				+ "Set @idBook = (Select ID from @tableBook) "
+				+ "Insert into BooksAuthors values (@idBook, @idAuthor) "
+				+ "Select ID from @tableBook "
+				
+				+ "commit tran";
 		
-					+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
-					+ "if (@idPublisher is null) "
-						+ "Begin "
-						+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
-						+ "Set @idPublisher = (Select ID from @tablePublisher); "
-						+ "End "
-		
-					+ "Insert into Books(Title, Subtitle, CategoryID, PublisherID, YearFirstPublication, ISBN, Pages, Language) output inserted.ID into @tableBook values (\'" + book.getTitle() + "\', \'" + book.getSubtitle() + "\', " + "@idCategory, @idPublisher, \'" 
-					+ book.getYearFirstPublication() + "\', \'" + book.getISBN() + "\', \'" + book.getPages() + "\', \'" + book.getLanguage() + "\') "
-					+ "Set @idBook = (Select ID from @tableBook) "
-					+ "Insert into BooksAuthors values (@idBook, @idAuthor) "
-					
-					+ "commit tran";
-			
 //			String sqlStatement = "Insert into Books values (" 
 //					+ book.getTitle() + ", "
 //					+ book.getSubtitle() + ", ("
@@ -107,14 +109,26 @@ public class DatabaseHandler {
 //					+ book.getPages() + ", "
 //					+ book.getLanguage() + ", "
 //					/*+ book.getImageCover()*/ + ");";
-			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
-			System.out.println("insert success");
-			System.out.println("rows affected: " + rowsAffected);
-			return rowsAffected >= 1;
+		try {
+//			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
+//			System.out.println("insert success");
+//			System.out.println("rows affected: " + rowsAffected);
+//			//return rowsAffected >= 1;
+			
+//			ResultSet resultSet = DatabaseConnector.executeInsertForId(sqlStatement);
+			
+			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
+			if (resultSet.next()) {
+				int id = resultSet.getInt("ID");
+				System.out.println("ID = " + id);
+				return id;
+			} else {
+				return 0;
+			}
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 			System.out.println("sqlexcep");
-			return false;
+			return -1;
 		}
 	}
 	
@@ -246,7 +260,7 @@ public class DatabaseHandler {
 				+ "End "
 			+ "commit tran";
 		
-		Book book = new Book("", "", "", "", "", "", (short) 0, "", (short) 0, "");
+		Book book = new Book(id, "", "", "", "", "", "", (short) 0, "", (short) 0, "");
 		int copiesAvailable = 0;
 		try {
 			ResultSet resultSet = DatabaseConnector.executeQuery(bookSqlStatement);
@@ -263,7 +277,7 @@ public class DatabaseHandler {
 				short pages = resultSet.getShort("Pages");
 				String language = resultSet.getString("Language");
 				
-				book = new Book(title, subtitle, authorForename, authorSurname, category, publisher,
+				book = new Book(id, title, subtitle, authorForename, authorSurname, category, publisher,
 						yearFirstPublication, isbn, pages, language);
 				
 				copiesAvailable = resultSet.getInt("CopiesAvailable");
@@ -280,6 +294,60 @@ public class DatabaseHandler {
 		} 
 		
 		return new BookInfo(book, copiesAvailable);
+	}
+	
+	public static boolean updateBook(Book book) {
+		String sqlStatement = 
+				"Set xact_abort on "
+				+ "begin tran "
+				
+				+ "Declare @idAuthor int "
+				+ "Declare @idCategory int "
+				+ "Declare @idPublisher int "
+				+ "Declare @tableAuthor table (ID int) "
+				+ "Declare @tableCategory table (ID int) "
+				+ "Declare @tablePublisher table (ID int) "
+				
+				+ "Set @idAuthor = (" + selectIdAuthorForename + book.getAuthorForename() + "\' and Surname = \'" + book.getAuthorSurname() + "\') "
+				+ "if (@idAuthor is null) "
+					+ "Begin "
+					+ "Insert into Authors output inserted.ID into @tableAuthor values (\'" + book.getAuthorForename() + "\', \'" + book.getAuthorSurname() + "\') "
+					+ "Set @idAuthor = (Select ID from @tableAuthor); "
+					+ "End "
+	
+				+ "Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
+				+ "if (@idCategory is null) "
+					+ "Begin "
+					+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
+					+ "Set @idCategory = (Select ID from @tableCategory); "
+					+ "End "
+	
+				+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
+				+ "if (@idPublisher is null) "
+					+ "Begin "
+					+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
+					+ "Set @idPublisher = (Select ID from @tablePublisher); "
+					+ "End "
+				
+				+ "Update Books Set Title = \'" + book.getTitle() + "\', Subtitle = \'" + book.getSubtitle() + "\', CategoryID = @idCategory, PublisherID = @idPublisher"
+				+ ", YearFirstPublication = " + book.getYearFirstPublication() + ", ISBN = \'" + book.getIsbn() + "\', Pages = " + book.getPages() + ", Language = \'" 
+				+ book.getLanguage() + "\' where ID = " + book.getId() + " "
+				
+				+ "Update BooksAuthors Set AuthorID = @idAuthor where BookID = " + book.getId() + " "
+				
+				+ "commit tran";
+		
+		try {
+			System.out.println(sqlStatement);
+			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
+			System.out.println("update success");
+			System.out.println("rows affected: " + rowsAffected);
+			return rowsAffected >= 1;
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+			System.out.println("sqlexcep");
+			return false;
+		}
 	}
 	
 	public static AddCopyMessage insertCopy(int bookId) {
@@ -367,6 +435,7 @@ public class DatabaseHandler {
 				+ "commit tran";
 		
 		try {
+			System.out.println("try deleteBook");
 			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
 			return rowsAffected >= 1;
 		} catch (SQLException e) {

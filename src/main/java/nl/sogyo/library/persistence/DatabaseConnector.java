@@ -42,6 +42,13 @@ public class DatabaseConnector {
 		return preparedStatement.executeUpdate();
 	}
 	
+	public static ResultSet executeInsertForId(String sqlStatement) throws SQLException {
+		connect();
+		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+		preparedStatement.executeUpdate();
+		return preparedStatement.getGeneratedKeys();
+	}
+	
 	// only for select
 	public static ResultSet executeQuery(String sqlStatement) throws SQLException {
 		connect();

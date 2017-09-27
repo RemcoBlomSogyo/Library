@@ -8,6 +8,7 @@ import nl.sogyo.library.model.helper.InputValidator;
 
 public class Book {
 	
+	@XmlElement private int id;
 	@XmlElement private String title;
 	@XmlElement private String subtitle;
 //	private Author author;
@@ -26,8 +27,34 @@ public class Book {
 	public Book(String title, String subtitle, String authorForename, 
 			String authorSurname, String category, String publisher, String yearFirstPublication, 
 			String isbn, String pages, String language /*, Image imageCover*/) throws IllegalArgumentException {
+		this(0, title, subtitle, authorForename, authorSurname, category, publisher, 
+				yearFirstPublication, isbn, pages, language);
+	}
+	
+	public Book(int id, String title, String subtitle, String authorForename, 
+			String authorSurname, String category, String publisher, short yearFirstPublication, 
+			String isbn, short pages, String language /*, Image imageCover*/) {
+		this.id = id;
+		this.title = title;
+		this.subtitle = subtitle;
+//		this.author = new Author(authorForename, authorSurname);
+		this.authorForename = authorForename;
+		this.authorSurname = authorSurname;
+		this.category = category;
+		this.publisher = publisher;
+		this.yearFirstPublication = yearFirstPublication;
+		this.isbn = isbn;
+		this.pages = pages;
+		this.language = language;
+//		this.imageCover = imageCover;
+	}
+	
+	public Book(int id, String title, String subtitle, String authorForename, 
+			String authorSurname, String category, String publisher, String yearFirstPublication, 
+			String isbn, String pages, String language /*, Image imageCover*/) throws IllegalArgumentException {
 		if (variablesAreValid(title, authorForename, authorSurname, 
 				category, publisher, yearFirstPublication, isbn, pages)) {
+			this.id = id;
 			this.title = title;
 			this.subtitle = subtitle;
 //			this.author = new Author(authorForename, authorSurname);
@@ -45,21 +72,8 @@ public class Book {
 		}
 	}
 	
-	public Book(String title, String subtitle, String authorForename, 
-			String authorSurname, String category, String publisher, short yearFirstPublication, 
-			String isbn, short pages, String language /*, Image imageCover*/) {
-		this.title = title;
-		this.subtitle = subtitle;
-//		this.author = new Author(authorForename, authorSurname);
-		this.authorForename = authorForename;
-		this.authorSurname = authorSurname;
-		this.category = category;
-		this.publisher = publisher;
-		this.yearFirstPublication = yearFirstPublication;
-		this.isbn = isbn;
-		this.pages = pages;
-		this.language = language;
-//		this.imageCover = imageCover;
+	public int getId() {
+		return id;
 	}
 	
 	public String getTitle() {
@@ -94,7 +108,7 @@ public class Book {
 		return yearFirstPublication;
 	}
 
-	public String getISBN() {
+	public String getIsbn() {
 		return isbn;
 	}
 
