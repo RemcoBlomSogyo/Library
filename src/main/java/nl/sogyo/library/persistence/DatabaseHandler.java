@@ -7,21 +7,11 @@ import java.util.List;
 import nl.sogyo.library.model.command.Book;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
-import nl.sogyo.library.services.rest.libraryapi.json.TestBook;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 
 public class DatabaseHandler {
 	
-//	private static final String selectBooksStatement = "Select Books.ID, Title, Subtitle, Forename as AuthorForename, "
-//			+ "Surname as AuthorSurname, Categories.name as Category, "
-//			+ "Publishers.name as Publisher, YearFirstPublication, ISBN, "
-//			+ "Pages, Language from Books "
-//			+ "inner join BookAuthors on Books.ID = BooksAuthors.BookID "
-//			+ "inner join Authors on BooksAuthors.AuthorID = Authors.ID "
-//			+ "inner join Categories on Books.CategoryID = Categories.ID "
-//			+ "inner join Publishers on Books.PublisherID = Publishers.ID ";
 	private static final String selectBooksStatement = "Select Books.ID as ID, Title, Forename as AuthorForename, "
 			+ "Surname as AuthorSurname, Categories.name as Category, ISBN from Books "
 			+ "inner join BooksAuthors on Books.ID = BooksAuthors.BookID "
@@ -32,28 +22,7 @@ public class DatabaseHandler {
 	private static final String selectIdPublisher = "Select ID from Publishers where Name = \'";
 	private static final String selectCopiesOnId = "Select count(*) as CopiesOfBook from Copies where BookID = ";
 	
-	public static List<TestBook> getAllBooksTest() {
-		String sqlStatement = "Select * from Test;";
-		List<TestBook> testBooks = new ArrayList<TestBook>();
-		
-		try {
-			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
-			while (resultSet.next()) {
-				int id = resultSet.getInt("id");
-				String title = resultSet.getString("name");
-				testBooks.add(new TestBook(id, title));
-			}
-			return testBooks;
-		} catch (SQLException se) {
-			se.printStackTrace();
-			return null;
-		} finally {
-			DatabaseConnector.disconnect();
-		}
-	}
-	
 	public static int insertBook(Book book) {
-		
 		String sqlStatement = 
 				"Set xact_abort on "
 				+ "begin tran "
@@ -97,26 +66,7 @@ public class DatabaseHandler {
 				
 				+ "commit tran";
 		
-//			String sqlStatement = "Insert into Books values (" 
-//					+ book.getTitle() + ", "
-//					+ book.getSubtitle() + ", ("
-//					+ selectIdAuthorForename + book.getAuthor().getForename() 
-//					+ " and Surname = " + book.getAuthor().getSurname() + "), ("
-//					+ selectIdCategory + book.getCategory() + "), ("
-//					+ selectIdPublisher + book.getPublisher() + "), "
-//					+ book.getYearFirstPublication() + ", "
-//					+ book.getISBN() + ", "
-//					+ book.getPages() + ", "
-//					+ book.getLanguage() + ", "
-//					/*+ book.getImageCover()*/ + ");";
 		try {
-//			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
-//			System.out.println("insert success");
-//			System.out.println("rows affected: " + rowsAffected);
-//			//return rowsAffected >= 1;
-			
-//			ResultSet resultSet = DatabaseConnector.executeInsertForId(sqlStatement);
-			
 			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
 			if (resultSet.next()) {
 				int id = resultSet.getInt("ID");
@@ -131,11 +81,6 @@ public class DatabaseHandler {
 			return -1;
 		}
 	}
-	
-//	public static List<Book> getAllBooks() {
-//		String sqlStatement = selectBooksStatement;
-//		return selectBooks(sqlStatement);
-//	}
 	
 	public static List<BookPreview> selectBooksOnTitle(String titleInput) {
 		String sqlStatement = selectBooksStatement + "where Title like \'%" + titleInput + "%\'";
@@ -178,26 +123,12 @@ public class DatabaseHandler {
 		try {
 			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
 			while (resultSet.next()) {
-//				int id = resultSet.getInt("ID");
-//				String title = resultSet.getString("Title");
-//				String subtitle = resultSet.getString("Subtitle");
-//				String authorForename = resultSet.getString("AuthorForename");
-//				String authorSurname = resultSet.getString("AuthorSurname");
-//				String category = resultSet.getString("Category");
-//				String publisher = resultSet.getString("Publisher");
-//				short yearFirstPublication = resultSet.getShort("YearFirstPublication");
-//				String isbn = resultSet.getString("ISBN");
-//				short pages = resultSet.getShort("Pages");
-//				String language = resultSet.getString("Language");
-//				
-//				books.add(new Book(title, subtitle, authorForename, authorSurname, category, publisher, yearFirstPublication, isbn, pages, language));
 				int id = resultSet.getInt("ID");
 				String title = resultSet.getString("Title");
 				String author = resultSet.getString("AuthorForename") + " " + resultSet.getString("AuthorSurname");
 				String category = resultSet.getString("Category");
 				String isbn = resultSet.getString("ISBN");
 				bookPreviews.add(new BookPreview(id, title, author, category, isbn));
-				
 			}
 			return bookPreviews;
 		} catch (SQLException se) {
@@ -209,23 +140,6 @@ public class DatabaseHandler {
 	}
 
 	public static BookInfo selectBookOnId(int id) {
-//		String bookSqlStatement = 
-////				"Set xact_abort on "
-////				+ "begin tran "
-//				"Select Title, Subtitle, Forename as AuthorForename, "
-//				+ "Surname as AuthorSurname, Categories.name as Category, Publishers.name as Publisher, YearFirstPublication, "
-//				+ "ISBN, Pages, Language, count(*) as CopiesAvailable from Books "
-//				+ "inner join BooksAuthors on Books.ID = BooksAuthors.BookID "
-//				+ "inner join Authors on BooksAuthors.AuthorID = Authors.ID "
-//				+ "inner join Categories on Books.CategoryID = Categories.ID "
-//				+ "inner join Publishers on Books.PublisherID = Publishers.ID "
-//				+ "where BookID = " + id;
-//		
-//		String copiesSqlStatement = "Select count(*) as CopiesAvailable from Copies where BookID = " + id;
-				
-//				+ "Select count(*) as CopiesAvailable from Copies where BookID = " + id + " "
-//				+ "commit tran";
-		
 		String bookSqlStatement = 
 			"Set xact_abort on "
 			+ "begin tran "
@@ -282,13 +196,6 @@ public class DatabaseHandler {
 				
 				copiesAvailable = resultSet.getInt("CopiesAvailable");
 			}
-			
-//			resultSet = DatabaseConnector.executeQuery(copiesSqlStatement);
-//			while(resultSet.next()) {
-//				copiesAvailable = resultSet.getInt("CopiesAvailable");
-//			}
-			
-//			return new BookInfo(book, copiesAvailable);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		} 
@@ -351,9 +258,6 @@ public class DatabaseHandler {
 	}
 	
 	public static AddCopyMessage insertCopy(int bookId) {
-//		String insertStatement = "Insert into Copies(BookID) values (" + bookId + ")";
-//		String selectStatement = "Select count(*) as CopiesOfBook from Copies where BookID = " + bookId;
-		
 		String sqlStatement = 
 				"Set xact_abort on "
 				+ "begin tran "
@@ -379,25 +283,9 @@ public class DatabaseHandler {
 			System.err.println(e.getMessage());
 			return new AddCopyMessage(false, 0);
 		}
-		
-//		try {
-//			if (DatabaseConnector.executeNonQuery(insertStatement) == 1) {
-//				ResultSet resultSet = DatabaseConnector.executeQuery(selectStatement);
-//				while (resultSet.next()) {
-//					copiesOfBook = resultSet.getInt("CopiesOfBook");
-//				}
-//				return new AddCopyMessage(true, copiesOfBook);
-//			} else {
-//				return new AddCopyMessage(false, 0);
-//			}
-//		} catch(SQLException e) {
-//			return new AddCopyMessage(false, 0);
-//		}
-
 	}
 	
 	public static DeleteCopyMessage deleteCopy(int bookId) {
-		
 		String sqlStatement = 
 				"Set xact_abort on "
 				+ "begin tran "
@@ -442,8 +330,6 @@ public class DatabaseHandler {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return false;
-		}
-				
+		}	
 	}
 }
-

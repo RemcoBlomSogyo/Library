@@ -13,14 +13,6 @@ public class AddBookMessage extends Message {
 	public AddBookMessage(int bookId) {
 		super(bookId > 0, messagePositive, messageNegative);
 		this.bookId = bookId;
-//		this.bookId = bookId;
-//		if (bookId > 0) {
-//			commandSucceeded = true;
-//			message = "Book is added to the database.";
-//		} else {
-//			commandSucceeded = false;
-//			message = "Something went wrong. No book was added.";
-//		}
 	}
 	
 	public int getBookId() {

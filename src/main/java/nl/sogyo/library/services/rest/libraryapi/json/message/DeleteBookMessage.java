@@ -11,12 +11,5 @@ public class DeleteBookMessage extends Message {
 	
 	public DeleteBookMessage(boolean commandSucceeded) {
 		super(commandSucceeded, messagePositive, messageNegative);
-//		this.commandSucceeded = commandSucceeded;
-//
-//		if (commandSucceeded) {
-//			this.message = "Boek en exemplaren zijn verwijderd uit de database";
-//		} else {
-//			this.message = "Boek en exemplaren verwijderen mislukt";
-//		}
 	}
 }

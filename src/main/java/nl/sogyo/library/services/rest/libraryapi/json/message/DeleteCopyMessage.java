@@ -13,12 +13,6 @@ public class DeleteCopyMessage extends Message {
 	public DeleteCopyMessage(boolean commandSucceeded, int copiesOfBook) {
 		super(commandSucceeded, messagePositive, messageNegative);
 		this.copiesOfBook = copiesOfBook;
-		
-//		if (commandSucceeded) {
-//			this.message = "Exemplaar is verwijderd uit de database";
-//		} else {
-//			this.message = "Exemplaar verwijderen mislukt";
-//		}
 	}
 
 	public int getCopiesOfBook() {

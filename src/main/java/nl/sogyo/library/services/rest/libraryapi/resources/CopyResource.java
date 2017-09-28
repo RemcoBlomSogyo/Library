@@ -19,11 +19,7 @@ public class CopyResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public AddCopyMessage addCopy(BookId copyCommand) {
-		System.out.println("addCopy " + copyCommand.getBookId());
 		AddCopyMessage addCopyMessage = Library.addCopy(copyCommand);
-		System.out.println(" " + addCopyMessage.getCommandSucceeded()
-				+ addCopyMessage.getCopiesOfBook()
-				+ addCopyMessage.getMessage());
 		return addCopyMessage;
 	}
 	
@@ -31,7 +27,6 @@ public class CopyResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public DeleteCopyMessage deleteCopy(BookId copyCommand) {
-		System.out.println("deleteCopy " + copyCommand.getBookId());
 		DeleteCopyMessage deleteCopyMessage = Library.deleteCopy(copyCommand);
 		System.out.println(" " + deleteCopyMessage.getCommandSucceeded()
 				+ deleteCopyMessage.getCopiesOfBook()

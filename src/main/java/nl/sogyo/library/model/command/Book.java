@@ -1,17 +1,29 @@
 package nl.sogyo.library.model.command;
 
-import java.awt.Image;
-
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 
 import nl.sogyo.library.model.helper.InputValidator;
 
+// code for Hibernate
+
+//@Entity
+//@Table(name = "Books")
+//@SecondaryTables({
+//    @SecondaryTable(name="Categories", pkJoinColumns={
+//        @PrimaryKeyJoinColumn(name="ID", referencedColumnName="CategoriesID") }),
+//    @SecondaryTable(name="Publishers", pkJoinColumns={
+//            @PrimaryKeyJoinColumn(name="ID", referencedColumnName="PublisherID") }),
+//})
 public class Book {
 	
 	@XmlElement private int id;
 	@XmlElement private String title;
 	@XmlElement private String subtitle;
-//	private Author author;
 	@XmlElement private String authorForename;
 	@XmlElement private String authorSurname;
 	@XmlElement private String category;
@@ -20,7 +32,6 @@ public class Book {
 	@XmlElement private String isbn;
 	@XmlElement private short pages;
 	@XmlElement private String language;
-//	private Image imageCover;
 	
 	public Book() {}
 	
@@ -37,7 +48,6 @@ public class Book {
 		this.id = id;
 		this.title = title;
 		this.subtitle = subtitle;
-//		this.author = new Author(authorForename, authorSurname);
 		this.authorForename = authorForename;
 		this.authorSurname = authorSurname;
 		this.category = category;
@@ -46,7 +56,6 @@ public class Book {
 		this.isbn = isbn;
 		this.pages = pages;
 		this.language = language;
-//		this.imageCover = imageCover;
 	}
 	
 	public Book(int id, String title, String subtitle, String authorForename, 
@@ -57,7 +66,6 @@ public class Book {
 			this.id = id;
 			this.title = title;
 			this.subtitle = subtitle;
-//			this.author = new Author(authorForename, authorSurname);
 			this.authorForename = authorForename;
 			this.authorSurname = authorSurname;
 			this.category = category;
@@ -66,7 +74,6 @@ public class Book {
 			this.isbn = isbn;
 			this.pages = Short.parseShort(emptyToZero(pages));
 			this.language = language;
-//			this.imageCover = imageCover;
 		} else {
 			throw new IllegalArgumentException("A variable is invalid");
 		}
@@ -83,10 +90,6 @@ public class Book {
 	public String getSubtitle() {
 		return subtitle;
 	}
-	
-//	public Author getAuthor() {
-//		return author;
-//	}
 	
 	public String getAuthorForename() {
 		return authorForename;
@@ -119,10 +122,6 @@ public class Book {
 	public String getLanguage() {
 		return language;
 	}
-	
-//	public Image getImageCover() {
-//		return imageCover;
-//	}
 	
 	private boolean variablesAreValid(String title, String authorForename, String authorSurname,
 			String category, String publisher, String yearFirstPublication, String isbn, String pages) {

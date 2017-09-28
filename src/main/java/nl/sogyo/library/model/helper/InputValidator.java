@@ -50,7 +50,6 @@ public class InputValidator {
 		}
 		
 		int checkDigitInString = Character.getNumericValue(isbnInput.charAt(12));
-		System.out.println(calculatedCheckDigit + " - " + checkDigitInString);
 		return calculatedCheckDigit == checkDigitInString;
 	}
 	

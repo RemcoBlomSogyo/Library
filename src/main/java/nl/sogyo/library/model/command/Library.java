@@ -21,8 +21,6 @@ public class Library {
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
 			bookId = DatabaseHandler.insertBook(book);
 		} catch (IllegalArgumentException e) {
-			System.err.println(e.getMessage());
-			System.out.println("library illargexcp");
 			bookId = -2;
 		}
 		return new AddBookMessage(bookId);
@@ -43,7 +41,6 @@ public class Library {
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
 			commandSucceeded = DatabaseHandler.updateBook(book);
 		} catch (IllegalArgumentException e) {
-			System.err.println(e.getMessage());
 			commandSucceeded = false;
 		}
 		return new EditBookMessage(commandSucceeded);
