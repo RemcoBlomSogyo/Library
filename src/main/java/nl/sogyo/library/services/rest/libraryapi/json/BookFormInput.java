@@ -7,8 +7,12 @@ public class BookFormInput {
 	@XmlElement private int id;
 	@XmlElement private String title;
 	@XmlElement private String subtitle;
-	@XmlElement private String authorForename;
-	@XmlElement private String authorSurname;
+	@XmlElement private String authorForename1;
+	@XmlElement private String authorSurname1;
+	@XmlElement private String authorForename2;
+	@XmlElement private String authorSurname2;
+	@XmlElement private String authorForename3;
+	@XmlElement private String authorSurname3;
 	@XmlElement private String category;
 	@XmlElement private String publisher;
 	@XmlElement private String yearFirstPublication;
@@ -30,12 +34,28 @@ public class BookFormInput {
 		return subtitle;
 	}
 	
-	public String getAuthorForname() {
-		return authorForename;
+	public String getAuthorForename1() {
+		return authorForename1;
 	}
 	
-	public String getAuthorSurname() {
-		return authorSurname;
+	public String getAuthorSurname1() {
+		return authorSurname1;
+	}
+	
+	public String getAuthorForename2() {
+		return authorForename2;
+	}
+	
+	public String getAuthorSurname2() {
+		return authorSurname2;
+	}
+	
+	public String getAuthorForename3() {
+		return authorForename3;
+	}
+	
+	public String getAuthorSurname3() {
+		return authorSurname3;
 	}
 	
 	public String getCategory() {
