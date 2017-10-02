@@ -119,55 +119,55 @@ public class DatabaseHandler {
 							+ "Set @idAuthor1 = (Select ID from @tableAuthor1); "
 							+ "End ");
 				
-				if (authors.size() >= 2) {
-					sqlStatement.append("Set @idAuthor2 = (" + selectIdAuthorForename + authors.get(1).getForename() + "\' and Surname = \'" + authors.get(1).getSurname() + "\') "
-							+ "if (@idAuthor2 is null) "
-							+ "Begin "
-							+ "Insert into Authors output inserted.ID into @tableAuthor2 values (\'" + authors.get(1).getForename() + "\', \'" + authors.get(1).getSurname() + "\') "
-							+ "Set @idAuthor2 = (Select ID from @tableAuthor2); "
-							+ "End ");
-				}
-				
-				if (authors.size() == 3) {
-					sqlStatement.append("Set @idAuthor3 = (" + selectIdAuthorForename + authors.get(2).getForename() + "\' and Surname = \'" + authors.get(2).getSurname() + "\') "
-							+ "if (@idAuthor3 is null) "
-							+ "Begin "
-							+ "Insert into Authors output inserted.ID into @tableAuthor3 values (\'" + authors.get(2).getForename() + "\', \'" + authors.get(2).getSurname() + "\') "
-							+ "Set @idAuthor3 = (Select ID from @tableAuthor3); "
-							+ "End ");
-				}
+		if (authors.size() >= 2) {
+			sqlStatement.append("Set @idAuthor2 = (" + selectIdAuthorForename + authors.get(1).getForename() + "\' and Surname = \'" + authors.get(1).getSurname() + "\') "
+					+ "if (@idAuthor2 is null) "
+					+ "Begin "
+					+ "Insert into Authors output inserted.ID into @tableAuthor2 values (\'" + authors.get(1).getForename() + "\', \'" + authors.get(1).getSurname() + "\') "
+					+ "Set @idAuthor2 = (Select ID from @tableAuthor2); "
+					+ "End ");
+		}
+		
+		if (authors.size() == 3) {
+			sqlStatement.append("Set @idAuthor3 = (" + selectIdAuthorForename + authors.get(2).getForename() + "\' and Surname = \'" + authors.get(2).getSurname() + "\') "
+					+ "if (@idAuthor3 is null) "
+					+ "Begin "
+					+ "Insert into Authors output inserted.ID into @tableAuthor3 values (\'" + authors.get(2).getForename() + "\', \'" + authors.get(2).getSurname() + "\') "
+					+ "Set @idAuthor3 = (Select ID from @tableAuthor3); "
+					+ "End ");
+		}
 	
-				sqlStatement.append("Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
-					+ "if (@idCategory is null) "
-						+ "Begin "
-						+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
-						+ "Set @idCategory = (Select ID from @tableCategory); "
-						+ "End "
+		sqlStatement.append("Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
+				+ "if (@idCategory is null) "
+					+ "Begin "
+					+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
+					+ "Set @idCategory = (Select ID from @tableCategory); "
+					+ "End "
+	
+				+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
+				+ "if (@idPublisher is null) "
+					+ "Begin "
+					+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
+					+ "Set @idPublisher = (Select ID from @tablePublisher); "
+					+ "End "
+	
+				+ "Insert into Books(Title, Subtitle, CategoryID, PublisherID, YearFirstPublication, ISBN, Pages, Language) output inserted.ID into @tableBook "
+				+ "values (\'" + book.getTitle() + "\', \'" + book.getSubtitle() + "\', " + "@idCategory, @idPublisher, \'" 
+				+ book.getYearFirstPublication() + "\', \'" + book.getIsbn() + "\', \'" + book.getPages() + "\', \'" + book.getLanguage() + "\') "
+				+ "Set @idBook = (Select ID from @tableBook) "
+				+ "Insert into BooksAuthors values (@idBook, @idAuthor1) ");
+				
+		if (authors.size() >= 2) {
+			sqlStatement.append("Insert into BooksAuthors values (@idBook, @idAuthor2) ");
+		}
 		
-					+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
-					+ "if (@idPublisher is null) "
-						+ "Begin "
-						+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
-						+ "Set @idPublisher = (Select ID from @tablePublisher); "
-						+ "End "
+		if (authors.size() == 3) {
+			sqlStatement.append("Insert into BooksAuthors values (@idBook, @idAuthor3) ");
+		}
 		
-					+ "Insert into Books(Title, Subtitle, CategoryID, PublisherID, YearFirstPublication, ISBN, Pages, Language) output inserted.ID into @tableBook "
-					+ "values (\'" + book.getTitle() + "\', \'" + book.getSubtitle() + "\', " + "@idCategory, @idPublisher, \'" 
-					+ book.getYearFirstPublication() + "\', \'" + book.getIsbn() + "\', \'" + book.getPages() + "\', \'" + book.getLanguage() + "\') "
-					+ "Set @idBook = (Select ID from @tableBook) "
-					+ "Insert into BooksAuthors values (@idBook, @idAuthor1) ");
-				
-				if (authors.size() >= 2) {
-					sqlStatement.append("Insert into BooksAuthors values (@idBook, @idAuthor2) ");
-				}
-				
-				if (authors.size() == 3) {
-					sqlStatement.append("Insert into BooksAuthors values (@idBook, @idAuthor3) ");
-				}
-				
-				sqlStatement.append(
-					"Select ID from @tableBook "
-					+ "commit tran");
+		sqlStatement.append(
+			"Select ID from @tableBook "
+			+ "commit tran");
 		
 		try {
 			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement.toString());
@@ -300,31 +300,33 @@ public class DatabaseHandler {
 		String language = "";
 		
 		int copiesAvailable = 0;
-		int numberAuthors = 0;
 		
 		try {
 			ResultSet resultSet = DatabaseConnector.executeQuery(bookSqlStatement);
-			while (resultSet.next()) {
-				if (numberAuthors != 0) {
-					System.out.println("title: " + resultSet.getString("Title"));
-					title = resultSet.getString("Title");
-					subtitle = resultSet.getString("Subtitle");
-					category = resultSet.getString("Category");
-					publisher = resultSet.getString("Publisher");
-					yearFirstPublication = resultSet.getShort("YearFirstPublication");
-					isbn = resultSet.getString("ISBN");
-					pages = resultSet.getShort("Pages");
-					language = resultSet.getString("Language");
+			resultSet.next();
+			
+			System.out.println("title: " + resultSet.getString("Title"));
+			title = resultSet.getString("Title");
+			subtitle = resultSet.getString("Subtitle");
+			category = resultSet.getString("Category");
+			publisher = resultSet.getString("Publisher");
+			yearFirstPublication = resultSet.getShort("YearFirstPublication");
+			isbn = resultSet.getString("ISBN");
+			pages = resultSet.getShort("Pages");
+			language = resultSet.getString("Language");
+			String authorForename = resultSet.getString("AuthorForename");
+			String authorSurname = resultSet.getString("AuthorSurname");
+			authors.add(new Author(authorForename, authorSurname));
+				
+			if (resultSet.isLast()) {
+				copiesAvailable = resultSet.getInt("CopiesAvailable");
+			} else {
+				while (resultSet.next()) {
+					authorForename = resultSet.getString("AuthorForename");
+					authorSurname = resultSet.getString("AuthorSurname");
+					authors.add(new Author(authorForename, authorSurname));
 				}
-				
-				String authorForename = resultSet.getString("AuthorForename");
-				String authorSurname = resultSet.getString("AuthorSurname");
-				authors.add(new Author(authorForename, authorSurname));
-				numberAuthors++;
-				
-				
 			}
-			copiesAvailable = resultSet.getInt("CopiesAvailable");
 
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -337,25 +339,57 @@ public class DatabaseHandler {
 	}
 	
 	public static boolean updateBook(Book book) {
-		String sqlStatement = 
+		List<Author> authors = book.getAuthors();
+		StringBuilder sqlStatement = new StringBuilder(
 				"Set xact_abort on "
 				+ "begin tran "
 				
-				+ "Declare @idAuthor int "
+				+ "Declare @idAuthor1 int "
+				+ "Declare @idAuthor2 int "
+				+ "Declare @idAuthor3 int "
 				+ "Declare @idCategory int "
 				+ "Declare @idPublisher int "
-				+ "Declare @tableAuthor table (ID int) "
+				+ "Declare @idBook int "
+				+ "Declare @tableAuthor1 table (ID int) "
+				+ "Declare @tableAuthor2 table (ID int) "
+				+ "Declare @tableAuthor3 table (ID int) "
 				+ "Declare @tableCategory table (ID int) "
 				+ "Declare @tablePublisher table (ID int) "
+				+ "Declare @tableBook table (ID int) "
 				
-				+ "Set @idAuthor = (" + selectIdAuthorForename + book.getAuthorForename() + "\' and Surname = \'" + book.getAuthorSurname() + "\') "
-				+ "if (@idAuthor is null) "
+				+ "Set @idAuthor1 = (" + selectIdAuthorForename + authors.get(0).getForename() + "\' and Surname = \'" + authors.get(0).getSurname() + "\') "
+							+ "if (@idAuthor1 is null) "
+							+ "Begin "
+							+ "Insert into Authors output inserted.ID into @tableAuthor1 values (\'" + authors.get(0).getForename() + "\', \'" + authors.get(0).getSurname() + "\') "
+							+ "Set @idAuthor1 = (Select ID from @tableAuthor1); "
+							+ "End "
+							
+							+ "Delete from BooksAuthors where BookID = " + book.getId() + " "
+							+ "Insert into BooksAuthors values (" + book.getId() + ", @idAuthor1) ");
+				
+		if (authors.size() >= 2) {
+			sqlStatement.append("Set @idAuthor2 = (" + selectIdAuthorForename + authors.get(1).getForename() + "\' and Surname = \'" + authors.get(1).getSurname() + "\') "
+					+ "if (@idAuthor2 is null) "
 					+ "Begin "
-					+ "Insert into Authors output inserted.ID into @tableAuthor values (\'" + book.getAuthorForename() + "\', \'" + book.getAuthorSurname() + "\') "
-					+ "Set @idAuthor = (Select ID from @tableAuthor); "
+					+ "Insert into Authors output inserted.ID into @tableAuthor2 values (\'" + authors.get(1).getForename() + "\', \'" + authors.get(1).getSurname() + "\') "
+					+ "Set @idAuthor2 = (Select ID from @tableAuthor2); "
 					+ "End "
+					
+					+ "Insert into BooksAuthors values (" + book.getId() + ", @idAuthor2) ");
+		}
+		
+		if (authors.size() == 3) {
+			sqlStatement.append("Set @idAuthor3 = (" + selectIdAuthorForename + authors.get(2).getForename() + "\' and Surname = \'" + authors.get(2).getSurname() + "\') "
+					+ "if (@idAuthor3 is null) "
+					+ "Begin "
+					+ "Insert into Authors output inserted.ID into @tableAuthor3 values (\'" + authors.get(2).getForename() + "\', \'" + authors.get(2).getSurname() + "\') "
+					+ "Set @idAuthor3 = (Select ID from @tableAuthor3); "
+					+ "End "
+					
+					+ "Insert into BooksAuthors values (" + book.getId() + ", @idAuthor3) ");
+		}
 	
-				+ "Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
+		sqlStatement.append("Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
 				+ "if (@idCategory is null) "
 					+ "Begin "
 					+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
@@ -368,18 +402,16 @@ public class DatabaseHandler {
 					+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
 					+ "Set @idPublisher = (Select ID from @tablePublisher); "
 					+ "End "
-				
+		
 				+ "Update Books Set Title = \'" + book.getTitle() + "\', Subtitle = \'" + book.getSubtitle() + "\', CategoryID = @idCategory, PublisherID = @idPublisher"
 				+ ", YearFirstPublication = " + book.getYearFirstPublication() + ", ISBN = \'" + book.getIsbn() + "\', Pages = " + book.getPages() + ", Language = \'" 
 				+ book.getLanguage() + "\' where ID = " + book.getId() + " "
 				
-				+ "Update BooksAuthors Set AuthorID = @idAuthor where BookID = " + book.getId() + " "
-				
-				+ "commit tran";
+				+ "commit tran");
 		
 		try {
 			System.out.println(sqlStatement);
-			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
+			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement.toString());
 			System.out.println("update success");
 			System.out.println("rows affected: " + rowsAffected);
 			return rowsAffected >= 1;

@@ -10,8 +10,12 @@ public class Author {
 	public Author() {}
 	
 	public Author(String forename, String surname) {
-		this.forename = forename;
-		this.surname = surname;
+		if (forename.isEmpty() || surname.isEmpty()) {
+			throw new IllegalArgumentException("A name is empty");
+		} else {
+			this.forename = forename;
+			this.surname = surname;
+		}
 	}
 	
 	public String getForename() {

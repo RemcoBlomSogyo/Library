@@ -45,7 +45,8 @@ public class DatabaseConnector {
 	// only for select
 	public static ResultSet executeQuery(String sqlStatement) throws SQLException {
 		connect();
-		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, ResultSet.TYPE_SCROLL_INSENSITIVE, 
+				  ResultSet.CONCUR_READ_ONLY);
 		return preparedStatement.executeQuery();
 	}
 }

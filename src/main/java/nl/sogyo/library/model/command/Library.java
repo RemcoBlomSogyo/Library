@@ -31,17 +31,7 @@ public class Library {
 	
 	public static AddBookMessage addBook(BookFormInput bookFormInput) {
 		int bookId;
-		List<Author> authors = new ArrayList<Author>();
-		
-		if (!bookFormInput.getAuthorForename1().isEmpty() && !bookFormInput.getAuthorSurname1().isEmpty()) {
-			authors.add(new Author(bookFormInput.getAuthorForename1(), bookFormInput.getAuthorSurname1()));
-		}
-		if (!bookFormInput.getAuthorForename2().isEmpty() && !bookFormInput.getAuthorSurname2().isEmpty()) {
-			authors.add(new Author(bookFormInput.getAuthorForename2(), bookFormInput.getAuthorSurname2()));
-		}
-		if (!bookFormInput.getAuthorForename3().isEmpty() && !bookFormInput.getAuthorSurname3().isEmpty()) {
-			authors.add(new Author(bookFormInput.getAuthorForename3(), bookFormInput.getAuthorSurname3()));
-		}
+		List<Author> authors = getAuthorsFromBookFormInput(bookFormInput);
 		
 		try {
 			Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
@@ -60,12 +50,27 @@ public class Library {
 		return addCopyMessage;
 	}
 	
+//	public static EditBookMessage editBook(BookFormInput bookFormInput) {
+//		boolean commandSucceeded;
+//		try {
+//			Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
+//					bookFormInput.getSubtitle(), bookFormInput.getAuthorForname(),
+//					bookFormInput.getAuthorSurname(), bookFormInput.getCategory(),
+//					bookFormInput.getPublisher(), bookFormInput.getYearFirstPublication(),
+//					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
+//			commandSucceeded = DatabaseHandler.updateBook(book);
+//		} catch (IllegalArgumentException e) {
+//			commandSucceeded = false;
+//		}
+//		return new EditBookMessage(commandSucceeded);
+//	}
+	
 	public static EditBookMessage editBook(BookFormInput bookFormInput) {
 		boolean commandSucceeded;
+		List<Author> authors = getAuthorsFromBookFormInput(bookFormInput);
 		try {
 			Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
-					bookFormInput.getSubtitle(), bookFormInput.getAuthorForname(),
-					bookFormInput.getAuthorSurname(), bookFormInput.getCategory(),
+					bookFormInput.getSubtitle(), authors, bookFormInput.getCategory(),
 					bookFormInput.getPublisher(), bookFormInput.getYearFirstPublication(),
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
 			commandSucceeded = DatabaseHandler.updateBook(book);
@@ -84,5 +89,21 @@ public class Library {
 		boolean commandSucceeded = DatabaseHandler.deleteBookAndCopies(deleteBookCommand.getBookId());
 		DeleteBookMessage deleteBookMessage = new DeleteBookMessage(commandSucceeded);
 		return deleteBookMessage;
+	}
+	
+	private static List<Author> getAuthorsFromBookFormInput(BookFormInput bookFormInput) {
+		List<Author> authors = new ArrayList<Author>();
+		
+		if (!bookFormInput.getAuthorForename1().isEmpty() && !bookFormInput.getAuthorSurname1().isEmpty()) {
+			authors.add(new Author(bookFormInput.getAuthorForename1(), bookFormInput.getAuthorSurname1()));
+		}
+		if (!bookFormInput.getAuthorForename2().isEmpty() && !bookFormInput.getAuthorSurname2().isEmpty()) {
+			authors.add(new Author(bookFormInput.getAuthorForename2(), bookFormInput.getAuthorSurname2()));
+		}
+		if (!bookFormInput.getAuthorForename3().isEmpty() && !bookFormInput.getAuthorSurname3().isEmpty()) {
+			authors.add(new Author(bookFormInput.getAuthorForename3(), bookFormInput.getAuthorSurname3()));
+		}
+		
+		return authors;
 	}
 }
