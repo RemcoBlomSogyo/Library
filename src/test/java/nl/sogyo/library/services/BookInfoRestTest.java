@@ -29,6 +29,6 @@ public class BookInfoRestTest extends JerseyTest {
 	@Test
 	public void requestForNotExistingIdGivesEmptyResults() {
 		String output = target("/book").path("10000000").request().get(String.class);
-		Assert.assertTrue(output.contains("\"title\":\"\",\"subtitle\":\"\",\"authorForename\":\"\",\"authorSurname\":\"\""));
+		Assert.assertTrue(output.contains("\"title\":\"\",\"subtitle\":\"\",\"authors\":[],\"category\":\"\""));
 	}
 }
