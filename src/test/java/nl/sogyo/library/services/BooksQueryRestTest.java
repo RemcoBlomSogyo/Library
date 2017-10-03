@@ -29,27 +29,69 @@ public class BooksQueryRestTest extends JerseyTest {
 	
 	@Test
 	public void searchForBooksWithTitlesWithAGivesStatus200() {
-		Response output = target("/books").queryParam("title", "a").queryParam("author", "").queryParam("isbn", "").request().get();
+		Response output = target("books").queryParam("title", "a").queryParam("author", "").queryParam("isbn", "").request().get();
 		System.out.println(output.getStatus());
 		Assert.assertEquals(200, output.getStatus());
 	}
 	
 	@Test
 	public void searchForBooksWithoutQueryValuesGivesEmptyArray() {
-		String output = target("/books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "").request().get(String.class);
+		String output = target("books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "").request().get(String.class);
 		Assert.assertEquals("[]", output);
 	}
 	
 	@Test
 	public void searchForBooksWithNotExistingIsbnGivesEmptyArray() {
-		String output = target("/books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889372").request().get(String.class);
+		String output = target("books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889372").request().get(String.class);
 		Assert.assertEquals("[]", output);
 	}
 	
 	@Test
-	public void searchForBooksWithExistingIsbnGivesOnlyJsonOfBook() {
-		System.out.println(target("/books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889370"));
+	public void searchForBooksWithExistingIsbnGivesJsonOfBook() {
+		System.out.println(target("books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889370"));
 		String output = target("/books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889370").request().get(String.class);
-		Assert.assertTrue(output.contains("Polymer"));
+		Assert.assertTrue(output.contains("Getting Started with Polymer"));
+	}
+	
+	@Test
+	public void searchForBooksOfArshakGivesGettingStartedWithPolymer() {
+		String output = target("books").queryParam("title", "").queryParam("author", "Arshak").queryParam("isbn", "").request().get(String.class);
+		Assert.assertTrue(output.contains("Getting Started with Polymer"));
+	}
+	
+	@Test
+	public void searchForBooksOfArshakKhachatrianGivesGettingStartedWithPolymer() {
+		String output = target("books").queryParam("title", "").queryParam("author", "Arshak Khachatrian").queryParam("isbn", "").request().get(String.class);
+		Assert.assertTrue(output.contains("Getting Started with Polymer"));
+	}
+	
+	@Test
+	public void searchForBooksOfNotExistingAuthorGivesEmptyArray() {
+		String output = target("books").queryParam("title", "").queryParam("author", "Schaapgeitkoekip").queryParam("isbn", "").request().get(String.class);
+		Assert.assertEquals("[]", output);
+	}
+	
+	@Test
+	public void searchForBooksOfNotExistingForenameAndSurnameGivesEmptyArray() {
+		String output = target("books").queryParam("title", "").queryParam("author", "Henk Westbroek").queryParam("isbn", "").request().get(String.class);
+		Assert.assertEquals("[]", output);
+	}
+	
+	@Test
+	public void searchForTitlePolymerGivesGettingStartedPolymerInJson() {
+		String output = target("books").queryParam("title", "polymer").queryParam("author", "").queryParam("isbn", "").request().get(String.class);
+		Assert.assertTrue(output.contains("Getting Started with Polymer"));
+	}
+	
+	@Test
+	public void searchForNotExistingWordInAnyTitleGivesEmptyArray() {
+		String output = target("books").queryParam("title", "jongbelegenkaas").queryParam("author", "").queryParam("isbn", "").request().get(String.class);
+		Assert.assertEquals("[]", output);
+	}
+	
+	@Test
+	public void searchForExactlyTheSameTitleGivesTheBookInJson() {
+		String output = target("books").queryParam("title", "Pro RESTful APIs").queryParam("author", "").queryParam("isbn", "").request().get(String.class);
+		Assert.assertTrue(output.contains("Pro RESTful APIs"));
 	}
 }
