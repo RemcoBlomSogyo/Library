@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import nl.sogyo.library.services.rest.libraryapi.resources.BookResource;
 
-public class BookInfoRestTest extends JerseyTest {
+public class BookInfoQueryRestTest extends JerseyTest {
 
 	@Override
 	public Application configure() {

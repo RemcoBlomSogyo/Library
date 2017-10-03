@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class Author {
 	
+	@XmlElement private int id;
 	@XmlElement private String forename;
 	@XmlElement private String surname;
 	
@@ -16,6 +17,10 @@ public class Author {
 			this.forename = forename;
 			this.surname = surname;
 		}
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public String getForename() {

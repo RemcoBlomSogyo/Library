@@ -30,9 +30,13 @@ public class Library {
 //	}
 	
 	public static AddBookMessage addBook(BookFormInput bookFormInput) {
+		System.out.println("libary....");
+		System.out.println("bookform " + bookFormInput.getTitle() );
 		int bookId;
 		List<Author> authors = getAuthorsFromBookFormInput(bookFormInput);
 		
+		System.out.println("test");
+		System.out.println("test libary: " + bookFormInput.getTitle());
 		try {
 			Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
 					bookFormInput.getSubtitle(), authors, bookFormInput.getCategory(),
@@ -45,8 +49,8 @@ public class Library {
 		return new AddBookMessage(bookId);
 	}
 	
-	public static AddCopyMessage addCopy(BookId addCopyCommand) {
-		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(addCopyCommand.getBookId());
+	public static AddCopyMessage addCopy(int bookId) {
+		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(bookId);
 		return addCopyMessage;
 	}
 	
@@ -65,11 +69,11 @@ public class Library {
 //		return new EditBookMessage(commandSucceeded);
 //	}
 	
-	public static EditBookMessage editBook(BookFormInput bookFormInput) {
+	public static EditBookMessage editBook(int id, BookFormInput bookFormInput) {
 		boolean commandSucceeded;
 		List<Author> authors = getAuthorsFromBookFormInput(bookFormInput);
 		try {
-			Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
+			Book book = new Book(id, bookFormInput.getTitle(),
 					bookFormInput.getSubtitle(), authors, bookFormInput.getCategory(),
 					bookFormInput.getPublisher(), bookFormInput.getYearFirstPublication(),
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
@@ -80,13 +84,13 @@ public class Library {
 		return new EditBookMessage(commandSucceeded);
 	}
 	
-	public static DeleteCopyMessage deleteCopy(BookId deleteCopyCommand) {
-		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(deleteCopyCommand.getBookId());
+	public static DeleteCopyMessage deleteCopy(int bookId) {
+		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(bookId);
 		return deleteCopyMessage;
 	}
 	
-	public static DeleteBookMessage deleteBook(BookId deleteBookCommand) {
-		boolean commandSucceeded = DatabaseHandler.deleteBookAndCopies(deleteBookCommand.getBookId());
+	public static DeleteBookMessage deleteBook(int id) {
+		boolean commandSucceeded = DatabaseHandler.deleteBookAndCopies(id);
 		DeleteBookMessage deleteBookMessage = new DeleteBookMessage(commandSucceeded);
 		return deleteBookMessage;
 	}
@@ -96,14 +100,17 @@ public class Library {
 		
 		if (!bookFormInput.getAuthorForename1().isEmpty() && !bookFormInput.getAuthorSurname1().isEmpty()) {
 			authors.add(new Author(bookFormInput.getAuthorForename1(), bookFormInput.getAuthorSurname1()));
+			System.out.println("auteur test");
 		}
+		System.out.println("auteur test3");
 		if (!bookFormInput.getAuthorForename2().isEmpty() && !bookFormInput.getAuthorSurname2().isEmpty()) {
 			authors.add(new Author(bookFormInput.getAuthorForename2(), bookFormInput.getAuthorSurname2()));
 		}
+		System.out.println("auteur test4");
 		if (!bookFormInput.getAuthorForename3().isEmpty() && !bookFormInput.getAuthorSurname3().isEmpty()) {
 			authors.add(new Author(bookFormInput.getAuthorForename3(), bookFormInput.getAuthorSurname3()));
 		}
-		
+		System.out.println("auteur test2");
 		return authors;
 	}
 }

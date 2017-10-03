@@ -18,7 +18,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
-public class BooksRestTest extends JerseyTest {
+public class BooksQueryRestTest extends JerseyTest {
 	
 	@Override
 	public Application configure() {

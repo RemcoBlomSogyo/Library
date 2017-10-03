@@ -8,6 +8,10 @@ public class BookId {
 	
 	public BookId() {}
 	
+	public BookId(int bookId) {
+		this.bookId = bookId;
+	}
+	
 	public int getBookId() {
 		return bookId;
 	}
