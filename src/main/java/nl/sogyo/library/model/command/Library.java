@@ -5,7 +5,6 @@ import java.util.List;
 
 import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
-import nl.sogyo.library.services.rest.libraryapi.json.BookId;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
