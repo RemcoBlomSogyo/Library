@@ -101,4 +101,21 @@ public class BookCommandTest extends JerseyTest {
 	    DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
 	    Assert.assertFalse(deleteBookMessage.getCommandSucceeded());
 	}
+	
+//	@Test
+//	public void test10PostValidBookWithNewAuthorCategoryAndPublisher() {
+//		BookFormInput bookFormInput = new BookFormInput("Philips", "Philip", "Philips", "Elektronica", "Philips BV", "9784567890120");
+//	    Response response = target("book").request().post(Entity.json(bookFormInput));
+//	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
+//	    Assert.assertTrue(addBookMessage.getCommandSucceeded());
+//	}
+//	
+//	@Test
+//	public void test11PostValidBookWithNewAuthorCategoryAndPublisher() {
+//		BookFormInput bookFormInput = new BookFormInput("Kaas", "Een melkproduct", "Komijn", "Kaas", 
+//				"Brie", "Kaasje", "Oude", "Kazen", "Elektronica", "Philips BV", "2000", "9784567890120", "100", "Hongaars");
+//	    Response response = target("book").request().post(Entity.json(bookFormInput));
+//	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
+//	    Assert.assertTrue(addBookMessage.getCommandSucceeded());
+//	}
 }

@@ -10,12 +10,14 @@
       	</id>
       	<property name="title" column="Title" type="string"/>
       	<property name="subtitle" column="Subtitle" type="string"/>
-     	<property name="authorForename" column="AuthorForename" type="string"/>
-      	<property name="authorSurname" column="AuthorSurname" type="string"/>
-      	<set name="authors" cascade="all" table="BooksAuthors">
+      	<!--  <set name="authors" cascade="all" table="BooksAuthors">
          	<key column="BookID"/>
          	<many-to-many column="AuthorID" class="nl.sogyo.library.model.command.Author"/>
-      	</set>
+      	</set>-->
+      	<bag name="authors" cascade="all" table="BooksAuthors">
+         	<key column="BookID"/>
+         	<many-to-many column="AuthorID" class="nl.sogyo.library.model.command.Author"/>
+      	</bag>
    		<many-to-one name="category" class="nl.sogyo.library.model.command.Category"
         	column="CategoryID" not-null="true" cascade="all" />
       	<many-to-one name="publisher" class="nl.sogyo.library.model.command.Publisher"

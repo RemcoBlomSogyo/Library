@@ -3,6 +3,7 @@ package nl.sogyo.library.persistence;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import nl.sogyo.library.model.command.Author;
 import nl.sogyo.library.model.command.Book;
@@ -137,17 +138,17 @@ public class DatabaseHandler {
 					+ "End ");
 		}
 	
-		sqlStatement.append("Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
+		sqlStatement.append("Set @idCategory = (" + selectIdCategory + book.getCategory().getName() + "\')"
 				+ "if (@idCategory is null) "
 					+ "Begin "
-					+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
+					+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory().getName() + "\') "
 					+ "Set @idCategory = (Select ID from @tableCategory); "
 					+ "End "
 	
-				+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
+				+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher().getName() + "\')"
 				+ "if (@idPublisher is null) "
 					+ "Begin "
-					+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
+					+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher().getName() + "\');"
 					+ "Set @idPublisher = (Select ID from @tablePublisher); "
 					+ "End "
 	
@@ -389,17 +390,17 @@ public class DatabaseHandler {
 					+ "Insert into BooksAuthors values (" + book.getId() + ", @idAuthor3) ");
 		}
 	
-		sqlStatement.append("Set @idCategory = (" + selectIdCategory + book.getCategory() + "\')"
+		sqlStatement.append("Set @idCategory = (" + selectIdCategory + book.getCategory().getName() + "\')"
 				+ "if (@idCategory is null) "
 					+ "Begin "
-					+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory() + "\') "
+					+ "Insert into Categories(Name) output inserted.ID into @tableCategory values (\'" + book.getCategory().getName() + "\') "
 					+ "Set @idCategory = (Select ID from @tableCategory); "
 					+ "End "
 	
-				+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher() + "\')"
+				+ "Set @idPublisher = (" + selectIdPublisher + book.getPublisher().getName() + "\')"
 				+ "if (@idPublisher is null) "
 					+ "Begin "
-					+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher() + "\');"
+					+ "Insert into Publishers output inserted.ID into @tablePublisher values (\'" + book.getPublisher().getName() + "\');"
 					+ "Set @idPublisher = (Select ID from @tablePublisher); "
 					+ "End "
 		

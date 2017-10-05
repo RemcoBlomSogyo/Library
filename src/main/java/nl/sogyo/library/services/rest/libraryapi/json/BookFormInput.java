@@ -2,23 +2,41 @@ package nl.sogyo.library.services.rest.libraryapi.json;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BookFormInput {
 
-	@XmlElement private int id;
-	@XmlElement private String title;
-	@XmlElement private String subtitle;
-	@XmlElement private String authorForename1;
-	@XmlElement private String authorSurname1;
-	@XmlElement private String authorForename2;
-	@XmlElement private String authorSurname2;
-	@XmlElement private String authorForename3;
-	@XmlElement private String authorSurname3;
-	@XmlElement private String category;
-	@XmlElement private String publisher;
-	@XmlElement private String yearFirstPublication;
-	@XmlElement private String isbn;
-	@XmlElement private String pages;
-	@XmlElement private String language;
+//	@XmlElement private int id;
+//	@XmlElement private String title;
+//	@XmlElement private String subtitle;
+//	@XmlElement private String authorForename1;
+//	@XmlElement private String authorSurname1;
+//	@XmlElement private String authorForename2;
+//	@XmlElement private String authorSurname2;
+//	@XmlElement private String authorForename3;
+//	@XmlElement private String authorSurname3;
+//	@XmlElement private String category;
+//	@XmlElement private String publisher;
+//	@XmlElement private String yearFirstPublication;
+//	@XmlElement private String isbn;
+//	@XmlElement private String pages;
+//	@XmlElement private String language;
+
+	@JsonProperty private int id;
+	@JsonProperty private String title;
+	@JsonProperty private String subtitle;
+	@JsonProperty private String authorForename1;
+	@JsonProperty private String authorSurname1;
+	@JsonProperty private String authorForename2;
+	@JsonProperty private String authorSurname2;
+	@JsonProperty private String authorForename3;
+	@JsonProperty private String authorSurname3;
+	@JsonProperty private String category;
+	@JsonProperty private String publisher;
+	@JsonProperty private String yearFirstPublication;
+	@JsonProperty private String isbn;
+	@JsonProperty private String pages;
+	@JsonProperty private String language;
 	
 	public BookFormInput() {}
 	

@@ -1,9 +1,12 @@
 package nl.sogyo.library.model.command;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import nl.sogyo.library.persistence.DatabaseHandler;
+import nl.sogyo.library.persistence.HibernateDatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
@@ -34,17 +37,20 @@ public class Library {
 		int bookId;
 		List<Author> authors = getAuthorsFromBookFormInput(bookFormInput);
 		
-		System.out.println("test");
 		System.out.println("test libary: " + bookFormInput.getTitle());
 		try {
 			Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
 					bookFormInput.getSubtitle(), authors, bookFormInput.getCategory(),
 					bookFormInput.getPublisher(), bookFormInput.getYearFirstPublication(),
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
-			bookId = DatabaseHandler.insertBook(book);
+//			bookId = DatabaseHandler.insertBook(book);
+			System.out.println("in try before insert");
+			bookId = HibernateDatabaseHandler.insertBook(book);
+			System.out.println("bookId in try after insert: " + bookId);
 		} catch (IllegalArgumentException e) {
 			bookId = -2;
 		}
+		System.out.println("bookId out of try: " + bookId);
 		return new AddBookMessage(bookId);
 	}
 	

@@ -1,25 +1,45 @@
 package nl.sogyo.library.model.command;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import nl.sogyo.library.model.helper.InputValidator;
 
 public class Book {
 	
-	@XmlElement private int id;
-	@XmlElement private String title;
-	@XmlElement private String subtitle;
-	@XmlElement private String authorForename;
-	@XmlElement private String authorSurname;
-	@XmlElement private List<Author> authors;
-	@XmlElement private String category;
-	@XmlElement private String publisher;
-	@XmlElement private short yearFirstPublication;
-	@XmlElement private String isbn;
-	@XmlElement private short pages;
-	@XmlElement private String language;
+//	@XmlElement private int id;
+//	@XmlElement private String title;
+//	@XmlElement private String subtitle;
+////	@XmlElement private String authorForename;
+////	@XmlElement private String authorSurname;
+//	@XmlElement private List<Author> authors;
+////	@XmlElement private String category;
+//	@XmlElement private Category category;
+////	@XmlElement private String publisher;
+//	@XmlElement private Publisher publisher;
+//	@XmlElement private short yearFirstPublication;
+//	@XmlElement private String isbn;
+//	@XmlElement private short pages;
+//	@XmlElement private String language;
+	
+	private int id;
+	private String title;
+	private String subtitle;
+//	@XmlElement private String authorForename;
+//	@XmlElement private String authorSurname;
+	private List<Author> authors;
+//	@XmlElement private String category;
+	private Category category;
+//	@XmlElement private String publisher;
+	private Publisher publisher;
+	private short yearFirstPublication;
+	private String isbn;
+	private short pages;
+	private String language;
 	
 	public Book() {}
 	
@@ -58,8 +78,10 @@ public class Book {
 		this.title = title;
 		this.subtitle = subtitle;
 		this.authors = authors;
-		this.category = category;
-		this.publisher = publisher;
+//		this.category = category;
+		this.category = new Category(category);
+//		this.publisher = publisher;
+		this.publisher = new Publisher(publisher);
 		this.yearFirstPublication = yearFirstPublication;
 		this.isbn = isbn;
 		this.pages = pages;
@@ -95,8 +117,10 @@ public class Book {
 			this.title = title;
 			this.subtitle = subtitle;
 			this.authors = authors;
-			this.category = category;
-			this.publisher = publisher;
+//			this.category = category;
+			this.category = new Category(category);
+//			this.publisher = publisher;
+			this.publisher = new Publisher(publisher);
 			this.yearFirstPublication = Short.parseShort(emptyToZero(yearFirstPublication));
 			this.isbn = isbn;
 			this.pages = Short.parseShort(emptyToZero(pages));
@@ -110,48 +134,111 @@ public class Book {
 		return id;
 	}
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getTitle() {
 		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	public String getSubtitle() {
 		return subtitle;
 	}
 	
-	public String getAuthorForename() {
-		return authorForename;
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
 	}
 	
-	public String getAuthorSurname() {
-		return authorSurname;
-	}
+//	public String getAuthorForename() {
+//		return authorForename;
+//	}
+//	public void setAuthorForename() {
+//		this.authorForename = authorForename;
+//	}
+//	public String getAuthorSurname() {
+//		return authorSurname;
+//	}
+//	public void setAuthorSurname() {
+//		this.authorSurname = authorSurname;
+//	}
 	
 	public List<Author> getAuthors() {
 		return authors;
 	}
 	
-	public String getCategory() {
+	public void setAuthors(List<Author> authors) {
+		this.authors = authors;
+	}
+	
+//	public String getCategory() {
+////		return category;
+//		return category.getName();
+//	}
+//	public void setCategory() {
+////		return category;
+//		this.title = title;
+//	}
+	
+	public Category getCategory() {
 		return category;
 	}
 	
-	public String getPublisher() {
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	
+//	public String getPublisher() {
+////		return publisher;
+//		return publisher.getName();
+//	}
+//	public void setPublisher() {
+////		return publisher;
+//		this.title = title;
+//	}
+	
+	public Publisher getPublisher() {
 		return publisher;
+	}
+	
+	public void setPublisher(Publisher publisher) {
+		this.publisher = publisher;
 	}
 	
 	public short getYearFirstPublication() {
 		return yearFirstPublication;
 	}
-
+	
+	public void setYearFirstPublication(short yearFirstPublication) {
+		this.yearFirstPublication = yearFirstPublication;
+	}
+	
 	public String getIsbn() {
 		return isbn;
 	}
-
+	
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
+	
 	public short getPages() {
 		return pages;
 	}
 	
+	public void setPages(short pages) {
+		this.pages = pages;
+	}
+	
 	public String getLanguage() {
 		return language;
+	}
+	
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 	
 //	private boolean variablesAreValid(String title, String authorForename, String authorSurname,

@@ -4,11 +4,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import nl.sogyo.library.model.command.Library;
 import nl.sogyo.library.model.query.QueryHelper;
@@ -25,15 +25,15 @@ public class BookResource {
 	
 	@GET 
 	@Path("{id}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public BookInfo getBookInfo(@PathParam("id") int id) {
 		BookInfo bookInfo = QueryHelper.getBookInfo(id);
 		return bookInfo;
 	}
 
 	@POST 
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public AddBookMessage addBook(BookFormInput bookFormInput) {
 		System.out.println("test rest");
 		System.out.println("Title: " + bookFormInput.getTitle());

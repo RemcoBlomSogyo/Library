@@ -4,16 +4,25 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import nl.sogyo.library.model.command.Author;
 
 public class BookPreview {
 	
-	@XmlElement private int id;
-	@XmlElement private String title;
-//	@XmlElement private String author;
-	@XmlElement private List<Author> authors;
-	@XmlElement private String category;
-	@XmlElement private String isbn;
+//	@XmlElement private int id;
+//	@XmlElement private String title;
+////	@XmlElement private String author;
+//	@XmlElement private List<Author> authors;
+//	@XmlElement private String category;
+//	@XmlElement private String isbn;
+	
+	@JsonProperty private int id;
+	@JsonProperty private String title;
+//	@JsonProperty private String author;
+	@JsonProperty private List<Author> authors;
+	@JsonProperty private String category;
+	@JsonProperty private String isbn;
 	
 	public BookPreview() {}
 	
