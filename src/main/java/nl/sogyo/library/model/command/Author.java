@@ -1,18 +1,10 @@
 package nl.sogyo.library.model.command;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Author {
 	
-//	@XmlElement private int id;
-//	@XmlElement private String forename;
-//	@XmlElement private String surname;
-	
-	@JsonProperty private int id;
-	@JsonProperty private String forename;
-	@JsonProperty private String surname;
+	private int id;
+	private String forename;
+	private String surname;
 	
 	public Author() {}
 	

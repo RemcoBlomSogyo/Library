@@ -1,30 +1,10 @@
 package nl.sogyo.library.model.command;
 
 import java.util.List;
-import java.util.Set;
-
-import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import nl.sogyo.library.model.helper.InputValidator;
 
 public class Book {
-	
-//	@XmlElement private int id;
-//	@XmlElement private String title;
-//	@XmlElement private String subtitle;
-////	@XmlElement private String authorForename;
-////	@XmlElement private String authorSurname;
-//	@XmlElement private List<Author> authors;
-////	@XmlElement private String category;
-//	@XmlElement private Category category;
-////	@XmlElement private String publisher;
-//	@XmlElement private Publisher publisher;
-//	@XmlElement private short yearFirstPublication;
-//	@XmlElement private String isbn;
-//	@XmlElement private short pages;
-//	@XmlElement private String language;
 	
 	private int id;
 	private String title;

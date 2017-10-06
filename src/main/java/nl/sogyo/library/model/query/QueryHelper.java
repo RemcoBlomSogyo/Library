@@ -5,6 +5,7 @@ import java.util.List;
 
 import nl.sogyo.library.model.helper.InputValidator;
 import nl.sogyo.library.persistence.DatabaseHandler;
+import nl.sogyo.library.persistence.HibernateDatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
 
@@ -40,7 +41,8 @@ public class QueryHelper {
 	}
 	
 	public static BookInfo getBookInfo(int id) {
-		BookInfo bookInfo = DatabaseHandler.selectBookOnId(id);
+//		BookInfo bookInfo = DatabaseHandler.selectBookOnId(id);
+		BookInfo bookInfo = HibernateDatabaseHandler.selectBookById(id);
 		return bookInfo;
 	}
 	

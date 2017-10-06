@@ -1,6 +1,5 @@
 package nl.sogyo.library.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -8,44 +7,55 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 import nl.sogyo.library.model.command.Author;
 import nl.sogyo.library.model.command.Book;
 import nl.sogyo.library.model.command.Category;
+import nl.sogyo.library.model.command.Copy;
 import nl.sogyo.library.model.command.Publisher;
+import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 
 public class HibernateDatabaseHandler {
 	
-	private static ServiceRegistry serviceRegistry;
-	private static SessionFactory sessionFactory;
+	public static BookInfo selectBookById(int id) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		Book book = null;
+		int numberCopies = 0;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			book = session.get(Book.class, id);
+			
+			List<Copy> copies = null;
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class);
+			Root<Book> bookRoot = copyQuery.from(Book.class);
+			Root<Copy> copyRoot = copyQuery.from(Copy.class);
+			copyQuery.select(copyRoot).where(criteriaBuilder.equal(bookRoot.get("id"), id));
+			try {
+				copies = session.createQuery(copyQuery).list();
+				numberCopies = copies.size();
+			} catch (NoResultException e) {
+				numberCopies = 0;
+			}
 	
-	public static void addConfigurations() {
-		Configuration configuration = new Configuration();
-		configuration.configure();
-		configuration.addAnnotatedClass(Book.class);
-		configuration.addAnnotatedClass(Author.class);
-		configuration.addAnnotatedClass(Category.class);
-		configuration.addAnnotatedClass(Publisher.class);
-		configuration.addResource("Book.hbm.xml");
-		configuration.addResource("Author.hbm.xml");
-		configuration.addResource("Category.hbm.xml");
-		configuration.addResource("Publisher.hbm.xml");
-		serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+		} finally {
+			connector.disconnect(session);
+		}
+		
+		BookInfo bookInfo = new BookInfo(book, numberCopies);
+		return bookInfo;
 	}
 	
 	public static int insertBook(Book book) {
-//		addConfigurations();
-		
-//		Session session = sessionFactory.openSession();
 		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
 		Session session = connector.connect();
 		Transaction transaction = null;
@@ -63,12 +73,8 @@ public class HibernateDatabaseHandler {
 				category = (Category) session.createQuery(categoryQuery).setMaxResults(1).getSingleResult();
 				book.setCategory(category);
 			} catch (NoResultException e) {
-				System.out.println("test exp");
-			} finally {
-				if (category == null) {
-					session.save(book.getCategory());
-				}
-			}
+				session.save(book.getCategory());
+			} 
 			
 			Publisher publisher = null;
 			try {
@@ -79,12 +85,8 @@ public class HibernateDatabaseHandler {
 				publisher = (Publisher) session.createQuery(publisherQuery).setMaxResults(1).getSingleResult();
 				book.setPublisher(publisher);
 			} catch (NoResultException e) {
-				System.out.println("test exp");
-			} finally {
-				if (publisher == null) {
-					session.save(book.getPublisher());
-				}
-			}
+				session.save(book.getPublisher());
+			} 
 
 			for (int i = 0; i < book.getAuthors().size(); i++) {
 				Author author = null;
@@ -98,28 +100,26 @@ public class HibernateDatabaseHandler {
 					author = (Author) session.createQuery(authorQuery).setMaxResults(1).getSingleResult();
 					book.getAuthors().set(i, author);
 				} catch (NoResultException e) {
-					System.out.println("test exp");
-				} finally {
-					if (author == null) {
-						session.save(book.getAuthors().get(i));
-					}
-				}
+					session.save(book.getAuthors().get(i));
+				} 
 			}
 
 			id = (int) session.save(book);
 			transaction.commit();
 		} catch (HibernateException e) {
-			System.err.println("ERRORMESSAGE: " + e.getMessage());
-			if (transaction != null) {
-				transaction.rollback();
-			}
+			rollbackTransaction(transaction, e);
 		} catch (Exception e) {
 			System.err.println("ERROR: " + e.getMessage());
 		} finally {
-//			session.close();
 			connector.disconnect(session);
 		}
 		return id;
 	}
-
+	
+	private static void rollbackTransaction(Transaction transaction, HibernateException e) {
+		System.err.println("ERRORMESSAGE: " + e.getMessage());
+		if (transaction != null) {
+			transaction.rollback();
+		}
+	}
 }

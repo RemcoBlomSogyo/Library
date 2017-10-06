@@ -1,13 +1,6 @@
 package nl.sogyo.library.model.command;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Publisher {
-
-//	@XmlElement private int id;
-//	@XmlElement private String name;
 	
 	private int id;
 	private String name;
