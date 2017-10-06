@@ -1,15 +1,8 @@
 package nl.sogyo.library.services.rest.libraryapi.json;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import nl.sogyo.library.model.command.Book;
 
 public class BookInfo {
-	
-//	@XmlElement private Book book;
-//	@XmlElement private int copiesAvailable;
 	
 	private Book book;
 	private int copiesAvailable;

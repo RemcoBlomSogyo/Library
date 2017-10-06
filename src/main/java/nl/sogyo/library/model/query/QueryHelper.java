@@ -12,7 +12,6 @@ public class QueryHelper {
 	
 	public static List<BookPreview> getBooks(String titleInput, 
 			String authorInput, String isbnInput) {
-		
 		if (isbnInput.isEmpty()) {
 			if (titleInput.isEmpty()) {
 				if (authorInput.isEmpty()) {

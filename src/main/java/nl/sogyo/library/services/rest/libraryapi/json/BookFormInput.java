@@ -1,42 +1,22 @@
 package nl.sogyo.library.services.rest.libraryapi.json;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class BookFormInput {
 
-//	@XmlElement private int id;
-//	@XmlElement private String title;
-//	@XmlElement private String subtitle;
-//	@XmlElement private String authorForename1;
-//	@XmlElement private String authorSurname1;
-//	@XmlElement private String authorForename2;
-//	@XmlElement private String authorSurname2;
-//	@XmlElement private String authorForename3;
-//	@XmlElement private String authorSurname3;
-//	@XmlElement private String category;
-//	@XmlElement private String publisher;
-//	@XmlElement private String yearFirstPublication;
-//	@XmlElement private String isbn;
-//	@XmlElement private String pages;
-//	@XmlElement private String language;
-
-	@JsonProperty private int id;
-	@JsonProperty private String title;
-	@JsonProperty private String subtitle;
-	@JsonProperty private String authorForename1;
-	@JsonProperty private String authorSurname1;
-	@JsonProperty private String authorForename2;
-	@JsonProperty private String authorSurname2;
-	@JsonProperty private String authorForename3;
-	@JsonProperty private String authorSurname3;
-	@JsonProperty private String category;
-	@JsonProperty private String publisher;
-	@JsonProperty private String yearFirstPublication;
-	@JsonProperty private String isbn;
-	@JsonProperty private String pages;
-	@JsonProperty private String language;
+	private int id;
+	private String title;
+	private String subtitle;
+	private String authorForename1;
+	private String authorSurname1;
+	private String authorForename2;
+	private String authorSurname2;
+	private String authorForename3;
+	private String authorSurname3;
+	private String category;
+	private String publisher;
+	private String yearFirstPublication;
+	private String isbn;
+	private String pages;
+	private String language;
 	
 	public BookFormInput() {}
 	
@@ -82,116 +62,116 @@ public class BookFormInput {
 		return id;
 	}
 	
-	public String getTitle() {
-		return title;
-	}
-	
-	public String getSubtitle() {
-		return subtitle;
-	}
-	
-	public String getAuthorForename1() {
-		return authorForename1;
-	}
-	
-	public String getAuthorSurname1() {
-		return authorSurname1;
-	}
-	
-	public String getAuthorForename2() {
-		return authorForename2;
-	}
-	
-	public String getAuthorSurname2() {
-		return authorSurname2;
-	}
-	
-	public String getAuthorForename3() {
-		return authorForename3;
-	}
-	
-	public String getAuthorSurname3() {
-		return authorSurname3;
-	}
-	
-	public String getCategory() {
-		return category;
-	}
-	
-	public String getPublisher() {
-		return publisher;
-	}
-	
-	public String getYearFirstPublication() {
-		return yearFirstPublication;
-	}
-	
-	public String getIsbn() {
-		return isbn;
-	}
-	
-	public String getPages() {
-		return pages;
-	}
-	
-	public String getLanguage() {
-		return language;
-	}
-	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getTitle() {
+		return title;
 	}
 	
 	public void setTitle(String title) {
 		this.title = title;
 	}
 	
+	public String getSubtitle() {
+		return subtitle;
+	}
+	
 	public void setSubtitle(String subtitle) {
 		this.subtitle = subtitle;
+	}
+	
+	public String getAuthorForename1() {
+		return authorForename1;
 	}
 	
 	public void setAuthorForename1(String authorForename1) {
 		this.authorForename1 = authorForename1;
 	}
 	
+	public String getAuthorSurname1() {
+		return authorSurname1;
+	}
+	
 	public void setAuthorSurname1(String authorSurname1) {
 		this.authorSurname1 = authorSurname1;
+	}
+	
+	public String getAuthorForename2() {
+		return authorForename2;
 	}
 	
 	public void setAuthorForename2(String authorForename2) {
 		this.authorForename2 = authorForename2;
 	}
 	
+	public String getAuthorSurname2() {
+		return authorSurname2;
+	}
+	
 	public void setAuthorSurname2(String authorSurname2) {
 		this.authorSurname2 = authorSurname2;
+	}
+	
+	public String getAuthorForename3() {
+		return authorForename3;
 	}
 	
 	public void setAuthorForename3(String authorForename3) {
 		this.authorForename3 = authorForename3;
 	}
 	
+	public String getAuthorSurname3() {
+		return authorSurname3;
+	}
+	
 	public void setAuthorSurname3(String authorSurname3) {
 		this.authorSurname3 = authorSurname3;
+	}
+	
+	public String getCategory() {
+		return category;
 	}
 	
 	public void setCategory(String category) {
 		this.category = category;
 	}
 	
+	public String getPublisher() {
+		return publisher;
+	}
+	
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
+	}
+	
+	public String getYearFirstPublication() {
+		return yearFirstPublication;
 	}
 	
 	public void setYearFirstPublication(String yearFirstPublication) {
 		this.yearFirstPublication = yearFirstPublication;
 	}
 	
+	public String getIsbn() {
+		return isbn;
+	}
+	
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
 	
+	public String getPages() {
+		return pages;
+	}
+	
 	public void setPages(String pages) {
 		this.pages = pages;
+	}
+	
+	public String getLanguage() {
+		return language;
 	}
 	
 	public void setLanguage(String language) {

@@ -237,16 +237,17 @@ public class DatabaseHandler {
 					}
 				}
 				String title = resultSet.getString("Title");
-//				String author = resultSet.getString("AuthorForename") + " " + resultSet.getString("AuthorSurname");
 				List<Author> authors = new ArrayList<Author>();
 				authors.add(new Author(resultSet.getString("AuthorForename"), resultSet.getString("AuthorSurname")));
 				String category = resultSet.getString("Category");
 				String isbn = resultSet.getString("ISBN");
+
 				bookPreviews.add(new BookPreview(id, title, authors, category, isbn));
 			}
 			return bookPreviews;
 		} catch (SQLException se) {
 			se.printStackTrace();
+			System.out.println("MESSAGE: " + se.getMessage());
 			return new ArrayList<BookPreview>();
 		} finally {
 			DatabaseConnector.disconnect();

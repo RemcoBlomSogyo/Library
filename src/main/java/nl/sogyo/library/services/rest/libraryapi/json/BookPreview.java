@@ -2,37 +2,17 @@ package nl.sogyo.library.services.rest.libraryapi.json;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import nl.sogyo.library.model.command.Author;
 
 public class BookPreview {
 	
-//	@XmlElement private int id;
-//	@XmlElement private String title;
-////	@XmlElement private String author;
-//	@XmlElement private List<Author> authors;
-//	@XmlElement private String category;
-//	@XmlElement private String isbn;
-	
-	@JsonProperty private int id;
-	@JsonProperty private String title;
-//	@JsonProperty private String author;
-	@JsonProperty private List<Author> authors;
-	@JsonProperty private String category;
-	@JsonProperty private String isbn;
+	private int id;
+	private String title;
+	private List<Author> authors;
+	private String category;
+	private String isbn;
 	
 	public BookPreview() {}
-	
-//	public BookPreview(int id, String title, String author, String category, String isbn) {
-//		this.id = id;
-//		this.title = title;
-//		this.author = author;
-//		this.category = category;
-//		this.isbn = isbn;
-//	}
 	
 	public BookPreview(int id, String title, List<Author> authors, String category, String isbn) {
 		this.id = id;
@@ -46,7 +26,38 @@ public class BookPreview {
 		return id;
 	}
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
 	public List<Author> getAuthors() {
 		return authors;
+	}
+	
+	public void setAuthors(List<Author> authors) {
+		this.authors = authors;
+	}
+	
+	public String getCategory() {
+		return category;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public String getIsbn() {
+		return isbn;
+	}
+	
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 }
