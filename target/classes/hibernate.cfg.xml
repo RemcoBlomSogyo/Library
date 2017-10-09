@@ -23,11 +23,11 @@
    </property>
 
    <!-- List of XML mapping files -->
-   <mapping resource="Book.hbm.xml"/>
    <mapping resource="Author.hbm.xml"/>
+   <mapping resource="Book.hbm.xml"/>
    <mapping resource="Category.hbm.xml"/>
-   <mapping resource="Publisher.hbm.xml"/>
    <mapping resource="Copy.hbm.xml"/>
+   <mapping resource="Publisher.hbm.xml"/>
 
    </session-factory>
 </hibernate-configuration>

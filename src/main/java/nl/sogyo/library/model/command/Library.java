@@ -1,9 +1,7 @@
 package nl.sogyo.library.model.command;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.persistence.HibernateDatabaseHandler;

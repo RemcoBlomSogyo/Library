@@ -2,7 +2,6 @@ package nl.sogyo.library.services;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.ResourceConfig;
@@ -15,7 +14,6 @@ import org.junit.runners.MethodSorters;
 
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.resources.BookResource;
@@ -52,12 +50,14 @@ public class BookCommandTest extends JerseyTest {
 	// two query tests for copiesAvailable 
 	@Test
 	public void test03CopiesAvailableOfCreatedBookIsZero() {
+		System.out.println("test03");
 	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
+	    System.out.println(output);
 	    Assert.assertTrue(output.contains("\"copiesAvailable\":0"));
 	}
 	
 	@Test
-	public void test04CopiesAvailableOfCreatedBookIsZero() {
+	public void test04CopiesAvailableOfCreatedBookIsOneIfOneCopyIsAdded() {
 	    target("book").path(id + "/copy").request().post(null);
 	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
 	    Assert.assertTrue(output.contains("\"copiesAvailable\":1"));

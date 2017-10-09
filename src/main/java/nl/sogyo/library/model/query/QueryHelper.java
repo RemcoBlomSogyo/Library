@@ -43,6 +43,11 @@ public class QueryHelper {
 	public static BookInfo getBookInfo(int id) {
 //		BookInfo bookInfo = DatabaseHandler.selectBookOnId(id);
 		BookInfo bookInfo = HibernateDatabaseHandler.selectBookById(id);
+		System.out.println("copies: " + bookInfo.getCopiesAvailable());
+		System.out.println("title: " + bookInfo.getBook().getTitle());
+		System.out.println("subtitle: " + bookInfo.getBook().getSubtitle());
+		System.out.println("category: " + bookInfo.getBook().getCategory().getName());
+		System.out.println("publisher: " + bookInfo.getBook().getPublisher().getName());
 		return bookInfo;
 	}
 	

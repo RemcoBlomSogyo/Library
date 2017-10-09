@@ -9,12 +9,8 @@ public class Book {
 	private int id;
 	private String title;
 	private String subtitle;
-//	@XmlElement private String authorForename;
-//	@XmlElement private String authorSurname;
 	private List<Author> authors;
-//	@XmlElement private String category;
 	private Category category;
-//	@XmlElement private String publisher;
 	private Publisher publisher;
 	private short yearFirstPublication;
 	private String isbn;

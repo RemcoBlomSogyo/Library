@@ -1,13 +1,6 @@
 package nl.sogyo.library.services.rest.libraryapi.json.message;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public abstract class Message {
-	
-//	@XmlElement private boolean commandSucceeded;
-//	@XmlElement private String message;
 	
 	private boolean commandSucceeded;
 	private String message;

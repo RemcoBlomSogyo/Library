@@ -1,5 +1,6 @@
 package nl.sogyo.library.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -7,6 +8,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -31,23 +33,30 @@ public class HibernateDatabaseHandler {
 			transaction = session.beginTransaction();
 			
 			book = session.get(Book.class, id);
+			if (book == null) {
+				book = new Book(0, "", "", new ArrayList<Author>(), "", "", (short) 0, "", (short) 0, "");
+			} else {
+				Hibernate.initialize(book.getCategory());
+				Hibernate.initialize(book.getPublisher());
+				for (Author author : book.getAuthors()) {
+					Hibernate.initialize(author);
+				}
+			}
 			
-			List<Copy> copies = null;
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 			CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class);
-			Root<Book> bookRoot = copyQuery.from(Book.class);
 			Root<Copy> copyRoot = copyQuery.from(Copy.class);
-			copyQuery.select(copyRoot).where(criteriaBuilder.equal(bookRoot.get("id"), id));
-			try {
-				copies = session.createQuery(copyQuery).list();
-				numberCopies = copies.size();
-			} catch (NoResultException e) {
-				numberCopies = 0;
-			}
-	
+			copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book").get("id"), id));
+
+			List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
+			numberCopies = copies.size();
+			
+			transaction.commit();
 		} catch (HibernateException e) {
+			System.out.println("hibernateexcpetion");
 			rollbackTransaction(transaction, e);
 		} finally {
+			session.close();
 			connector.disconnect(session);
 		}
 		

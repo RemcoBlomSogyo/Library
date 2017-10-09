@@ -1,14 +1,8 @@
 package nl.sogyo.library.services.rest.libraryapi.json.message;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class AddCopyMessage extends Message {
-
-//	@XmlElement private int copiesOfBook;
 	
-	@JsonProperty private int copiesOfBook;
+	private int copiesOfBook;
 	private static final String messagePositive = "Exemplaar is toegevoegd aan de database";
 	private static final String messageNegative = "Exemplaar toevoegen mislukt";
 	

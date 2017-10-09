@@ -1,7 +1,5 @@
 package nl.sogyo.library.services.rest.libraryapi.json.message;
 
-import javax.xml.bind.annotation.XmlElement;
-
 public class DeleteBookMessage extends Message {
 	
 	private static final String messagePositive = "Boek en exemplaren zijn verwijderd uit de database";
