@@ -92,6 +92,9 @@ public class BookCommandTest extends JerseyTest {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "REST", "Appress", "9784567890120");
 	    Response response = target("book").path("10000000").request().put(Entity.json(bookFormInput));
 	    EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
+	    if (editBookMessage == null) {
+	    	System.out.println("editbookmessage is null");
+	    }
 	    Assert.assertFalse(editBookMessage.getCommandSucceeded());
 	}
 	

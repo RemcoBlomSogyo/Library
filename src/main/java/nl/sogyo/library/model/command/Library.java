@@ -80,10 +80,11 @@ public class Library {
 					bookFormInput.getSubtitle(), authors, bookFormInput.getCategory(),
 					bookFormInput.getPublisher(), bookFormInput.getYearFirstPublication(),
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
-			commandSucceeded = DatabaseHandler.updateBook(book);
+			commandSucceeded = HibernateDatabaseHandler.updateBook(book);
 		} catch (IllegalArgumentException e) {
 			commandSucceeded = false;
 		}
+		System.out.println("commandsucceeded: " + commandSucceeded);
 		return new EditBookMessage(commandSucceeded);
 	}
 	

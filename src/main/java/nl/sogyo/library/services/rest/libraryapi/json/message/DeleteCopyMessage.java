@@ -16,4 +16,8 @@ public class DeleteCopyMessage extends Message {
 	public int getCopiesOfBook() {
 		return copiesOfBook;
 	}
+	
+	public void setCopiesOfBook(int copiesOfBook) {
+		this.copiesOfBook = copiesOfBook;
+	}
 }

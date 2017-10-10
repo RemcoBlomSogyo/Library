@@ -72,47 +72,7 @@ public class HibernateDatabaseHandler {
 		
 		try {
 			transaction = session.beginTransaction();
-			
-			Category category = null;
-			try {
-				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-				CriteriaQuery<Category> categoryQuery = criteriaBuilder.createQuery(Category.class);
-				Root<Category> categoryRoot = categoryQuery.from(Category.class);
-				categoryQuery.select(categoryRoot).where(criteriaBuilder.equal(categoryRoot.get("name"), book.getCategory().getName()));
-				category = (Category) session.createQuery(categoryQuery).setMaxResults(1).getSingleResult();
-				book.setCategory(category);
-			} catch (NoResultException e) {
-				session.save(book.getCategory());
-			} 
-			
-			Publisher publisher = null;
-			try {
-				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-				CriteriaQuery<Publisher> publisherQuery = criteriaBuilder.createQuery(Publisher.class);
-				Root<Publisher> publisherRoot = publisherQuery.from(Publisher.class);
-				publisherQuery.select(publisherRoot).where(criteriaBuilder.equal(publisherRoot.get("name"), book.getPublisher().getName()));
-				publisher = (Publisher) session.createQuery(publisherQuery).setMaxResults(1).getSingleResult();
-				book.setPublisher(publisher);
-			} catch (NoResultException e) {
-				session.save(book.getPublisher());
-			} 
-
-			for (int i = 0; i < book.getAuthors().size(); i++) {
-				Author author = null;
-				try {
-					CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-					CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
-					Root<Author> authorRoot = authorQuery.from(Author.class);
-					authorQuery.select(authorRoot).where(criteriaBuilder.and(
-							criteriaBuilder.equal(authorRoot.get("forename"), book.getAuthors().get(i).getForename()),
-							criteriaBuilder.equal(authorRoot.get("surname"), book.getAuthors().get(i).getSurname())));
-					author = (Author) session.createQuery(authorQuery).setMaxResults(1).getSingleResult();
-					book.getAuthors().set(i, author);
-				} catch (NoResultException e) {
-					session.save(book.getAuthors().get(i));
-				} 
-			}
-
+			book = setForeignKeyIdentifiers(book, session);
 			id = (int) session.save(book);
 			transaction.commit();
 		} catch (HibernateException e) {
@@ -123,6 +83,80 @@ public class HibernateDatabaseHandler {
 			connector.disconnect(session);
 		}
 		return id;
+	}
+	
+	public static boolean updateBook(Book book) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+
+		try {
+			transaction = session.beginTransaction();
+			if (isBookIdInTable(book.getId(), session)) {
+				setForeignKeyIdentifiers(book, session);
+				session.update(book);
+				transaction.commit();
+				return true;
+			} else {
+				return false;
+			}
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+			return false;
+		} finally {
+			connector.disconnect(session);
+		}
+	}
+	
+	private static boolean isBookIdInTable(int id, Session session) {
+		boolean isBookIdInTable = session.get(Book.class, id) != null;
+		session.clear();
+		return isBookIdInTable;
+	}
+	
+	private static Book setForeignKeyIdentifiers(Book book, Session session) {
+		Category category = null;
+		try {
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Category> categoryQuery = criteriaBuilder.createQuery(Category.class);
+			Root<Category> categoryRoot = categoryQuery.from(Category.class);
+			categoryQuery.select(categoryRoot).where(criteriaBuilder.equal(categoryRoot.get("name"), book.getCategory().getName()));
+			category = (Category) session.createQuery(categoryQuery).getSingleResult();
+			System.out.println(category.getName());
+			book.setCategory(category);
+		} catch (NoResultException e) {
+			session.save(book.getCategory());
+		} 
+		
+		Publisher publisher = null;
+		try {
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Publisher> publisherQuery = criteriaBuilder.createQuery(Publisher.class);
+			Root<Publisher> publisherRoot = publisherQuery.from(Publisher.class);
+			publisherQuery.select(publisherRoot).where(criteriaBuilder.equal(publisherRoot.get("name"), book.getPublisher().getName()));
+			publisher = (Publisher) session.createQuery(publisherQuery).getSingleResult();
+			book.setPublisher(publisher);
+		} catch (NoResultException e) {
+			session.save(book.getPublisher());
+		} 
+
+		for (int i = 0; i < book.getAuthors().size(); i++) {
+			Author author = null;
+			try {
+				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+				CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
+				Root<Author> authorRoot = authorQuery.from(Author.class);
+				authorQuery.select(authorRoot).where(criteriaBuilder.and(
+						criteriaBuilder.equal(authorRoot.get("forename"), book.getAuthors().get(i).getForename()),
+						criteriaBuilder.equal(authorRoot.get("surname"), book.getAuthors().get(i).getSurname())));
+				author = (Author) session.createQuery(authorQuery).getSingleResult();
+				book.getAuthors().set(i, author);
+			} catch (NoResultException e) {
+				session.save(book.getAuthors().get(i));
+			} 
+		}
+		System.out.println("test test test");
+		return book;
 	}
 	
 	private static void rollbackTransaction(Transaction transaction, HibernateException e) {
