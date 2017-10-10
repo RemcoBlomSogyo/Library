@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
@@ -22,6 +25,232 @@ import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 
 public class HibernateDatabaseHandler {
 	
+//	public static List<BookPreview> selectBooks(String titleInput, String authorInput, String isbnInput) {
+//		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+//		Session session = connector.connect();
+//		Transaction transaction = null;
+//		
+//		try {
+//			transaction = session.beginTransaction();
+//			
+//			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
+//			Root<Book> bookRoot = bookQuery.from(Book.class);
+//			List<Predicate> criteria = new ArrayList<Predicate>();
+////			bookQuery.select(bookRoot).where(criteriaBuilder.like(bookRoot.get("title"), titleInput));
+//			criteria.add(criteriaBuilder.like(bookRoot.get("title"), titleInput));
+//			criteria.add(criteriaBuilder.like(bookRoot.get("forename"), titleInput));
+//			criteria.add(criteriaBuilder.like(bookRoot.get("title"), titleInput));
+//		}
+//
+//	}
+	
+	public static List<Book> selectBooksByTitle(String titleInput) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		List<Book> books = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
+			Root<Book> bookRoot = bookQuery.from(Book.class);
+			ParameterExpression<String> titleParam = criteriaBuilder.parameter(String.class);
+			bookQuery.select(bookRoot).where(criteriaBuilder.like(bookRoot.get("title"), titleParam));
+			
+			TypedQuery<Book> typedQuery = session.createQuery(bookQuery);
+			typedQuery.setParameter(titleParam, addPercentWildcards(titleInput));
+			books = typedQuery.getResultList();
+			
+			for (Book book : books) {
+				initializeReferencedEntities(book);
+			}
+			transaction.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+		} finally {
+			session.close();
+			connector.disconnect(session);
+		}
+		
+		return books;
+	}
+	
+	public static List<Book> selectBooksByAuthorSingleName(String authorInput) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		List<Book> books = null;
+		System.out.println("test author hibernate");
+		try {
+			transaction = session.beginTransaction();
+			// CHECK JOIN
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
+			Root<Book> bookRoot = bookQuery.from(Book.class);
+			Root<Author> authorRoot = bookQuery.from(Author.class);
+			ParameterExpression<String> authorParam = criteriaBuilder.parameter(String.class);
+			bookQuery.select(bookRoot).where(criteriaBuilder.or(
+//					criteriaBuilder.like(authorRoot.get("forename"), authorParam),
+//					criteriaBuilder.like(authorRoot.get("surname"), authorParam)));
+					criteriaBuilder.like(bookRoot.get("authors").get("forename"), authorParam),
+					criteriaBuilder.like(bookRoot.get("authors").get("surname"), authorParam)));
+			
+//			bookQuery.select(bookRoot).where(criteriaBuilder.or(
+//					criteriaBuilder.like(authorRoot.get("forename"), "%" + authorInput + "%"), 
+//					criteriaBuilder.like(authorRoot.get("surname"), "%" + authorInput + "%")));
+			
+			TypedQuery<Book> typedQuery = session.createQuery(bookQuery);
+			typedQuery.setParameter(authorParam, addPercentWildcards(authorInput));
+			books = typedQuery.getResultList();
+			
+//			books = (List<Book>) session.createQuery(bookQuery).list();
+			
+			for (Book book : books) {
+				initializeReferencedEntities(book);
+			}
+			transaction.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+		} finally {
+			session.close();
+			connector.disconnect(session);
+		}
+		
+		return books;
+	}
+	
+	public static List<Book> selectBooksByIsbn(String isbnInput) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		List<Book> books = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
+			Root<Book> bookRoot = bookQuery.from(Book.class);
+			bookQuery.select(bookRoot).where(criteriaBuilder.like(bookRoot.get("isbn"), "%" + isbnInput + "%"));
+			books = (List<Book>) session.createQuery(bookQuery).list();
+			
+			for (Book book : books) {
+				initializeReferencedEntities(book);
+			}
+			transaction.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+		} finally {
+			session.close();
+			connector.disconnect(session);
+		}
+		
+		return books;
+	}
+	
+	public static List<Book> selectBooksByAuthorTotalName(String authorFornameInput, String authorSurnameInput) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		List<Book> books = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
+			Root<Book> bookRoot = bookQuery.from(Book.class);
+			Root<Author> authorRoot = bookQuery.from(Author.class);
+			bookQuery.select(bookRoot).where(criteriaBuilder.and(
+					criteriaBuilder.like(authorRoot.get("forename"), "%" + authorFornameInput + "%"), 
+					criteriaBuilder.like(authorRoot.get("surname"),"%" + authorSurnameInput + "%")));
+			books = (List<Book>) session.createQuery(bookQuery).list();
+			
+			for (Book book : books) {
+				initializeReferencedEntities(book);
+			}
+			transaction.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+		} finally {
+			session.close();
+			connector.disconnect(session);
+		}
+		
+		return books;
+	}
+	
+	public static List<Book> selectBooksByTitleAndAuthorSingleName(String titleInput, String authorInput) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		List<Book> books = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
+			Root<Book> bookRoot = bookQuery.from(Book.class);
+			Root<Author> authorRoot = bookQuery.from(Author.class);
+			bookQuery.select(bookRoot).where(criteriaBuilder.and(
+					criteriaBuilder.like(bookRoot.get("title"), "%" + titleInput + "%")),
+					criteriaBuilder.or(
+							criteriaBuilder.like(authorRoot.get("forename"), "%" + authorInput + "%"), 
+							criteriaBuilder.like(authorRoot.get("surname"), "%" + authorInput + "%")));
+			books = (List<Book>) session.createQuery(bookQuery).list();
+			
+			for (Book book : books) {
+				initializeReferencedEntities(book);
+			}
+			transaction.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+		} finally {
+			session.close();
+			connector.disconnect(session);
+		}
+		
+		return books;
+	}
+	
+	public static List<Book> selectBooksByTitleAndAuthorTotalName(String titleInput, String authorForenameInput, String authorSurnameInput) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		List<Book> books = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
+			
+			Root<Book> bookRoot = bookQuery.from(Book.class);
+			Root<Author> authorRoot = bookQuery.from(Author.class);
+			bookQuery.select(bookRoot).where(criteriaBuilder.and(
+					criteriaBuilder.like(bookRoot.get("title"), "%" + titleInput + "%"),
+					criteriaBuilder.like(authorRoot.get("forename"), "%" + authorForenameInput + "%"), 
+					criteriaBuilder.like(authorRoot.get("surname"), "%" + authorSurnameInput + "%")));
+			books = (List<Book>) session.createQuery(bookQuery).list();
+			
+			for (Book book : books) {
+				initializeReferencedEntities(book);
+			}
+			transaction.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+		} finally {
+			session.close();
+			connector.disconnect(session);
+		}
+		
+		return books;
+	}
+	
 	public static BookInfo selectBookById(int id) {
 		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
 		Session session = connector.connect();
@@ -36,11 +265,7 @@ public class HibernateDatabaseHandler {
 			if (book == null) {
 				book = new Book(0, "", "", new ArrayList<Author>(), "", "", (short) 0, "", (short) 0, "");
 			} else {
-				Hibernate.initialize(book.getCategory());
-				Hibernate.initialize(book.getPublisher());
-				for (Author author : book.getAuthors()) {
-					Hibernate.initialize(author);
-				}
+				initializeReferencedEntities(book);
 			}
 			
 			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -112,6 +337,18 @@ public class HibernateDatabaseHandler {
 		boolean isBookIdInTable = session.get(Book.class, id) != null;
 		session.clear();
 		return isBookIdInTable;
+	}
+	
+	private static void initializeReferencedEntities(Book book) {
+		Hibernate.initialize(book.getCategory());
+		Hibernate.initialize(book.getPublisher());
+		for (Author author : book.getAuthors()) {
+			Hibernate.initialize(author);
+		}
+	}
+	
+	private static String addPercentWildcards(String param) {
+		return "%" + param + "%";
 	}
 	
 	private static Book setForeignKeyIdentifiers(Book book, Session session) {
