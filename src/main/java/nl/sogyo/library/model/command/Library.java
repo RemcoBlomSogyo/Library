@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //import nl.sogyo.library.persistence.DatabaseHandler;
-import nl.sogyo.library.persistence.HibernateDatabaseHandler;
+import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
@@ -43,7 +43,7 @@ public class Library {
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
 //			bookId = DatabaseHandler.insertBook(book);
 			System.out.println("in try before insert");
-			bookId = HibernateDatabaseHandler.insertBook(book);
+			bookId = DatabaseHandler.insertBook(book);
 			System.out.println("bookId in try after insert: " + bookId);
 		} catch (IllegalArgumentException e) {
 			bookId = -2;
@@ -54,7 +54,7 @@ public class Library {
 	
 	public static AddCopyMessage addCopy(int bookId) {
 //		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(bookId);
-		AddCopyMessage addCopyMessage = HibernateDatabaseHandler.insertCopy(bookId);
+		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(bookId);
 		return addCopyMessage;
 	}
 	
@@ -81,7 +81,7 @@ public class Library {
 					bookFormInput.getSubtitle(), authors, bookFormInput.getCategory(),
 					bookFormInput.getPublisher(), bookFormInput.getYearFirstPublication(),
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
-			commandSucceeded = HibernateDatabaseHandler.updateBook(book);
+			commandSucceeded = DatabaseHandler.updateBook(book);
 		} catch (IllegalArgumentException e) {
 			commandSucceeded = false;
 		}
@@ -91,13 +91,13 @@ public class Library {
 	
 	public static DeleteCopyMessage deleteCopy(int bookId) {
 //		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(bookId);
-		DeleteCopyMessage deleteCopyMessage = HibernateDatabaseHandler.deleteCopy(bookId);
+		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(bookId);
 		return deleteCopyMessage;
 	}
 	
 	public static DeleteBookMessage deleteBook(int id) {
 //		boolean commandSucceeded = DatabaseHandler.deleteBookAndCopies(id);
-		boolean commandSucceeded = HibernateDatabaseHandler.deleteBookAndCopies(id);
+		boolean commandSucceeded = DatabaseHandler.deleteBookAndCopies(id);
 		DeleteBookMessage deleteBookMessage = new DeleteBookMessage(commandSucceeded);
 		return deleteBookMessage;
 	}

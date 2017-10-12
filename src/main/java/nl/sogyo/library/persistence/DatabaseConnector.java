@@ -1,52 +1,49 @@
 package nl.sogyo.library.persistence;
 
-import java.sql.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+
+import nl.sogyo.library.model.command.Author;
+import nl.sogyo.library.model.command.Book;
+import nl.sogyo.library.model.command.Category;
+import nl.sogyo.library.model.command.Copy;
+import nl.sogyo.library.model.command.Publisher;
 
 public class DatabaseConnector {
-	private static Connection connection;
+
+	private ServiceRegistry serviceRegistry;
+	private SessionFactory sessionFactory;
 	
-	private static void connect() {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String url = "jdbc:sqlserver://10.10.2.95:1433;databaseName=Library";
-			String sqlLogin = "javaLogin";
-			String sqlPassword = "javaLogin";
-			connection = DriverManager.getConnection(url, sqlLogin, sqlPassword);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+	public DatabaseConnector() {
+		addConfigurations();
 	}
 	
-	public static void disconnect() {
-		try {
-			connection.close();
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
+	public Session connect() {
+		Session session = sessionFactory.openSession();
+		return session;
 	}
 	
-	// for insert, update and delete
-	public static int executeNonQuery(String sqlStatement) throws SQLException {
-		connect();
-		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
-		return preparedStatement.executeUpdate();
+	public void disconnect(Session session) {
+		session.close();
 	}
 	
-	// for insert and return created id
-	public static ResultSet executeInsertForId(String sqlStatement) throws SQLException {
-		connect();
-		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
-		preparedStatement.executeUpdate();
-		return preparedStatement.getGeneratedKeys();
-	}
-	
-	// only for select
-	public static ResultSet executeQuery(String sqlStatement) throws SQLException {
-		connect();
-		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, ResultSet.TYPE_SCROLL_INSENSITIVE, 
-				  ResultSet.CONCUR_READ_ONLY);
-		return preparedStatement.executeQuery();
+	private void addConfigurations() {
+		Configuration configuration = new Configuration();
+		configuration.configure();
+		configuration.addAnnotatedClass(Book.class);
+		configuration.addAnnotatedClass(Author.class);
+		configuration.addAnnotatedClass(Category.class);
+		configuration.addAnnotatedClass(Publisher.class);
+		configuration.addAnnotatedClass(Copy.class);
+		configuration.addResource("Book.hbm.xml");
+		configuration.addResource("Author.hbm.xml");
+		configuration.addResource("Category.hbm.xml");
+		configuration.addResource("Publisher.hbm.xml");
+		configuration.addResource("Copy.hbm.xml");
+		serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 	}
 }

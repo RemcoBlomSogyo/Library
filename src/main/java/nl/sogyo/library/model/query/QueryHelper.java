@@ -6,7 +6,7 @@ import java.util.List;
 import nl.sogyo.library.model.command.Book;
 import nl.sogyo.library.model.helper.InputValidator;
 //import nl.sogyo.library.persistence.DatabaseHandler;
-import nl.sogyo.library.persistence.HibernateDatabaseHandler;
+import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
 
@@ -21,31 +21,31 @@ public class QueryHelper {
 					return new ArrayList<BookPreview>();
 				} else if (inputIsSingleName(authorInput)) {
 //					return DatabaseHandler.selectBooksOnAuthorSingleName(authorInput);
-					books = HibernateDatabaseHandler.selectBooksByAuthorSingleName(authorInput);
+					books = DatabaseHandler.selectBooksByAuthorSingleName(authorInput);
 				} else {
 //					return DatabaseHandler.selectBooksOnAuthorTotalName(authorInput.substring(0, authorInput.indexOf(" ")), 
 //							authorInput.substring(authorInput.indexOf(" ") + 1));
-					books = HibernateDatabaseHandler.selectBooksByAuthorTotalName(authorInput.substring(0, 
+					books = DatabaseHandler.selectBooksByAuthorTotalName(authorInput.substring(0, 
 							authorInput.indexOf(" ")), authorInput.substring(authorInput.indexOf(" ") + 1));
 				}
 			} else {
 				if (authorInput.isEmpty()) {
 					System.out.println("TESTTEST");
 //					return DatabaseHandler.selectBooksOnTitle(titleInput);
-					books = HibernateDatabaseHandler.selectBooksByTitle(titleInput);
+					books = DatabaseHandler.selectBooksByTitle(titleInput);
 				} else if (inputIsSingleName(authorInput)) {
 //					return DatabaseHandler.selectBooksOnTitleAndAuthorSingleName(titleInput, authorInput);
-					books = HibernateDatabaseHandler.selectBooksByTitleAndAuthorSingleName(titleInput, authorInput);
+					books = DatabaseHandler.selectBooksByTitleAndAuthorSingleName(titleInput, authorInput);
 				} else {
 //					return DatabaseHandler.selectBooksOnTitleAndAuthorTotalName(titleInput, authorInput.substring(0, 
 //							authorInput.indexOf(" ")), authorInput.substring(authorInput.indexOf(" ") + 1));
-					books = HibernateDatabaseHandler.selectBooksByTitleAndAuthorTotalName(titleInput, authorInput.substring(0, 
+					books = DatabaseHandler.selectBooksByTitleAndAuthorTotalName(titleInput, authorInput.substring(0, 
 							authorInput.indexOf(" ")), authorInput.substring(authorInput.indexOf(" ") + 1));
 				}
 			}
 		} else if (InputValidator.validateIsbn(isbnInput)) {
 //			return DatabaseHandler.selectBooksOnISBN(isbnInput);
-			books = HibernateDatabaseHandler.selectBooksByIsbn(isbnInput);
+			books = DatabaseHandler.selectBooksByIsbn(isbnInput);
 		} else {
 			return new ArrayList<BookPreview>();
 		}
@@ -54,7 +54,7 @@ public class QueryHelper {
 	
 	public static BookInfo getBookInfo(int id) {
 //		BookInfo bookInfo = DatabaseHandler.selectBookOnId(id);
-		BookInfo bookInfo = HibernateDatabaseHandler.selectBookById(id);
+		BookInfo bookInfo = DatabaseHandler.selectBookById(id);
 		System.out.println("copies: " + bookInfo.getCopiesAvailable());
 		System.out.println("title: " + bookInfo.getBook().getTitle());
 		System.out.println("subtitle: " + bookInfo.getBook().getSubtitle());
