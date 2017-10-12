@@ -186,71 +186,71 @@ public class DatabaseHandler {
 //		}
 //	}
 	
-	public static List<BookPreview> selectBooksOnTitle(String titleInput) {
-		String sqlStatement = selectBooksStatement + "where Title like \'%" + titleInput + "%\'";
-		return selectBooks(sqlStatement);
-	}
-	
-	public static List<BookPreview> selectBooksOnAuthorSingleName(String authorInput) {
-		String sqlStatement = selectBooksStatement + "where Forename like \'%" + authorInput + "%\' "
-				+ "or Surname like \'%" + authorInput + "%\'";
-		return selectBooks(sqlStatement);
-	}
-	
-	public static List<BookPreview> selectBooksOnISBN(String isbnInput) {
-		String sqlStatement = selectBooksStatement + "where ISBN = \'" + isbnInput + "\'";
-		return selectBooks(sqlStatement);
-	}
-	
-	public static List<BookPreview> selectBooksOnAuthorTotalName(String authorFornameInput, String authorSurnameInput) {
-		String sqlStatement = selectBooksStatement + "where Forename like \'%" + authorFornameInput + "%\' "
-				+ "and Surname like \'%" + authorSurnameInput + "%\'";
-		return selectBooks(sqlStatement);
-	}
-	
-	public static List<BookPreview> selectBooksOnTitleAndAuthorSingleName(String titleInput, String authorInput) {
-		String sqlStatement = selectBooksStatement + "where Title like \'%" + titleInput + "%\' "
-				+ "and (Forename like \'%" + authorInput + "%\' "
-				+ "or Surname like \'%" + authorInput + "%\')";
-		return selectBooks(sqlStatement);
-	}
-
-	public static List<BookPreview> selectBooksOnTitleAndAuthorTotalName(String titleInput, String authorForenameInput, String authorSurnameInput) {
-		String sqlStatement = selectBooksStatement + "where Title like \'%" + titleInput + "%\' "
-				+ "and Forename like \'%" + authorForenameInput + "%\' "
-				+ "and Surname like \'%" + authorSurnameInput + "%\'";
-		return selectBooks(sqlStatement);
-	}
-
-	private static List<BookPreview> selectBooks(String sqlStatement) {
-		List<BookPreview> bookPreviews = new ArrayList<BookPreview>();
-		try {
-			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
-			RESULT_SET: while (resultSet.next()) {
-				int id = resultSet.getInt("ID");
-				for (BookPreview bookPreview : bookPreviews) {
-					if (bookPreview.getId() == id) {
-						bookPreview.getAuthors().add(new Author(resultSet.getString("AuthorForename"), resultSet.getString("AuthorSurname")));
-						continue RESULT_SET;
-					}
-				}
-				String title = resultSet.getString("Title");
-				List<Author> authors = new ArrayList<Author>();
-				authors.add(new Author(resultSet.getString("AuthorForename"), resultSet.getString("AuthorSurname")));
-				String category = resultSet.getString("Category");
-				String isbn = resultSet.getString("ISBN");
-
-				bookPreviews.add(new BookPreview(id, title, authors, category, isbn));
-			}
-			return bookPreviews;
-		} catch (SQLException se) {
-			se.printStackTrace();
-			System.out.println("MESSAGE: " + se.getMessage());
-			return new ArrayList<BookPreview>();
-		} finally {
-			DatabaseConnector.disconnect();
-		}
-	}
+//	public static List<BookPreview> selectBooksOnTitle(String titleInput) {
+//		String sqlStatement = selectBooksStatement + "where Title like \'%" + titleInput + "%\'";
+//		return selectBooks(sqlStatement);
+//	}
+//	
+//	public static List<BookPreview> selectBooksOnAuthorSingleName(String authorInput) {
+//		String sqlStatement = selectBooksStatement + "where Forename like \'%" + authorInput + "%\' "
+//				+ "or Surname like \'%" + authorInput + "%\'";
+//		return selectBooks(sqlStatement);
+//	}
+//	
+//	public static List<BookPreview> selectBooksOnISBN(String isbnInput) {
+//		String sqlStatement = selectBooksStatement + "where ISBN = \'" + isbnInput + "\'";
+//		return selectBooks(sqlStatement);
+//	}
+//	
+//	public static List<BookPreview> selectBooksOnAuthorTotalName(String authorFornameInput, String authorSurnameInput) {
+//		String sqlStatement = selectBooksStatement + "where Forename like \'%" + authorFornameInput + "%\' "
+//				+ "and Surname like \'%" + authorSurnameInput + "%\'";
+//		return selectBooks(sqlStatement);
+//	}
+//	
+//	public static List<BookPreview> selectBooksOnTitleAndAuthorSingleName(String titleInput, String authorInput) {
+//		String sqlStatement = selectBooksStatement + "where Title like \'%" + titleInput + "%\' "
+//				+ "and (Forename like \'%" + authorInput + "%\' "
+//				+ "or Surname like \'%" + authorInput + "%\')";
+//		return selectBooks(sqlStatement);
+//	}
+//
+//	public static List<BookPreview> selectBooksOnTitleAndAuthorTotalName(String titleInput, String authorForenameInput, String authorSurnameInput) {
+//		String sqlStatement = selectBooksStatement + "where Title like \'%" + titleInput + "%\' "
+//				+ "and Forename like \'%" + authorForenameInput + "%\' "
+//				+ "and Surname like \'%" + authorSurnameInput + "%\'";
+//		return selectBooks(sqlStatement);
+//	}
+//
+//	private static List<BookPreview> selectBooks(String sqlStatement) {
+//		List<BookPreview> bookPreviews = new ArrayList<BookPreview>();
+//		try {
+//			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
+//			RESULT_SET: while (resultSet.next()) {
+//				int id = resultSet.getInt("ID");
+//				for (BookPreview bookPreview : bookPreviews) {
+//					if (bookPreview.getId() == id) {
+//						bookPreview.getAuthors().add(new Author(resultSet.getString("AuthorForename"), resultSet.getString("AuthorSurname")));
+//						continue RESULT_SET;
+//					}
+//				}
+//				String title = resultSet.getString("Title");
+//				List<Author> authors = new ArrayList<Author>();
+//				authors.add(new Author(resultSet.getString("AuthorForename"), resultSet.getString("AuthorSurname")));
+//				String category = resultSet.getString("Category");
+//				String isbn = resultSet.getString("ISBN");
+//
+//				bookPreviews.add(new BookPreview(id, title, authors, category, isbn));
+//			}
+//			return bookPreviews;
+//		} catch (SQLException se) {
+//			se.printStackTrace();
+//			System.out.println("MESSAGE: " + se.getMessage());
+//			return new ArrayList<BookPreview>();
+//		} finally {
+//			DatabaseConnector.disconnect();
+//		}
+//	}
 
 //	public static BookInfo selectBookOnId(int id) {
 //		String bookSqlStatement = 

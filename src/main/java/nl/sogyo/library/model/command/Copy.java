@@ -7,6 +7,11 @@ public class Copy {
 	
 	public Copy() {}
 	
+	public Copy(Book book) {
+		this.id = 0;
+		this.book = book;
+	}
+	
 	public Copy(int id, Book book) {
 		this.id = id;
 		this.book = book;
