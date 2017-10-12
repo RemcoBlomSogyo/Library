@@ -9,6 +9,6 @@
          	<generator class="native"/>
       	</id>
        	<many-to-one name="book" class="nl.sogyo.library.model.command.Book"
-        	column="BookID" not-null="true" cascade="all" />
+        	column="BookID" not-null="true" cascade="all"/>
    	</class>
 </hibernate-mapping>

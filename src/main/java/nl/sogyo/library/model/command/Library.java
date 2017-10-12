@@ -53,7 +53,8 @@ public class Library {
 	}
 	
 	public static AddCopyMessage addCopy(int bookId) {
-		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(bookId);
+//		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(bookId);
+		AddCopyMessage addCopyMessage = HibernateDatabaseHandler.insertCopy(bookId);
 		return addCopyMessage;
 	}
 	
@@ -89,7 +90,8 @@ public class Library {
 	}
 	
 	public static DeleteCopyMessage deleteCopy(int bookId) {
-		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(bookId);
+//		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(bookId);
+		DeleteCopyMessage deleteCopyMessage = HibernateDatabaseHandler.deleteCopy(bookId);
 		return deleteCopyMessage;
 	}
 	

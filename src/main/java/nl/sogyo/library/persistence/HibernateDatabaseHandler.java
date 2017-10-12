@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
@@ -27,6 +28,7 @@ import nl.sogyo.library.model.command.Copy;
 import nl.sogyo.library.model.command.Publisher;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 
 public class HibernateDatabaseHandler {
 	
@@ -451,7 +453,6 @@ public class HibernateDatabaseHandler {
 			System.out.println("hibernateexcpetion");
 			rollbackTransaction(transaction, e);
 		} finally {
-			session.close();
 			connector.disconnect(session);
 		}
 		
@@ -463,19 +464,19 @@ public class HibernateDatabaseHandler {
 		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
 		Session session = connector.connect();
 		Transaction transaction = null;
-		int id = 0;
-		
+
 		try {
 			transaction = session.beginTransaction();
 			book = setForeignKeyIdentifiers(book, session);
-			id = (int) session.save(book);
+			int id = (int) session.save(book);
 			transaction.commit();
+			return id;
 		} catch (HibernateException e) {
 			rollbackTransaction(transaction, e);
+			return 0;
 		} finally {
 			connector.disconnect(session);
 		}
-		return id;
 	}
 	
 	public static boolean updateBook(Book book) {
@@ -501,35 +502,83 @@ public class HibernateDatabaseHandler {
 		}
 	}
 	
-//	public static AddCopyMessage insertCopy(int bookId) {
-//		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
-//		Session session = connector.connect();
-//		Transaction transaction = null;
-//		
-//		try {
-//			transaction = session.beginTransaction();
-//			
-//			Book book = session.get(Book.class, bookId);
-//			if (book == null) {
-//				throw new HibernateException("Book ID is not in table");
-//			} else {
-//				Copy copy = new Copy(book);
-//				session.save(copy);
-//				
-//				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-//				CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class);
-//				Root<Copy> copyRoot = copyQuery.from(Copy.class);
-//				
-//				// check expression als parameter
-////				copyQuery.select(criteriaBuilder.count(copyRoot)).where(criteriaBuilder.equal(copyRoot.get("book"), book));
-//				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
-//				List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
-//				int numberCopies = copies.size();
-//				
-//				return new AddCopyMessage(true, numberCopies);
-//			}
-//		} 
-//	}
+	public static AddCopyMessage insertCopy(int bookId) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			Book book = session.get(Book.class, bookId);
+			if (book == null) {
+				throw new HibernateException("Book ID is not in table");
+			} else {
+				Copy copy = new Copy(book);
+				session.save(copy);
+				
+				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+				CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class);
+				Root<Copy> copyRoot = copyQuery.from(Copy.class);
+				
+				// check expression als parameter
+//				copyQuery.select(criteriaBuilder.count(copyRoot)).where(criteriaBuilder.equal(copyRoot.get("book"), book));
+				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
+				List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
+				int numberCopies = copies.size();
+				
+				transaction.commit();
+				return new AddCopyMessage(true, numberCopies);
+			}
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+			return new AddCopyMessage(false, 0);
+		} finally {
+			connector.disconnect(session);
+		}
+	}
+	
+	public static DeleteCopyMessage deleteCopy(int bookId) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			Book book = session.get(Book.class, bookId);
+			if (book == null) {
+				throw new HibernateException("Book ID is not in table");
+			} else {
+				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+
+				CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class); 
+				Root<Copy> copyRoot = copyQuery.from(Copy.class);
+				
+				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
+				List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
+				if (copies == null) {
+					throw new HibernateException("TESTNULL No copies of book in table");
+				} else if (copies.size() == 0) {
+					throw new HibernateException("TEST0 No copies of book in table");
+				} else {
+					Copy copy = copies.remove(0);
+					copy.setBook(null);
+					session.delete(copy);
+				}
+				
+				int numberCopies = copies.size() - 1;
+				System.out.println("hallo test");
+				transaction.commit();
+				return new DeleteCopyMessage(true, numberCopies);
+			}
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+			return new DeleteCopyMessage(false, 0);
+		} finally {
+			connector.disconnect(session);
+		}
+	}
 	
 	private static boolean isBookIdInTable(int id, Session session) {
 		boolean isBookIdInTable = session.get(Book.class, id) != null;
