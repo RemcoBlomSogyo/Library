@@ -66,6 +66,7 @@ public class BookCommandTest extends JerseyTest {
 	
 	@Test
 	public void test05DeleteCreatedBook() {
+		System.out.println("test05");
 	    Response response = target("book").path(Integer.toString(id)).request().delete();
 	    DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
 	    Assert.assertTrue(deleteBookMessage.getCommandSucceeded());

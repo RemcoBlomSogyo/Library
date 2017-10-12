@@ -28,6 +28,7 @@ import nl.sogyo.library.model.command.Copy;
 import nl.sogyo.library.model.command.Publisher;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 
 public class HibernateDatabaseHandler {
@@ -557,9 +558,7 @@ public class HibernateDatabaseHandler {
 				
 				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
 				List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
-				if (copies == null) {
-					throw new HibernateException("TESTNULL No copies of book in table");
-				} else if (copies.size() == 0) {
+				if (copies.size() == 0) {
 					throw new HibernateException("TEST0 No copies of book in table");
 				} else {
 					Copy copy = copies.remove(0);
@@ -575,6 +574,59 @@ public class HibernateDatabaseHandler {
 		} catch (HibernateException e) {
 			rollbackTransaction(transaction, e);
 			return new DeleteCopyMessage(false, 0);
+		} finally {
+			connector.disconnect(session);
+		}
+	}
+	
+	public static boolean deleteBookAndCopies(int bookId) {
+		HibernateDatabaseConnector connector = new HibernateDatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			Book book = session.get(Book.class, bookId);
+			if (book == null) {
+				throw new HibernateException("Book ID is not in table");
+			} else {
+				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+
+				CriteriaDelete<Copy> copyDelete = criteriaBuilder.createCriteriaDelete(Copy.class);
+				Root<Copy> copyRoot = copyDelete.from(Copy.class);
+				copyDelete.where(criteriaBuilder.equal(copyRoot.get("book").get("id"), bookId));
+				System.out.println("voor");
+				session.createQuery(copyDelete).executeUpdate();
+				System.out.println("na");
+				
+				CriteriaDelete<Book> bookDelete = criteriaBuilder.createCriteriaDelete(Book.class);
+				Root<Book> bookRoot = bookDelete.from(Book.class);
+				bookDelete.where(criteriaBuilder.equal(bookRoot.get("id"), bookId));
+				System.out.println("voor2");
+				session.createQuery(bookDelete).executeUpdate();
+				System.out.println("na2");
+//				CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class); 
+//				Root<Copy> copyRoot = copyQuery.from(Copy.class);
+				
+//				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
+//				List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
+//				if (copies.size() == 0) {
+//					throw new HibernateException("TEST0 No copies of book in table");
+//				} else {
+//					Copy copy = copies.remove(0);
+//					copy.setBook(null);
+//					session.delete(copy);
+//				}
+				transaction.commit();
+				return true;
+			}
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+			return false;
+		} catch (Exception e) {
+			System.out.println("EXCEPTION: " + e.getMessage());
+			return false;
 		} finally {
 			connector.disconnect(session);
 		}

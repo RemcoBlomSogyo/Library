@@ -3,7 +3,7 @@ package nl.sogyo.library.model.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.sogyo.library.persistence.DatabaseHandler;
+//import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.persistence.HibernateDatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
@@ -96,7 +96,8 @@ public class Library {
 	}
 	
 	public static DeleteBookMessage deleteBook(int id) {
-		boolean commandSucceeded = DatabaseHandler.deleteBookAndCopies(id);
+//		boolean commandSucceeded = DatabaseHandler.deleteBookAndCopies(id);
+		boolean commandSucceeded = HibernateDatabaseHandler.deleteBookAndCopies(id);
 		DeleteBookMessage deleteBookMessage = new DeleteBookMessage(commandSucceeded);
 		return deleteBookMessage;
 	}

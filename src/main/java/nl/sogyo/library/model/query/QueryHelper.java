@@ -5,7 +5,7 @@ import java.util.List;
 
 import nl.sogyo.library.model.command.Book;
 import nl.sogyo.library.model.helper.InputValidator;
-import nl.sogyo.library.persistence.DatabaseHandler;
+//import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.persistence.HibernateDatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;

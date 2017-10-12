@@ -1,26 +1,26 @@
 package nl.sogyo.library.persistence;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+//import java.sql.*;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import nl.sogyo.library.model.command.Author;
+////import nl.sogyo.library.model.command.Book;
+//import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
+//import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+//import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 
-import nl.sogyo.library.model.command.Author;
-//import nl.sogyo.library.model.command.Book;
-import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
-import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
-
-public class DatabaseHandler {
+//public class DatabaseHandler {
 	
-	private static final String selectBooksStatement = "Select Books.ID as ID, Title, Forename as AuthorForename, "
-			+ "Surname as AuthorSurname, Categories.name as Category, ISBN from Books "
-			+ "inner join BooksAuthors on Books.ID = BooksAuthors.BookID "
-			+ "inner join Authors on BooksAuthors.AuthorID = Authors.ID "
-			+ "inner join Categories on Books.CategoryID = Categories.ID ";
+//	private static final String selectBooksStatement = "Select Books.ID as ID, Title, Forename as AuthorForename, "
+//			+ "Surname as AuthorSurname, Categories.name as Category, ISBN from Books "
+//			+ "inner join BooksAuthors on Books.ID = BooksAuthors.BookID "
+//			+ "inner join Authors on BooksAuthors.AuthorID = Authors.ID "
+//			+ "inner join Categories on Books.CategoryID = Categories.ID ";
 //	private static final String selectIdAuthorForename = "Select ID from Authors where Forename = \'";
 //	private static final String selectIdCategory = "Select ID from Categories where Name = \'";
 //	private static final String selectIdPublisher = "Select ID from Publishers where Name = \'";
-	private static final String selectCopiesOnId = "Select count(*) as CopiesOfBook from Copies where BookID = ";
+//	private static final String selectCopiesOnId = "Select count(*) as CopiesOfBook from Copies where BookID = ";
 	
 //	public static int insertBook(Book book) {
 //		String sqlStatement = 
@@ -424,85 +424,85 @@ public class DatabaseHandler {
 //		}
 //	}
 	
-	public static AddCopyMessage insertCopy(int bookId) {
-		String sqlStatement = 
-				"Set xact_abort on "
-				+ "begin tran "
-				+ "Insert into Copies(BookID) values (" + bookId + ") "
-				+ "if (@@ROWCOUNT = 1) "
-					+ "Begin "
-					+ selectCopiesOnId + bookId + " "
-					+ "commit tran "
-					+ "End "
-				+ "else "
-					+ "rollback tran";
-		int copiesOfBook = 0;
-		
-		try {
-			System.out.println("insertCopy try");
-			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
-			while (resultSet.next()) {
-				copiesOfBook = resultSet.getInt("CopiesOfBook");
-			}
-			return new AddCopyMessage(true, copiesOfBook);
-		} catch(SQLException e) {
-			System.out.println("insertCopy catch");
-			System.err.println(e.getMessage());
-			return new AddCopyMessage(false, 0);
-		} finally {
-			DatabaseConnector.disconnect();
-		}
-	}
-	
-	public static DeleteCopyMessage deleteCopy(int bookId) {
-		String sqlStatement = 
-				"Set xact_abort on "
-				+ "begin tran "
-				+ "Delete Top (1) from Copies where BookID = " + bookId + " "
-				+ "if (@@ROWCOUNT = 1) "
-					+ "Begin "
-					+ selectCopiesOnId + bookId + " "
-					+ "commit tran "
-					+ "End "
-				+ "else "
-					+ "rollback tran";
-		int copiesOfBook = 0;
-		
-		try {
-			System.out.println("deleteCopy try");
-			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
-			while (resultSet.next()) {
-				copiesOfBook = resultSet.getInt("CopiesOfBook");
-			}
-			return new DeleteCopyMessage(true, copiesOfBook);
-		} catch(SQLException e) {
-			System.out.println("deleteCopy catch");
-			System.err.println(e.getMessage());
-			return new DeleteCopyMessage(false, 0);
-		} finally {
-			DatabaseConnector.disconnect();
-		}
-	}
-	
-	public static boolean deleteBookAndCopies(int bookId) {
-		String sqlStatement = 
-				"Set xact_abort on "
-				+ "begin tran "
-				+ "Delete from Copies where BookID = " + bookId + " "
-				+ "Delete from BooksAuthors where BookID = " + bookId + " "
-				+ "Delete from Books where ID = " + bookId + " "
-				+ "commit tran";
-		
-		try {
-			System.out.println("try deleteBook");
-			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
-			return rowsAffected >= 1;
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			return false;
-		} finally {
-			DatabaseConnector.disconnect();
-		}
-	}
-}
+//	public static AddCopyMessage insertCopy(int bookId) {
+//		String sqlStatement = 
+//				"Set xact_abort on "
+//				+ "begin tran "
+//				+ "Insert into Copies(BookID) values (" + bookId + ") "
+//				+ "if (@@ROWCOUNT = 1) "
+//					+ "Begin "
+//					+ selectCopiesOnId + bookId + " "
+//					+ "commit tran "
+//					+ "End "
+//				+ "else "
+//					+ "rollback tran";
+//		int copiesOfBook = 0;
+//		
+//		try {
+//			System.out.println("insertCopy try");
+//			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
+//			while (resultSet.next()) {
+//				copiesOfBook = resultSet.getInt("CopiesOfBook");
+//			}
+//			return new AddCopyMessage(true, copiesOfBook);
+//		} catch(SQLException e) {
+//			System.out.println("insertCopy catch");
+//			System.err.println(e.getMessage());
+//			return new AddCopyMessage(false, 0);
+//		} finally {
+//			DatabaseConnector.disconnect();
+//		}
+//	}
+//	
+//	public static DeleteCopyMessage deleteCopy(int bookId) {
+//		String sqlStatement = 
+//				"Set xact_abort on "
+//				+ "begin tran "
+//				+ "Delete Top (1) from Copies where BookID = " + bookId + " "
+//				+ "if (@@ROWCOUNT = 1) "
+//					+ "Begin "
+//					+ selectCopiesOnId + bookId + " "
+//					+ "commit tran "
+//					+ "End "
+//				+ "else "
+//					+ "rollback tran";
+//		int copiesOfBook = 0;
+//		
+//		try {
+//			System.out.println("deleteCopy try");
+//			ResultSet resultSet = DatabaseConnector.executeQuery(sqlStatement);
+//			while (resultSet.next()) {
+//				copiesOfBook = resultSet.getInt("CopiesOfBook");
+//			}
+//			return new DeleteCopyMessage(true, copiesOfBook);
+//		} catch(SQLException e) {
+//			System.out.println("deleteCopy catch");
+//			System.err.println(e.getMessage());
+//			return new DeleteCopyMessage(false, 0);
+//		} finally {
+//			DatabaseConnector.disconnect();
+//		}
+//	}
+//	
+//	public static boolean deleteBookAndCopies(int bookId) {
+//		String sqlStatement = 
+//				"Set xact_abort on "
+//				+ "begin tran "
+//				+ "Delete from Copies where BookID = " + bookId + " "
+//				+ "Delete from BooksAuthors where BookID = " + bookId + " "
+//				+ "Delete from Books where ID = " + bookId + " "
+//				+ "commit tran";
+//		
+//		try {
+//			System.out.println("try deleteBook");
+//			int rowsAffected = DatabaseConnector.executeNonQuery(sqlStatement);
+//			return rowsAffected >= 1;
+//		} catch (SQLException e) {
+//			System.out.println(e.getMessage());
+//			e.printStackTrace();
+//			return false;
+//		} finally {
+//			DatabaseConnector.disconnect();
+//		}
+//	}
+//}
