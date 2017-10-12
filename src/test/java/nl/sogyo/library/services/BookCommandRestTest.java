@@ -19,7 +19,7 @@ import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.resources.BookResource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class BookCommandTest extends JerseyTest {
+public class BookCommandRestTest extends JerseyTest {
 	
 	private static int id;
 

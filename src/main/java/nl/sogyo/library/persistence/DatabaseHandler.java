@@ -487,6 +487,30 @@ public class DatabaseHandler {
 		}
 	}
 	
+	public static List<Author> selectAllAuthors() {
+		DatabaseConnector connector = new DatabaseConnector();
+		Session session = connector.connect();
+		Transaction transaction = null;
+		List<Author> authors = null;
+		
+		try {
+			transaction = session.beginTransaction();
+
+			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+			CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
+			Root<Author> authorRoot = authorQuery.from(Author.class);
+			authorQuery.select(authorRoot);
+			
+			authors = (List<Author>) session.createQuery(authorQuery).list();
+			transaction.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(transaction, e);
+		} finally {
+			connector.disconnect(session);
+		}
+		return authors;
+	}
+	
 	private static boolean isBookIdInTable(int id, Session session) {
 		boolean isBookIdInTable = session.get(Book.class, id) != null;
 		session.clear();

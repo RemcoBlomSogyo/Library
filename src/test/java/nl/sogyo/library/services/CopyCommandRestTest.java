@@ -19,7 +19,7 @@ import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.resources.BookResource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CopyCommandTest extends JerseyTest {
+public class CopyCommandRestTest extends JerseyTest {
 	
 	@Override
 	public Application configure() {
