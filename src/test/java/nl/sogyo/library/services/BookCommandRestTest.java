@@ -49,7 +49,7 @@ public class BookCommandRestTest extends JerseyTest {
 	    Assert.assertTrue(editBookMessage.getCommandSucceeded());
 	}
 	
-	// two query tests for copiesAvailable 
+	// four copy tests for copiesAvailable 
 	@Test
 	public void test03CopiesAvailableOfCreatedBookIsZero() {
 		System.out.println("test03");
