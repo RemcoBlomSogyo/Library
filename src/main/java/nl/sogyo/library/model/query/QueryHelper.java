@@ -12,7 +12,13 @@ import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
 
 public class QueryHelper {
 	
-	public static List<BookPreview> getBooks(String titleInput, 
+	private DatabaseHandler databaseHandler;
+	
+	public QueryHelper() {
+		databaseHandler = new DatabaseHandler();
+	}
+	
+	public List<BookPreview> getBooks(String titleInput, 
 			String authorInput, String isbnInput) {
 		List<Book> books = null;
 		if (isbnInput.isEmpty()) {
@@ -20,31 +26,31 @@ public class QueryHelper {
 				if (authorInput.isEmpty()) {
 					return new ArrayList<BookPreview>();
 				} else if (inputIsSingleName(authorInput)) {
-					books = DatabaseHandler.selectBooksByAuthorSingleName(authorInput);
+					books = databaseHandler.selectBooksByAuthorSingleName(authorInput);
 				} else {
-					books = DatabaseHandler.selectBooksByAuthorTotalName(authorInput.substring(0, 
+					books = databaseHandler.selectBooksByAuthorTotalName(authorInput.substring(0, 
 							authorInput.indexOf(" ")), authorInput.substring(authorInput.indexOf(" ") + 1));
 				}
 			} else {
 				if (authorInput.isEmpty()) {
-					books = DatabaseHandler.selectBooksByTitle(titleInput);
+					books = databaseHandler.selectBooksByTitle(titleInput);
 				} else if (inputIsSingleName(authorInput)) {
-					books = DatabaseHandler.selectBooksByTitleAndAuthorSingleName(titleInput, authorInput);
+					books = databaseHandler.selectBooksByTitleAndAuthorSingleName(titleInput, authorInput);
 				} else {
-					books = DatabaseHandler.selectBooksByTitleAndAuthorTotalName(titleInput, authorInput.substring(0, 
+					books = databaseHandler.selectBooksByTitleAndAuthorTotalName(titleInput, authorInput.substring(0, 
 							authorInput.indexOf(" ")), authorInput.substring(authorInput.indexOf(" ") + 1));
 				}
 			}
 		} else if (InputValidator.validateIsbn(isbnInput)) {
-			books = DatabaseHandler.selectBooksByIsbn(isbnInput);
+			books = databaseHandler.selectBooksByIsbn(isbnInput);
 		} else {
 			return new ArrayList<BookPreview>();
 		}
 		return parseBooksIntoBookPreviews(books);
 	}
 	
-	public static BookInfo getBookInfo(int id) {
-		BookInfo bookInfo = DatabaseHandler.selectBookById(id);
+	public BookInfo getBookInfo(int id) {
+		BookInfo bookInfo = databaseHandler.selectBookById(id);
 		System.out.println("copies: " + bookInfo.getCopiesAvailable());
 		System.out.println("title: " + bookInfo.getBook().getTitle());
 		System.out.println("subtitle: " + bookInfo.getBook().getSubtitle());
@@ -53,16 +59,16 @@ public class QueryHelper {
 		return bookInfo;
 	}
 	
-	public static List<Author> getAllAuthors() {
-		List<Author> authors = DatabaseHandler.selectAllAuthors();
+	public List<Author> getAllAuthors() {
+		List<Author> authors = databaseHandler.selectAllAuthors();
 		return authors;
 	}
 	
-	private static boolean inputIsSingleName(String authorInput) {
+	private boolean inputIsSingleName(String authorInput) {
 		return !authorInput.contains(" ");
 	}
 	
-	private static List<BookPreview> parseBooksIntoBookPreviews(List<Book> books) {
+	private List<BookPreview> parseBooksIntoBookPreviews(List<Book> books) {
 		List<BookPreview> bookPreviews = new ArrayList<BookPreview>();
 		for (Book book : books) {
 			bookPreviews.add(new BookPreview(book.getId(), book.getTitle(), book.getAuthors(), 

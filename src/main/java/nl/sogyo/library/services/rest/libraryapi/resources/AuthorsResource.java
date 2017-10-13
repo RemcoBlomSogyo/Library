@@ -15,7 +15,8 @@ public class AuthorsResource {
 	@GET
 	@Produces("application/json")
 	public List<Author> getAllAuthors() {
-		List<Author> authors = QueryHelper.getAllAuthors();
+		QueryHelper queryHelper = new QueryHelper();
+		List<Author> authors = queryHelper.getAllAuthors();
 		return authors;
 	}
 }

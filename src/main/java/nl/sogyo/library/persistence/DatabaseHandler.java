@@ -27,18 +27,47 @@ import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 
 public class DatabaseHandler {
 	
-	public static List<Book> selectBooksByTitle(String titleInput) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		List<Book> books = null;
+	private DatabaseConnector connector;
+	private Session session;
+	private Transaction transaction;
+	private CriteriaBuilder criteriaBuilder;
+	
+	private CriteriaQuery<Book> bookQuery;
+	private CriteriaQuery<Author> authorQuery;
+	private CriteriaQuery<Copy> copyQuery;
+	
+	private Root<Book> bookRoot;
+	private Root<Author> authorRoot;
+	private Root<Copy> copyRoot;
+	
+	private List<Book> books;
+	private List<Author> authors;
+	private List<Copy> copies;
+	
+	private Book book;
+	private Copy copy;
+	
+	public DatabaseHandler() {
+		connector = new DatabaseConnector();
+	}
+	
+	private void initialize() {
+		session = connector.connect();
+		transaction = session.beginTransaction();
+		criteriaBuilder = session.getCriteriaBuilder();
 		
+		bookQuery = criteriaBuilder.createQuery(Book.class);
+		authorQuery = criteriaBuilder.createQuery(Author.class);
+		copyQuery = criteriaBuilder.createQuery(Copy.class);
+		
+		bookRoot = bookQuery.from(Book.class);
+		authorRoot = authorQuery.from(Author.class);
+		copyRoot = copyQuery.from(Copy.class);
+	}
+	
+	public List<Book> selectBooksByTitle(String titleInput) {
 		try {
-			transaction = session.beginTransaction();
-			
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
-			Root<Book> bookRoot = bookQuery.from(Book.class);
+			initialize();
 			ParameterExpression<String> titleParam = criteriaBuilder.parameter(String.class);
 			bookQuery.select(bookRoot).where(criteriaBuilder.like(bookRoot.get("title"), titleParam));
 			
@@ -51,7 +80,7 @@ public class DatabaseHandler {
 			}
 			transaction.commit();
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 		} finally {
 			session.close();
 			connector.disconnect(session);
@@ -60,18 +89,11 @@ public class DatabaseHandler {
 		return books;
 	}
 	
-	public static List<Book> selectBooksByAuthorSingleName(String authorInput) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		List<Book> books = new ArrayList<Book>();
-		System.out.println("test author hibernate");
+	public List<Book> selectBooksByAuthorSingleName(String authorInput) {
+		books = new ArrayList<Book>();
+
 		try {	
-			transaction = session.beginTransaction();
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-			
-			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
-			Root<Book> bookRoot = bookQuery.from(Book.class);
+			initialize();
 			bookQuery.select(bookRoot);
 			List<Book> allBooksInTable = session.createQuery(bookQuery).list();
 						
@@ -88,7 +110,7 @@ public class DatabaseHandler {
 			setBooksOfSelectedAuthors(allBooksInTable, authorMatches, books);
 			transaction.commit();
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 		} finally {
 			session.close();
 			connector.disconnect(session);
@@ -97,18 +119,9 @@ public class DatabaseHandler {
 		return books;
 	}
 	
-	public static List<Book> selectBooksByIsbn(String isbnInput) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		List<Book> books = null;
-		
+	public List<Book> selectBooksByIsbn(String isbnInput) {
 		try {
-			transaction = session.beginTransaction();
-			
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
-			Root<Book> bookRoot = bookQuery.from(Book.class);
+			initialize();
 			bookQuery.select(bookRoot).where(criteriaBuilder.like(bookRoot.get("isbn"), "%" + isbnInput + "%"));
 			books = (List<Book>) session.createQuery(bookQuery).list();
 			
@@ -117,7 +130,7 @@ public class DatabaseHandler {
 			}
 			transaction.commit();
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 		} finally {
 			session.close();
 			connector.disconnect(session);
@@ -126,23 +139,14 @@ public class DatabaseHandler {
 		return books;
 	}
 	
-	public static List<Book> selectBooksByAuthorTotalName(String authorForenameInput, String authorSurnameInput) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		List<Book> books = new ArrayList<Book>();
+	public List<Book> selectBooksByAuthorTotalName(String authorForenameInput, String authorSurnameInput) {
+		books = new ArrayList<Book>();
 		
 		try {
-			transaction = session.beginTransaction();
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-			
-			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
-			Root<Book> bookRoot = bookQuery.from(Book.class);
+			initialize();
 			bookQuery.select(bookRoot);
 			List<Book> allBooksInTable = session.createQuery(bookQuery).list();
 						
-			CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
-			Root<Author> authorRoot = authorQuery.from(Author.class);
 			ParameterExpression<String> forenameParam = criteriaBuilder.parameter(String.class);
 			ParameterExpression<String> surnameParam = criteriaBuilder.parameter(String.class);
 			authorQuery.select(authorRoot).where(criteriaBuilder.and(
@@ -156,7 +160,7 @@ public class DatabaseHandler {
 			setBooksOfSelectedAuthors(allBooksInTable, authorMatches, books);
 			transaction.commit();
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 		} finally {
 			session.close();
 			connector.disconnect(session);
@@ -165,19 +169,11 @@ public class DatabaseHandler {
 		return books;
 	}
 	
-	public static List<Book> selectBooksByTitleAndAuthorSingleName(String titleInput, String authorInput) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		List<Book> books = new ArrayList<Book>();
+	public List<Book> selectBooksByTitleAndAuthorSingleName(String titleInput, String authorInput) {
+		books = new ArrayList<Book>();
 		
 		try {
-			transaction = session.beginTransaction();
-			
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-			
-			CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
-			Root<Author> authorRoot = authorQuery.from(Author.class);
+			initialize();
 			ParameterExpression<String> authorParam = criteriaBuilder.parameter(String.class);
 			authorQuery.select(authorRoot).where(criteriaBuilder.or(
 					criteriaBuilder.like(authorRoot.get("forename"), authorParam),
@@ -186,8 +182,6 @@ public class DatabaseHandler {
 			typedQuery.setParameter(authorParam, addPercentWildcards(authorInput));
 			List<Author> authorMatches = typedQuery.getResultList();
 			
-			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
-			Root<Book> bookRoot = bookQuery.from(Book.class);
 			bookQuery.select(bookRoot).where(
 					criteriaBuilder.like(bookRoot.get("title"), "%" + titleInput + "%"));
 			List<Book> booksWithTitleInput = (List<Book>) session.createQuery(bookQuery).list();
@@ -195,7 +189,7 @@ public class DatabaseHandler {
 			setBooksOfSelectedAuthors(booksWithTitleInput, authorMatches, books);
 			transaction.commit();
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 		} finally {
 			session.close();
 			connector.disconnect(session);
@@ -204,20 +198,11 @@ public class DatabaseHandler {
 		return books;
 	}
 	
-	public static List<Book> selectBooksByTitleAndAuthorTotalName(String titleInput, String authorForenameInput, String authorSurnameInput) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		List<Book> books = new ArrayList<Book>();
+	public List<Book> selectBooksByTitleAndAuthorTotalName(String titleInput, String authorForenameInput, String authorSurnameInput) {
+		books = new ArrayList<Book>();
 		
 		try {
-			transaction = session.beginTransaction();
-			
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
-			CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
-			Root<Author> authorRoot = authorQuery.from(Author.class);
-			
+			initialize();
 			ParameterExpression<String> forenameParam = criteriaBuilder.parameter(String.class);
 			ParameterExpression<String> surnameParam = criteriaBuilder.parameter(String.class);
 			authorQuery.select(authorRoot).where(criteriaBuilder.and(
@@ -238,7 +223,7 @@ public class DatabaseHandler {
 			setBooksOfSelectedAuthors(booksWithTitleInput, authorMatches, books);
 			transaction.commit();
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 		} finally {
 			session.close();
 			connector.disconnect(session);
@@ -247,16 +232,11 @@ public class DatabaseHandler {
 		return books;
 	}
 	
-	public static BookInfo selectBookById(int id) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		Book book = null;
+	public BookInfo selectBookById(int id) {
 		int numberCopies = 0;
 		
 		try {
-			transaction = session.beginTransaction();
-			
+			initialize();
 			book = session.get(Book.class, id);
 			if (book == null) {
 				book = new Book(0, "", "", new ArrayList<Author>(), "", "", (short) 0, "", (short) 0, "");
@@ -264,18 +244,15 @@ public class DatabaseHandler {
 				initializeReferencedEntities(book);
 			}
 			
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-			CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class);
-			Root<Copy> copyRoot = copyQuery.from(Copy.class);
 			copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book").get("id"), id));
 
-			List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
+			copies = (List<Copy>) session.createQuery(copyQuery).list();
 			numberCopies = copies.size();
 			
 			transaction.commit();
 		} catch (HibernateException e) {
 			System.out.println("hibernateexcpetion");
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 		} finally {
 			connector.disconnect(session);
 		}
@@ -284,37 +261,26 @@ public class DatabaseHandler {
 		return bookInfo;
 	}
 	
-	public static int insertBook(Book book) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-
+	public int insertBook(Book book) {
 		try {
-			transaction = session.beginTransaction();
-			System.out.println("1");
-			setForeignKeyIdentifiers(book, session);
-			System.out.println("2");
+			initialize();
+			setForeignKeyIdentifiers(book);
 			int id = (int) session.save(book);
-			System.out.println("3");
 			transaction.commit();
 			return id;
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 			return 0;
 		} finally {
 			connector.disconnect(session);
 		}
 	}
 	
-	public static boolean updateBook(Book book) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-
+	public boolean updateBook(Book book) {
 		try {
-			transaction = session.beginTransaction();
-			if (isBookIdInTable(book.getId(), session)) {
-				setForeignKeyIdentifiers(book, session);
+			initialize();
+			if (isBookIdInTable(book.getId())) {
+				setForeignKeyIdentifiers(book);
 				session.update(book);
 				transaction.commit();
 				return true;
@@ -322,159 +288,115 @@ public class DatabaseHandler {
 				throw new HibernateException("Book ID is not in table");
 			}
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 			return false;
 		} finally {
 			connector.disconnect(session);
 		}
 	}
 	
-	public static AddCopyMessage insertCopy(int bookId) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		
+	public AddCopyMessage insertCopy(int bookId) {
 		try {
-			transaction = session.beginTransaction();
-			
-			Book book = session.get(Book.class, bookId);
+			initialize();
+			book = session.get(Book.class, bookId);
 			if (book == null) {
 				throw new HibernateException("Book ID is not in table");
 			} else {
-				Copy copy = new Copy(book);
+				copy = new Copy(book);
 				session.save(copy);
-				
-				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-				CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class);
-				Root<Copy> copyRoot = copyQuery.from(Copy.class);
 
 				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
-				List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
+				copies = (List<Copy>) session.createQuery(copyQuery).list();
 				int numberCopies = copies.size();
 				
 				transaction.commit();
 				return new AddCopyMessage(true, numberCopies);
 			}
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 			return new AddCopyMessage(false, 0);
 		} finally {
 			connector.disconnect(session);
 		}
 	}
 	
-	public static DeleteCopyMessage deleteCopy(int bookId) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		
+	public DeleteCopyMessage deleteCopy(int bookId) {
 		try {
-			transaction = session.beginTransaction();
-			
-			Book book = session.get(Book.class, bookId);
+			initialize();
+			book = session.get(Book.class, bookId);
 			if (book == null) {
 				throw new HibernateException("Book ID is not in table");
 			} else {
-				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
-				CriteriaQuery<Copy> copyQuery = criteriaBuilder.createQuery(Copy.class); 
-				Root<Copy> copyRoot = copyQuery.from(Copy.class);
-				
 				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
-				List<Copy> copies = (List<Copy>) session.createQuery(copyQuery).list();
+				copies = (List<Copy>) session.createQuery(copyQuery).list();
 				if (copies.size() == 0) {
 					throw new HibernateException("TEST0 No copies of book in table");
 				} else {
-					Copy copy = copies.remove(0);
+					copy = copies.remove(0);
 					copy.setBook(null);
 					session.delete(copy);
 				}
 				
 				int numberCopies = copies.size();
-				System.out.println("hallo test");
 				transaction.commit();
 				return new DeleteCopyMessage(true, numberCopies);
 			}
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 			return new DeleteCopyMessage(false, 0);
 		} finally {
 			connector.disconnect(session);
 		}
 	}
 	
-	public static boolean deleteBookAndCopies(int bookId) {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		
+	public boolean deleteBookAndCopies(int bookId) {
 		try {
-			transaction = session.beginTransaction();
-			
-			Book book = session.get(Book.class, bookId);
+			initialize();
+			book = session.get(Book.class, bookId);
 			if (book == null) {
 				throw new HibernateException("Book ID is not in table");
 			} else {
-				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
 				CriteriaDelete<Copy> copyDelete = criteriaBuilder.createCriteriaDelete(Copy.class);
 				Root<Copy> copyRoot = copyDelete.from(Copy.class);
 				copyDelete.where(criteriaBuilder.equal(copyRoot.get("book").get("id"), bookId));
-				System.out.println("voor");
 				session.createQuery(copyDelete).executeUpdate();
-				System.out.println("na");
-				
+
 				CriteriaDelete<Book> bookDelete = criteriaBuilder.createCriteriaDelete(Book.class);
 				Root<Book> bookRoot = bookDelete.from(Book.class);
 				bookDelete.where(criteriaBuilder.equal(bookRoot.get("id"), bookId));
-				System.out.println("voor2");
 				session.createQuery(bookDelete).executeUpdate();
-				System.out.println("na2");
 				transaction.commit();
 				return true;
 			}
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
-			return false;
-		} catch (Exception e) {
-			System.out.println("EXCEPTION: " + e.getMessage());
+			rollbackTransaction(e);
 			return false;
 		} finally {
 			connector.disconnect(session);
 		}
 	}
 	
-	public static List<Author> selectAllAuthors() {
-		DatabaseConnector connector = new DatabaseConnector();
-		Session session = connector.connect();
-		Transaction transaction = null;
-		List<Author> authors = null;
-		
+	public List<Author> selectAllAuthors() {
 		try {
-			transaction = session.beginTransaction();
-
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-			CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
-			Root<Author> authorRoot = authorQuery.from(Author.class);
+			initialize();
 			authorQuery.select(authorRoot);
-			
 			authors = (List<Author>) session.createQuery(authorQuery).list();
 			transaction.commit();
 		} catch (HibernateException e) {
-			rollbackTransaction(transaction, e);
+			rollbackTransaction(e);
 		} finally {
 			connector.disconnect(session);
 		}
 		return authors;
 	}
 	
-	private static boolean isBookIdInTable(int id, Session session) {
+	private boolean isBookIdInTable(int id) {
 		boolean isBookIdInTable = session.get(Book.class, id) != null;
 		session.clear();
 		return isBookIdInTable;
 	}
 	
-	private static void initializeReferencedEntities(Book book) {
+	private void initializeReferencedEntities(Book book) {
 		Hibernate.initialize(book.getCategory());
 		Hibernate.initialize(book.getPublisher());
 		for (Author author : book.getAuthors()) {
@@ -482,19 +404,17 @@ public class DatabaseHandler {
 		}
 	}
 	
-	private static String addPercentWildcards(String param) {
+	private String addPercentWildcards(String param) {
 		return "%" + param + "%";
 	}
 	
-	private static Book setForeignKeyIdentifiers(Book book, Session session) {
+	private Book setForeignKeyIdentifiers(Book book) {
 		Category category = null;
 		try {
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 			CriteriaQuery<Category> categoryQuery = criteriaBuilder.createQuery(Category.class);
 			Root<Category> categoryRoot = categoryQuery.from(Category.class);
 			categoryQuery.select(categoryRoot).where(criteriaBuilder.equal(categoryRoot.get("name"), book.getCategory().getName()));
 			category = (Category) session.createQuery(categoryQuery).setMaxResults(1).getSingleResult();
-			System.out.println(category.getName());
 			book.setCategory(category);
 		} catch (NoResultException e) {
 			session.save(book.getCategory());
@@ -502,7 +422,6 @@ public class DatabaseHandler {
 		
 		Publisher publisher = null;
 		try {
-			CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 			CriteriaQuery<Publisher> publisherQuery = criteriaBuilder.createQuery(Publisher.class);
 			Root<Publisher> publisherRoot = publisherQuery.from(Publisher.class);
 			publisherQuery.select(publisherRoot).where(criteriaBuilder.equal(publisherRoot.get("name"), book.getPublisher().getName()));
@@ -515,9 +434,7 @@ public class DatabaseHandler {
 		for (int i = 0; i < book.getAuthors().size(); i++) {
 			Author author = null;
 			try {
-				CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 				CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
-				Root<Author> authorRoot = authorQuery.from(Author.class);
 				authorQuery.select(authorRoot).where(criteriaBuilder.and(
 						criteriaBuilder.equal(authorRoot.get("forename"), book.getAuthors().get(i).getForename()),
 						criteriaBuilder.equal(authorRoot.get("surname"), book.getAuthors().get(i).getSurname())));
@@ -527,11 +444,10 @@ public class DatabaseHandler {
 				session.save(book.getAuthors().get(i));
 			} 
 		}
-		System.out.println("test test test");
 		return book;
 	}
 	
-	private static void setBooksOfSelectedAuthors(List<Book> selectedBooks, List<Author> selectedAuthors, List<Book> authorMatchingBooks) {
+	private void setBooksOfSelectedAuthors(List<Book> selectedBooks, List<Author> selectedAuthors, List<Book> authorMatchingBooks) {
 		for (Book book : selectedBooks) {
 			initializeReferencedEntities(book);
 			BOOK: for (Author authorBook : book.getAuthors()) {
@@ -546,7 +462,7 @@ public class DatabaseHandler {
 		}
 	}
 	
-	private static void rollbackTransaction(Transaction transaction, HibernateException e) {
+	private void rollbackTransaction(HibernateException e) {
 		System.err.println("ERRORMESSAGE: " + e.getMessage());
 		if (transaction != null) {
 			transaction.rollback();

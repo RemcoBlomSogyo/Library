@@ -16,7 +16,8 @@ public class BooksResource {
 	@GET
 	@Produces("application/json")
 	public List<BookPreview> getBooks(@QueryParam("title") String title, @QueryParam("author") String author, @QueryParam("isbn") String isbn) {
-		List<BookPreview> books = QueryHelper.getBooks(title, author, isbn);
+		QueryHelper queryHelper = new QueryHelper();
+		List<BookPreview> books = queryHelper.getBooks(title, author, isbn);
 		return books;
 	}
 }

@@ -27,7 +27,8 @@ public class BookResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public BookInfo getBookInfo(@PathParam("id") int id) {
-		BookInfo bookInfo = QueryHelper.getBookInfo(id);
+		QueryHelper queryHelper = new QueryHelper();
+		BookInfo bookInfo = queryHelper.getBookInfo(id);
 		return bookInfo;
 	}
 
@@ -51,7 +52,8 @@ public class BookResource {
 		System.out.println("isbn: " + bookFormInput.getIsbn());
 		System.out.println("year: " + bookFormInput.getYearFirstPublication());
 		
-		AddBookMessage addBookMessage = Library.addBook(bookFormInput);
+		Library library = new Library();
+		AddBookMessage addBookMessage = library.addBook(bookFormInput);
 		System.out.println("addBookmessage: " + addBookMessage.getMessage());
 		return addBookMessage;
 	}
@@ -61,7 +63,8 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public EditBookMessage editBook(@PathParam("id") int id, BookFormInput bookFormInput) {
-		EditBookMessage editBookMessage = Library.editBook(id, bookFormInput);
+		Library library = new Library();
+		EditBookMessage editBookMessage = library.editBook(id, bookFormInput);
 		return editBookMessage;
 	}
 	
@@ -69,7 +72,8 @@ public class BookResource {
 	@Path("{id}")
 	@Produces("application/json")
 	public DeleteBookMessage deleteBook(@PathParam("id") int id) {
-		DeleteBookMessage deleteBookMessage = Library.deleteBook(id);
+		Library library = new Library();
+		DeleteBookMessage deleteBookMessage = library.deleteBook(id);
 		return deleteBookMessage;
 	}
 	
@@ -78,7 +82,8 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public AddCopyMessage addCopy(@PathParam("bookId") int bookId) {
-		AddCopyMessage addCopyMessage = Library.addCopy(bookId);
+		Library library = new Library();
+		AddCopyMessage addCopyMessage = library.addCopy(bookId);
 		return addCopyMessage;
 	}
 	
@@ -87,7 +92,8 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public DeleteCopyMessage deleteCopy(@PathParam("bookId") int bookId) {
-		DeleteCopyMessage deleteCopyMessage = Library.deleteCopy(bookId);
+		Library library = new Library();
+		DeleteCopyMessage deleteCopyMessage = library.deleteCopy(bookId);
 		System.out.println(" " + deleteCopyMessage.getCommandSucceeded()
 				+ deleteCopyMessage.getCopiesOfBook()
 				+ deleteCopyMessage.getMessage());
