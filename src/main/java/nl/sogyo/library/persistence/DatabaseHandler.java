@@ -337,8 +337,11 @@ public class DatabaseHandler {
 
 		try {
 			transaction = session.beginTransaction();
-			book = setForeignKeyIdentifiers(book, session);
+			System.out.println("1");
+			setForeignKeyIdentifiers(book, session);
+			System.out.println("2");
 			int id = (int) session.save(book);
+			System.out.println("3");
 			transaction.commit();
 			return id;
 		} catch (HibernateException e) {
@@ -433,7 +436,7 @@ public class DatabaseHandler {
 					session.delete(copy);
 				}
 				
-				int numberCopies = copies.size() - 1;
+				int numberCopies = copies.size();
 				System.out.println("hallo test");
 				transaction.commit();
 				return new DeleteCopyMessage(true, numberCopies);
@@ -536,7 +539,7 @@ public class DatabaseHandler {
 			CriteriaQuery<Category> categoryQuery = criteriaBuilder.createQuery(Category.class);
 			Root<Category> categoryRoot = categoryQuery.from(Category.class);
 			categoryQuery.select(categoryRoot).where(criteriaBuilder.equal(categoryRoot.get("name"), book.getCategory().getName()));
-			category = (Category) session.createQuery(categoryQuery).getSingleResult();
+			category = (Category) session.createQuery(categoryQuery).setMaxResults(1).getSingleResult();
 			System.out.println(category.getName());
 			book.setCategory(category);
 		} catch (NoResultException e) {
@@ -549,7 +552,7 @@ public class DatabaseHandler {
 			CriteriaQuery<Publisher> publisherQuery = criteriaBuilder.createQuery(Publisher.class);
 			Root<Publisher> publisherRoot = publisherQuery.from(Publisher.class);
 			publisherQuery.select(publisherRoot).where(criteriaBuilder.equal(publisherRoot.get("name"), book.getPublisher().getName()));
-			publisher = (Publisher) session.createQuery(publisherQuery).getSingleResult();
+			publisher = (Publisher) session.createQuery(publisherQuery).setMaxResults(1).getSingleResult();
 			book.setPublisher(publisher);
 		} catch (NoResultException e) {
 			session.save(book.getPublisher());
@@ -564,7 +567,7 @@ public class DatabaseHandler {
 				authorQuery.select(authorRoot).where(criteriaBuilder.and(
 						criteriaBuilder.equal(authorRoot.get("forename"), book.getAuthors().get(i).getForename()),
 						criteriaBuilder.equal(authorRoot.get("surname"), book.getAuthors().get(i).getSurname())));
-				author = (Author) session.createQuery(authorQuery).getSingleResult();
+				author = (Author) session.createQuery(authorQuery).setMaxResults(1).getSingleResult();
 				book.getAuthors().set(i, author);
 			} catch (NoResultException e) {
 				session.save(book.getAuthors().get(i));

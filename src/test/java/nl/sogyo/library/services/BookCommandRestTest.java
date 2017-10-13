@@ -14,7 +14,9 @@ import org.junit.runners.MethodSorters;
 
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.resources.BookResource;
 
@@ -58,14 +60,33 @@ public class BookCommandRestTest extends JerseyTest {
 	
 	@Test
 	public void test04CopiesAvailableOfCreatedBookIsOneIfOneCopyIsAdded() {
-	    target("book").path(id + "/copy").request().post(null);
-	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
-	    Assert.assertTrue(output.contains("\"copiesAvailable\":1"));
+	    Response response = target("book").path(id + "/copy").request().post(null);
+//	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
+	    AddCopyMessage addCopyMessage = response.readEntity(AddCopyMessage.class);
+	    Assert.assertEquals(addCopyMessage.getCopiesOfBook(), 1);
+//	    Assert.assertTrue(output.contains("\"copiesAvailable\":1"));
 	}
 	
+	@Test
+	public void test05CopiesAvailableOfCreatedBookIsTwoIfAnotherCopyIsAdded() {
+		Response response = target("book").path(id + "/copy").request().post(null);
+//	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
+	    AddCopyMessage addCopyMessage = response.readEntity(AddCopyMessage.class);
+	    Assert.assertEquals(addCopyMessage.getCopiesOfBook(), 2);
+//		Assert.assertTrue(output.contains("\"copiesAvailable\":2"));
+	}
 	
 	@Test
-	public void test05DeleteCreatedBook() {
+	public void test06CopiesAvailableOfCreatedBookIsOneIfOneCopyIsDeleted() {
+	    Response response = target("book").path(id + "/copy").request().delete();
+//	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
+	    DeleteCopyMessage deleteCopyMessage = response.readEntity(DeleteCopyMessage.class);
+	    Assert.assertEquals(deleteCopyMessage.getCopiesOfBook(), 1);
+//	    Assert.assertTrue(output.contains("\"copiesAvailable\":1"));
+	}
+	
+	@Test
+	public void test07DeleteCreatedBook() {
 		System.out.println("test05");
 	    Response response = target("book").path(Integer.toString(id)).request().delete();
 	    DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
@@ -73,7 +94,7 @@ public class BookCommandRestTest extends JerseyTest {
 	}
 	
 	@Test
-	public void test06PostBookWithInvalidIsbn() {
+	public void test08PostBookWithInvalidIsbn() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "REST", "Appress", "9784567890125");
 	    Response response = target("book").request().post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
@@ -81,7 +102,7 @@ public class BookCommandRestTest extends JerseyTest {
 	}
 	
 	@Test
-	public void test07PostBookWithoutAuthorSurname() {
+	public void test09PostBookWithoutAuthorSurname() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "", "REST", "Appress", "9784567890120");
 	    Response response = target("book").request().post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
@@ -89,7 +110,7 @@ public class BookCommandRestTest extends JerseyTest {
 	}
 	
 	@Test
-	public void test08UpdateNotExistingBook() {
+	public void test10UpdateNotExistingBook() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "REST", "Appress", "9784567890120");
 	    Response response = target("book").path("10000000").request().put(Entity.json(bookFormInput));
 	    EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
@@ -100,7 +121,7 @@ public class BookCommandRestTest extends JerseyTest {
 	}
 	
 	@Test
-	public void test09DeleteNotExistingBook() {
+	public void test11DeleteNotExistingBook() {
 	    Response response = target("book").path("10000000").request().delete();
 	    DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
 	    Assert.assertFalse(deleteBookMessage.getCommandSucceeded());

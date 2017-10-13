@@ -37,6 +37,20 @@ public class BookResource {
 	public AddBookMessage addBook(BookFormInput bookFormInput) {
 		System.out.println("test rest");
 		System.out.println("Title: " + bookFormInput.getTitle());
+		System.out.println("subTitle: " + bookFormInput.getSubtitle());
+		System.out.println("author fore1: " + bookFormInput.getAuthorForename1());
+		System.out.println("author sur1: " + bookFormInput.getAuthorSurname1());
+		System.out.println("author fore2: " + bookFormInput.getAuthorForename2());
+		System.out.println("author sur2: " + bookFormInput.getAuthorSurname2());
+		System.out.println("author fore3: " + bookFormInput.getAuthorForename3());
+		System.out.println("author sur3: " + bookFormInput.getAuthorSurname3());
+		System.out.println("category: " + bookFormInput.getCategory());
+		System.out.println("publisher: " + bookFormInput.getPublisher());
+		System.out.println("pages: " + bookFormInput.getPages());
+		System.out.println("language: " + bookFormInput.getLanguage());
+		System.out.println("isbn: " + bookFormInput.getIsbn());
+		System.out.println("year: " + bookFormInput.getYearFirstPublication());
+		
 		AddBookMessage addBookMessage = Library.addBook(bookFormInput);
 		System.out.println("addBookmessage: " + addBookMessage.getMessage());
 		return addBookMessage;

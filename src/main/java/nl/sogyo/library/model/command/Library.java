@@ -55,6 +55,8 @@ public class Library {
 	public static AddCopyMessage addCopy(int bookId) {
 //		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(bookId);
 		AddCopyMessage addCopyMessage = DatabaseHandler.insertCopy(bookId);
+		System.out.println("Copymessage: " + addCopyMessage.getCommandSucceeded());
+		System.out.println("Copymessage: " + addCopyMessage.getCopiesOfBook());
 		return addCopyMessage;
 	}
 	
@@ -92,6 +94,8 @@ public class Library {
 	public static DeleteCopyMessage deleteCopy(int bookId) {
 //		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(bookId);
 		DeleteCopyMessage deleteCopyMessage = DatabaseHandler.deleteCopy(bookId);
+		System.out.println("Copymessage: " + deleteCopyMessage.getCommandSucceeded());
+		System.out.println("Copymessage: " + deleteCopyMessage.getCopiesOfBook());
 		return deleteCopyMessage;
 	}
 	
