@@ -73,7 +73,7 @@ public class DatabaseHandler {
 			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
 			Root<Book> bookRoot = bookQuery.from(Book.class);
 			bookQuery.select(bookRoot);
-			List<Book> allBooks = session.createQuery(bookQuery).list();
+			List<Book> allBooksInTable = session.createQuery(bookQuery).list();
 						
 			CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
 			Root<Author> authorRoot = authorQuery.from(Author.class);
@@ -85,19 +85,7 @@ public class DatabaseHandler {
 			typedQuery.setParameter(authorParam, addPercentWildcards(authorInput));
 			List<Author> authorMatches = typedQuery.getResultList();
 			
-			for (Book book : allBooks) {
-				initializeReferencedEntities(book);
-				BOOK: for (Author authorBook : book.getAuthors()) {
-					for (Author authorMatch : authorMatches) {
-						if (authorMatch.getForename().equals(authorBook.getForename())
-								&& authorMatch.getSurname().equals(authorBook.getSurname())) {
-							books.add(book);
-							break BOOK;
-						}
-					}
-				}
-			}
-
+			setBooksOfSelectedAuthors(allBooksInTable, authorMatches, books);
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(transaction, e);
@@ -165,18 +153,7 @@ public class DatabaseHandler {
 			typedQuery.setParameter(surnameParam, addPercentWildcards(authorSurnameInput));
 			List<Author> authorMatches = typedQuery.getResultList();
 			
-			for (Book book : allBooksInTable) {
-				initializeReferencedEntities(book);
-				BOOK: for (Author authorBook : book.getAuthors()) {
-					for (Author authorMatch : authorMatches) {
-						if (authorMatch.getForename().equals(authorBook.getForename())
-								&& authorMatch.getSurname().equals(authorBook.getSurname())) {
-							books.add(book);
-							break BOOK;
-						}
-					}
-				}
-			}
+			setBooksOfSelectedAuthors(allBooksInTable, authorMatches, books);
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(transaction, e);
@@ -215,18 +192,7 @@ public class DatabaseHandler {
 					criteriaBuilder.like(bookRoot.get("title"), "%" + titleInput + "%"));
 			List<Book> booksWithTitleInput = (List<Book>) session.createQuery(bookQuery).list();
 			
-			for (Book book : booksWithTitleInput) {
-				initializeReferencedEntities(book);
-				BOOK: for (Author authorBook : book.getAuthors()) {
-					for (Author authorMatch : authorMatches) {
-						if (authorMatch.getForename().equals(authorBook.getForename())
-								&& authorMatch.getSurname().equals(authorBook.getSurname())) {
-							books.add(book);
-							break BOOK;
-						}
-					}
-				}
-			}
+			setBooksOfSelectedAuthors(booksWithTitleInput, authorMatches, books);
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(transaction, e);
@@ -269,19 +235,7 @@ public class DatabaseHandler {
 					criteriaBuilder.like(bookRoot.get("title"), "%" + titleInput + "%"));
 			List<Book> booksWithTitleInput = (List<Book>) session.createQuery(bookQuery).list();
 			
-			for (Book book : booksWithTitleInput) {
-				initializeReferencedEntities(book);
-				BOOK: for (Author authorBook : book.getAuthors()) {
-					for (Author authorMatch : authorMatches) {
-						if (authorMatch.getForename().equals(authorBook.getForename())
-								&& authorMatch.getSurname().equals(authorBook.getSurname())) {
-							books.add(book);
-							break BOOK;
-						}
-					}
-				}
-			}
-			
+			setBooksOfSelectedAuthors(booksWithTitleInput, authorMatches, books);
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(transaction, e);
@@ -575,6 +529,21 @@ public class DatabaseHandler {
 		}
 		System.out.println("test test test");
 		return book;
+	}
+	
+	private static void setBooksOfSelectedAuthors(List<Book> selectedBooks, List<Author> selectedAuthors, List<Book> authorMatchingBooks) {
+		for (Book book : selectedBooks) {
+			initializeReferencedEntities(book);
+			BOOK: for (Author authorBook : book.getAuthors()) {
+				for (Author authorMatch : selectedAuthors) {
+					if (authorMatch.getForename().equals(authorBook.getForename())
+							&& authorMatch.getSurname().equals(authorBook.getSurname())) {
+						authorMatchingBooks.add(book);
+						break BOOK;
+					}
+				}
+			}
+		}
 	}
 	
 	private static void rollbackTransaction(Transaction transaction, HibernateException e) {
