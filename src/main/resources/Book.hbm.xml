@@ -4,23 +4,19 @@
  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
-	<class name="nl.sogyo.library.model.command.Book" table="Books">
+	<class name="nl.sogyo.library.model.entity.Book" table="Books">
     	<id name="id" type="int" column="ID">
          	<generator class="native"/>
       	</id>
       	<property name="title" column="Title" type="string"/>
       	<property name="subtitle" column="Subtitle" type="string"/>
-      	<!--  <set name="authors" cascade="all" table="BooksAuthors">
-         	<key column="BookID"/>
-         	<many-to-many column="AuthorID" class="nl.sogyo.library.model.command.Author"/>
-      	</set>-->
       	<bag name="authors" cascade="all" table="BooksAuthors">
          	<key column="BookID"/>
-         	<many-to-many column="AuthorID" class="nl.sogyo.library.model.command.Author"/>
+         	<many-to-many column="AuthorID" class="nl.sogyo.library.model.entity.Author"/>
       	</bag>
-   		<many-to-one name="category" class="nl.sogyo.library.model.command.Category"
+   		<many-to-one name="category" class="nl.sogyo.library.model.entity.Category"
         	column="CategoryID" not-null="true" cascade="all" />
-      	<many-to-one name="publisher" class="nl.sogyo.library.model.command.Publisher"
+      	<many-to-one name="publisher" class="nl.sogyo.library.model.entity.Publisher"
         	column="PublisherID" not-null="true" cascade="all" />
       	<property name="yearFirstPublication" column="YearFirstPublication" type="short"/>
       	<property name="isbn" column="ISBN" type="string"/>

@@ -4,11 +4,11 @@
  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
-	<class name="nl.sogyo.library.model.command.Copy" table="Copies">
+	<class name="nl.sogyo.library.model.entity.Copy" table="Copies">
     	<id name="id" type="int" column="ID">
          	<generator class="native"/>
       	</id>
-       	<many-to-one name="book" class="nl.sogyo.library.model.command.Book"
+       	<many-to-one name="book" class="nl.sogyo.library.model.entity.Book"
         	column="BookID" not-null="true" cascade="all"/>
    	</class>
 </hibernate-mapping>

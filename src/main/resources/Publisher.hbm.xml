@@ -4,7 +4,7 @@
  "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
 
 <hibernate-mapping>
-   <class name="nl.sogyo.library.model.command.Publisher" table="Publishers">
+   <class name="nl.sogyo.library.model.entity.Publisher" table="Publishers">
       <id name="id" type="int" column="ID">
          <generator class="native"/>
       </id>
