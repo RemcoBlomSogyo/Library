@@ -45,6 +45,7 @@ public class DatabaseHandler {
 	private List<Copy> copies;
 	
 	private Book book;
+	private Author author;
 	private Copy copy;
 	
 	public DatabaseHandler() {
@@ -432,9 +433,7 @@ public class DatabaseHandler {
 		} 
 
 		for (int i = 0; i < book.getAuthors().size(); i++) {
-			Author author = null;
 			try {
-				CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
 				authorQuery.select(authorRoot).where(criteriaBuilder.and(
 						criteriaBuilder.equal(authorRoot.get("forename"), book.getAuthors().get(i).getForename()),
 						criteriaBuilder.equal(authorRoot.get("surname"), book.getAuthors().get(i).getSurname())));

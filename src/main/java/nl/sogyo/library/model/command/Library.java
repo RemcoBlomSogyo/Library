@@ -31,6 +31,7 @@ public class Library {
 					bookFormInput.getIsbn(), bookFormInput.getPages(), bookFormInput.getLanguage());
 			bookId = databaseHandler.insertBook(book);
 		} catch (IllegalArgumentException e) {
+			System.out.println(e.getMessage());
 			bookId = -2;
 		}
 		System.out.println("bookId out of try: " + bookId);
