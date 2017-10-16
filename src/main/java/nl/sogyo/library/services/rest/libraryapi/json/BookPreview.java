@@ -2,7 +2,7 @@ package nl.sogyo.library.services.rest.libraryapi.json;
 
 import java.util.List;
 
-import nl.sogyo.library.model.command.Author;
+import nl.sogyo.library.model.entity.Author;
 
 public class BookPreview {
 	

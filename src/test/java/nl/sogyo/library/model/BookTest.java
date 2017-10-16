@@ -7,8 +7,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.sogyo.library.model.command.Author;
-import nl.sogyo.library.model.command.Book;
+import nl.sogyo.library.model.entity.Author;
+import nl.sogyo.library.model.entity.Book;
 
 public class BookTest {
 	

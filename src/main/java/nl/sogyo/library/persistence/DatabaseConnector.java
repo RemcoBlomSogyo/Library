@@ -6,11 +6,11 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import nl.sogyo.library.model.command.Author;
-import nl.sogyo.library.model.command.Book;
-import nl.sogyo.library.model.command.Category;
-import nl.sogyo.library.model.command.Copy;
-import nl.sogyo.library.model.command.Publisher;
+import nl.sogyo.library.model.entity.Author;
+import nl.sogyo.library.model.entity.Book;
+import nl.sogyo.library.model.entity.Category;
+import nl.sogyo.library.model.entity.Copy;
+import nl.sogyo.library.model.entity.Publisher;
 
 public class DatabaseConnector {
 

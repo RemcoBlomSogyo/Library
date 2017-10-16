@@ -3,6 +3,8 @@ package nl.sogyo.library.model.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.sogyo.library.model.entity.Author;
+import nl.sogyo.library.model.entity.Book;
 import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
@@ -11,11 +13,11 @@ import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
 
-public class Library {
+public class CommandHelper {
 	
 	private DatabaseHandler databaseHandler;
 	
-	public Library() {
+	public CommandHelper() {
 		databaseHandler = new DatabaseHandler();
 	}
 	

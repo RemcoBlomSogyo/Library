@@ -1,4 +1,4 @@
-package nl.sogyo.library.services.rest.libraryapi.resources;
+package nl.sogyo.library.services.rest.libraryapi.resource;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import nl.sogyo.library.model.command.Author;
+import nl.sogyo.library.model.entity.Author;
 import nl.sogyo.library.model.query.QueryHelper;
 
 @Path("authors")

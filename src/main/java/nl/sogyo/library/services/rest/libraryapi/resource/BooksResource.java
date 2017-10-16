@@ -1,4 +1,4 @@
-package nl.sogyo.library.services.rest.libraryapi.resources;
+package nl.sogyo.library.services.rest.libraryapi.resource;
 
 import java.util.List;
 

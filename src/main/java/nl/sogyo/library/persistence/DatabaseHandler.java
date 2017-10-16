@@ -16,11 +16,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import nl.sogyo.library.model.command.Author;
-import nl.sogyo.library.model.command.Book;
-import nl.sogyo.library.model.command.Category;
-import nl.sogyo.library.model.command.Copy;
-import nl.sogyo.library.model.command.Publisher;
+import nl.sogyo.library.model.entity.Author;
+import nl.sogyo.library.model.entity.Book;
+import nl.sogyo.library.model.entity.Category;
+import nl.sogyo.library.model.entity.Copy;
+import nl.sogyo.library.model.entity.Publisher;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;

@@ -1,4 +1,4 @@
-package nl.sogyo.library.model.command;
+package nl.sogyo.library.model.entity;
 
 public class Publisher {
 	

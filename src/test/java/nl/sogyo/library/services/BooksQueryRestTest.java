@@ -3,7 +3,7 @@ package nl.sogyo.library.services;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.sogyo.library.services.rest.libraryapi.resources.BooksResource;
+import nl.sogyo.library.services.rest.libraryapi.resource.BooksResource;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;

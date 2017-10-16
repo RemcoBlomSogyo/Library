@@ -3,8 +3,8 @@ package nl.sogyo.library.model.query;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.sogyo.library.model.command.Author;
-import nl.sogyo.library.model.command.Book;
+import nl.sogyo.library.model.entity.Author;
+import nl.sogyo.library.model.entity.Book;
 import nl.sogyo.library.model.helper.InputValidator;
 import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;

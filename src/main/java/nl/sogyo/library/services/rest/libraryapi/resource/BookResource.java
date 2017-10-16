@@ -1,4 +1,4 @@
-package nl.sogyo.library.services.rest.libraryapi.resources;
+package nl.sogyo.library.services.rest.libraryapi.resource;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -10,7 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import nl.sogyo.library.model.command.Library;
+import nl.sogyo.library.model.command.CommandHelper;
 import nl.sogyo.library.model.query.QueryHelper;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
@@ -52,7 +52,7 @@ public class BookResource {
 		System.out.println("isbn: " + bookFormInput.getIsbn());
 		System.out.println("year: " + bookFormInput.getYearFirstPublication());
 		
-		Library library = new Library();
+		CommandHelper library = new CommandHelper();
 		AddBookMessage addBookMessage = library.addBook(bookFormInput);
 		System.out.println("addBookmessage: " + addBookMessage.getMessage());
 		return addBookMessage;
@@ -63,7 +63,7 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public EditBookMessage editBook(@PathParam("id") int id, BookFormInput bookFormInput) {
-		Library library = new Library();
+		CommandHelper library = new CommandHelper();
 		EditBookMessage editBookMessage = library.editBook(id, bookFormInput);
 		return editBookMessage;
 	}
@@ -72,7 +72,7 @@ public class BookResource {
 	@Path("{id}")
 	@Produces("application/json")
 	public DeleteBookMessage deleteBook(@PathParam("id") int id) {
-		Library library = new Library();
+		CommandHelper library = new CommandHelper();
 		DeleteBookMessage deleteBookMessage = library.deleteBook(id);
 		return deleteBookMessage;
 	}
@@ -82,7 +82,7 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public AddCopyMessage addCopy(@PathParam("bookId") int bookId) {
-		Library library = new Library();
+		CommandHelper library = new CommandHelper();
 		AddCopyMessage addCopyMessage = library.addCopy(bookId);
 		return addCopyMessage;
 	}
@@ -92,7 +92,7 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public DeleteCopyMessage deleteCopy(@PathParam("bookId") int bookId) {
-		Library library = new Library();
+		CommandHelper library = new CommandHelper();
 		DeleteCopyMessage deleteCopyMessage = library.deleteCopy(bookId);
 		System.out.println(" " + deleteCopyMessage.getCommandSucceeded()
 				+ deleteCopyMessage.getCopiesOfBook()

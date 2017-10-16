@@ -16,7 +16,7 @@ import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
-import nl.sogyo.library.services.rest.libraryapi.resources.BookResource;
+import nl.sogyo.library.services.rest.libraryapi.resource.BookResource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CopyCommandRestTest extends JerseyTest {

@@ -1,6 +1,6 @@
 package nl.sogyo.library.services.rest.libraryapi.json;
 
-import nl.sogyo.library.model.command.Book;
+import nl.sogyo.library.model.entity.Book;
 
 public class BookInfo {
 	

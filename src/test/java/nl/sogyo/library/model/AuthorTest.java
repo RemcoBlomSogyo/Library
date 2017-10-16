@@ -2,7 +2,7 @@ package nl.sogyo.library.model;
 
 import org.junit.Test;
 
-import nl.sogyo.library.model.command.Author;
+import nl.sogyo.library.model.entity.Author;
 
 public class AuthorTest {
 	

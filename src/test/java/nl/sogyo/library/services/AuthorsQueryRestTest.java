@@ -8,7 +8,7 @@ import org.glassfish.jersey.test.TestProperties;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.sogyo.library.services.rest.libraryapi.resources.AuthorsResource;
+import nl.sogyo.library.services.rest.libraryapi.resource.AuthorsResource;
 
 public class AuthorsQueryRestTest extends JerseyTest {
 
