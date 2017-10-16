@@ -41,6 +41,7 @@ public class DatabaseHandler {
 	private Root<Copy> copyRoot;
 	
 	private List<Book> books;
+	private List<Book> booksWithTitleInput;
 	private List<Author> authors;
 	private List<Copy> copies;
 	
@@ -69,51 +70,33 @@ public class DatabaseHandler {
 	public List<Book> selectBooksByTitle(String titleInput) {
 		try {
 			initialize();
-			ParameterExpression<String> titleParam = criteriaBuilder.parameter(String.class);
-			bookQuery.select(bookRoot).where(criteriaBuilder.like(bookRoot.get("title"), titleParam));
+			setBooksWithTitleInput(titleInput);
 			
-			TypedQuery<Book> typedQuery = session.createQuery(bookQuery);
-			typedQuery.setParameter(titleParam, addPercentWildcards(titleInput));
-			books = typedQuery.getResultList();
-			
-			for (Book book : books) {
+			for (Book book : booksWithTitleInput) {
 				initializeReferencedEntities(book);
 			}
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
 		} finally {
-			session.close();
 			connector.disconnect(session);
 		}
 		
-		return books;
+		return booksWithTitleInput;
 	}
 	
 	public List<Book> selectBooksByAuthorSingleName(String authorInput) {
-		books = new ArrayList<Book>();
-
 		try {	
 			initialize();
 			bookQuery.select(bookRoot);
 			List<Book> allBooksInTable = session.createQuery(bookQuery).list();
-						
-			CriteriaQuery<Author> authorQuery = criteriaBuilder.createQuery(Author.class);
-			Root<Author> authorRoot = authorQuery.from(Author.class);
-			ParameterExpression<String> authorParam = criteriaBuilder.parameter(String.class);
-			authorQuery.select(authorRoot).where(criteriaBuilder.or(
-					criteriaBuilder.like(authorRoot.get("forename"), authorParam),
-					criteriaBuilder.like(authorRoot.get("surname"), authorParam)));
-			TypedQuery<Author> typedQuery = session.createQuery(authorQuery);
-			typedQuery.setParameter(authorParam, addPercentWildcards(authorInput));
-			List<Author> authorMatches = typedQuery.getResultList();
 			
-			setBooksOfSelectedAuthors(allBooksInTable, authorMatches, books);
+			setAuthorsWithSingleNameInput(authorInput);
+			setBooksOfSelectedAuthors(allBooksInTable, authors, new ArrayList<Book>());
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
 		} finally {
-			session.close();
 			connector.disconnect(session);
 		}
 		
@@ -123,8 +106,11 @@ public class DatabaseHandler {
 	public List<Book> selectBooksByIsbn(String isbnInput) {
 		try {
 			initialize();
-			bookQuery.select(bookRoot).where(criteriaBuilder.like(bookRoot.get("isbn"), "%" + isbnInput + "%"));
-			books = (List<Book>) session.createQuery(bookQuery).list();
+			ParameterExpression<String> isbnParam = criteriaBuilder.parameter(String.class);
+			bookQuery.select(bookRoot).where(criteriaBuilder.like(bookRoot.get("isbn"), isbnParam));
+			TypedQuery<Book> typedQuery = session.createQuery(bookQuery);
+			typedQuery.setParameter(isbnParam, addPercentWildcards(isbnInput));
+			books = typedQuery.getResultList();
 			
 			for (Book book : books) {
 				initializeReferencedEntities(book);
@@ -133,7 +119,6 @@ public class DatabaseHandler {
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
 		} finally {
-			session.close();
 			connector.disconnect(session);
 		}
 		
@@ -141,95 +126,49 @@ public class DatabaseHandler {
 	}
 	
 	public List<Book> selectBooksByAuthorTotalName(String authorForenameInput, String authorSurnameInput) {
-		books = new ArrayList<Book>();
-		
 		try {
 			initialize();
 			bookQuery.select(bookRoot);
 			List<Book> allBooksInTable = session.createQuery(bookQuery).list();
-						
-			ParameterExpression<String> forenameParam = criteriaBuilder.parameter(String.class);
-			ParameterExpression<String> surnameParam = criteriaBuilder.parameter(String.class);
-			authorQuery.select(authorRoot).where(criteriaBuilder.and(
-					criteriaBuilder.like(authorRoot.get("forename"), forenameParam),
-					criteriaBuilder.like(authorRoot.get("surname"), surnameParam)));
-			TypedQuery<Author> typedQuery = session.createQuery(authorQuery);
-			typedQuery.setParameter(forenameParam, addPercentWildcards(authorForenameInput));
-			typedQuery.setParameter(surnameParam, addPercentWildcards(authorSurnameInput));
-			List<Author> authorMatches = typedQuery.getResultList();
 			
-			setBooksOfSelectedAuthors(allBooksInTable, authorMatches, books);
+			setAuthorsWithForenameAndSurnameParameters(authorForenameInput, authorSurnameInput);
+			setBooksOfSelectedAuthors(allBooksInTable, authors, new ArrayList<Book>());
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
 		} finally {
-			session.close();
 			connector.disconnect(session);
 		}
-		
 		return books;
 	}
 	
 	public List<Book> selectBooksByTitleAndAuthorSingleName(String titleInput, String authorInput) {
-		books = new ArrayList<Book>();
-		
 		try {
 			initialize();
-			ParameterExpression<String> authorParam = criteriaBuilder.parameter(String.class);
-			authorQuery.select(authorRoot).where(criteriaBuilder.or(
-					criteriaBuilder.like(authorRoot.get("forename"), authorParam),
-					criteriaBuilder.like(authorRoot.get("surname"), authorParam)));
-			TypedQuery<Author> typedQuery = session.createQuery(authorQuery);
-			typedQuery.setParameter(authorParam, addPercentWildcards(authorInput));
-			List<Author> authorMatches = typedQuery.getResultList();
-			
-			bookQuery.select(bookRoot).where(
-					criteriaBuilder.like(bookRoot.get("title"), "%" + titleInput + "%"));
-			List<Book> booksWithTitleInput = (List<Book>) session.createQuery(bookQuery).list();
-			
-			setBooksOfSelectedAuthors(booksWithTitleInput, authorMatches, books);
+			setAuthorsWithSingleNameInput(authorInput);
+			setBooksWithTitleInput(titleInput);
+			setBooksOfSelectedAuthors(booksWithTitleInput, authors, new ArrayList<Book>());
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
 		} finally {
-			session.close();
 			connector.disconnect(session);
 		}
-		
 		return books;
 	}
 	
 	public List<Book> selectBooksByTitleAndAuthorTotalName(String titleInput, String authorForenameInput, String authorSurnameInput) {
-		books = new ArrayList<Book>();
-		
 		try {
 			initialize();
-			ParameterExpression<String> forenameParam = criteriaBuilder.parameter(String.class);
-			ParameterExpression<String> surnameParam = criteriaBuilder.parameter(String.class);
-			authorQuery.select(authorRoot).where(criteriaBuilder.and(
-					criteriaBuilder.like(authorRoot.get("forename"), forenameParam),
-					criteriaBuilder.like(authorRoot.get("surname"), surnameParam)));
-			
-			TypedQuery<Author> typedQuery = session.createQuery(authorQuery);
-			typedQuery.setParameter(forenameParam, addPercentWildcards(authorForenameInput));
-			typedQuery.setParameter(surnameParam, addPercentWildcards(authorSurnameInput));
-			List<Author> authorMatches = typedQuery.getResultList();
-			
-			CriteriaQuery<Book> bookQuery = criteriaBuilder.createQuery(Book.class);
-			Root<Book> bookRoot = bookQuery.from(Book.class);
-			bookQuery.select(bookRoot).where(
-					criteriaBuilder.like(bookRoot.get("title"), "%" + titleInput + "%"));
-			List<Book> booksWithTitleInput = (List<Book>) session.createQuery(bookQuery).list();
-			
-			setBooksOfSelectedAuthors(booksWithTitleInput, authorMatches, books);
+			setAuthorsWithForenameAndSurnameParameters(authorForenameInput, authorSurnameInput);
+			setBooksWithTitleInput(titleInput);
+			setBooksOfSelectedAuthors(booksWithTitleInput, authors, new ArrayList<Book>());
 			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
 		} finally {
-			session.close();
 			connector.disconnect(session);
 		}
-		
 		return books;
 	}
 	
@@ -246,13 +185,10 @@ public class DatabaseHandler {
 			}
 			
 			copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book").get("id"), id));
-
 			copies = (List<Copy>) session.createQuery(copyQuery).list();
 			numberCopies = copies.size();
-			
 			transaction.commit();
 		} catch (HibernateException e) {
-			System.out.println("hibernateexcpetion");
 			rollbackTransaction(e);
 		} finally {
 			connector.disconnect(session);
@@ -446,7 +382,40 @@ public class DatabaseHandler {
 		return book;
 	}
 	
+	private void setAuthorsWithSingleNameInput(String authorInput) {
+		ParameterExpression<String> authorParam = criteriaBuilder.parameter(String.class);
+		authorQuery.select(authorRoot).where(criteriaBuilder.or(
+				criteriaBuilder.like(authorRoot.get("forename"), authorParam),
+				criteriaBuilder.like(authorRoot.get("surname"), authorParam)));
+		TypedQuery<Author> typedQuery = session.createQuery(authorQuery);
+		typedQuery.setParameter(authorParam, addPercentWildcards(authorInput));
+		authors = typedQuery.getResultList();
+	}
+	
+	private void setAuthorsWithForenameAndSurnameParameters(String authorForenameInput, String authorSurnameInput) {
+		ParameterExpression<String> forenameParam = criteriaBuilder.parameter(String.class);
+		ParameterExpression<String> surnameParam = criteriaBuilder.parameter(String.class);
+		authorQuery.select(authorRoot).where(criteriaBuilder.and(
+				criteriaBuilder.like(authorRoot.get("forename"), forenameParam),
+				criteriaBuilder.like(authorRoot.get("surname"), surnameParam)));
+		
+		TypedQuery<Author> typedQuery = session.createQuery(authorQuery);
+		typedQuery.setParameter(forenameParam, addPercentWildcards(authorForenameInput));
+		typedQuery.setParameter(surnameParam, addPercentWildcards(authorSurnameInput));
+		authors = typedQuery.getResultList();
+	}
+	
+	private void setBooksWithTitleInput(String titleInput) {
+		ParameterExpression<String> titleParam = criteriaBuilder.parameter(String.class);
+		bookQuery.select(bookRoot).where(
+				criteriaBuilder.like(bookRoot.get("title"), titleParam));
+		TypedQuery<Book> typedQuery = session.createQuery(bookQuery);
+		typedQuery.setParameter(titleParam, addPercentWildcards(titleInput));
+		booksWithTitleInput = typedQuery.getResultList();
+	}
+	
 	private void setBooksOfSelectedAuthors(List<Book> selectedBooks, List<Author> selectedAuthors, List<Book> authorMatchingBooks) {
+		books = authorMatchingBooks;
 		for (Book book : selectedBooks) {
 			initializeReferencedEntities(book);
 			BOOK: for (Author authorBook : book.getAuthors()) {
