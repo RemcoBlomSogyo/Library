@@ -27,6 +27,7 @@ public class BookResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public BookInfo getBookInfo(@PathParam("id") int id) {
+		System.out.println("test");
 		QueryHelper queryHelper = new QueryHelper();
 		BookInfo bookInfo = queryHelper.getBookInfo(id);
 		return bookInfo;
