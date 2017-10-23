@@ -13,9 +13,11 @@ public class SignInResource {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public int signInUser(SignInCode signInCode) {
+	public void signInUser(SignInCode signInCode) {
+		System.out.println("post signin");
 		SignInHelper signInHelper = new SignInHelper();
 		int userInfo = signInHelper.signInUser(signInCode);
-		return userInfo;
+		System.out.println(userInfo);
+//		return userInfo;
 	}
 }
