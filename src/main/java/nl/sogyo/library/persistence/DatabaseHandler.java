@@ -21,6 +21,7 @@ import nl.sogyo.library.model.entity.Book;
 import nl.sogyo.library.model.entity.Category;
 import nl.sogyo.library.model.entity.Copy;
 import nl.sogyo.library.model.entity.Publisher;
+import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
@@ -35,10 +36,12 @@ public class DatabaseHandler {
 	private CriteriaQuery<Book> bookQuery;
 	private CriteriaQuery<Author> authorQuery;
 	private CriteriaQuery<Copy> copyQuery;
+	private CriteriaQuery<User> userQuery;
 	
 	private Root<Book> bookRoot;
 	private Root<Author> authorRoot;
 	private Root<Copy> copyRoot;
+	private Root<User> userRoot;
 	
 	private List<Book> books;
 	private List<Book> booksWithTitleInput;
@@ -48,6 +51,7 @@ public class DatabaseHandler {
 	private Book book;
 	private Author author;
 	private Copy copy;
+	private User user;
 	
 	public DatabaseHandler() {
 		connector = new DatabaseConnector();
@@ -61,10 +65,12 @@ public class DatabaseHandler {
 		bookQuery = criteriaBuilder.createQuery(Book.class);
 		authorQuery = criteriaBuilder.createQuery(Author.class);
 		copyQuery = criteriaBuilder.createQuery(Copy.class);
+		userQuery = criteriaBuilder.createQuery(User.class);
 		
 		bookRoot = bookQuery.from(Book.class);
 		authorRoot = authorQuery.from(Author.class);
 		copyRoot = copyQuery.from(Copy.class);
+		userRoot = userQuery.from(User.class);
 	}
 	
 	public List<Book> selectBooksByTitle(String titleInput) {
@@ -325,6 +331,32 @@ public class DatabaseHandler {
 			connector.disconnect(session);
 		}
 		return authors;
+	}
+	
+	public User getUserWithId(User userWithoutId) {
+		try {
+			initialize();
+			userQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("googleUserId"), userWithoutId.getGoogleUserId()));
+			user = (User) session.createQuery(userQuery).setMaxResults(1).getSingleResult();
+		} catch (NoResultException e) {
+			// user is not in table, so profile has to be created
+		} catch (HibernateException e) {
+			rollbackTransaction(e);
+		} finally {
+			connector.disconnect(session);
+		}
+		return user;
+	}
+	
+	public User createProfile(User userWithoutId) {
+		try {
+			initialize();
+			int id = (int) session.save(userWithoutId);
+			user = new User(id, userWithoutId.getGoogleUserId(), userWithoutId.getName(), userWithoutId.getEmail());
+		} catch (HibernateException e) {
+			rollbackTransaction(e);
+		}
+		return user;
 	}
 	
 	private boolean isBookIdInTable(int id) {
