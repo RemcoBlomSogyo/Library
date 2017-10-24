@@ -43,6 +43,7 @@ public class DatabaseConnector {
 		configuration.addResource("Category.hbm.xml");
 		configuration.addResource("Publisher.hbm.xml");
 		configuration.addResource("Copy.hbm.xml");
+		configuration.addResource("User.hbm.xml");
 		serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
 		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 	}

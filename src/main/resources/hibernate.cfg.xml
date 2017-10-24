@@ -28,6 +28,7 @@
    <mapping resource="Category.hbm.xml"/>
    <mapping resource="Copy.hbm.xml"/>
    <mapping resource="Publisher.hbm.xml"/>
-
+   <mapping resource="User.hbm.xml"/>
+   
    </session-factory>
 </hibernate-configuration>
