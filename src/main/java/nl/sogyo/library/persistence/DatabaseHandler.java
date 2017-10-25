@@ -355,6 +355,8 @@ public class DatabaseHandler {
 			user = new User(id, userWithoutId.getGoogleUserId(), userWithoutId.getName(), userWithoutId.getEmail());
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
+		} finally {
+			connector.disconnect(session);
 		}
 		return user;
 	}

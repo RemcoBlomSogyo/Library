@@ -52,6 +52,7 @@ public class SignInHelper {
 
 		
 		
+		
 		return 0;
 	}
 	
@@ -71,7 +72,7 @@ public class SignInHelper {
 				.execute();
 		GoogleIdToken idToken = tokenResponse.parseIdToken();
 		GoogleIdToken.Payload payload = idToken.getPayload();
-		
+
 		if (isEmailVerified(payload)) {
 			String googleUserId = payload.getSubject();
 			String email = payload.getEmail();
