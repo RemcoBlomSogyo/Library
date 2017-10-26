@@ -2,12 +2,14 @@ package nl.sogyo.library.model.signin;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.persistence.DatabaseHandler;
-import nl.sogyo.library.services.rest.libraryapi.json.SignInCode;
+import nl.sogyo.library.services.rest.libraryapi.json.IdToken;
 import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
 import nl.sogyo.oauth.javagooglesignin.GoogleUser;
+import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
 import nl.sogyo.oauth.javagooglesignin.OauthHelper;
 
 public class SignInHelper {
@@ -21,18 +23,22 @@ public class SignInHelper {
 		databaseHandler = new DatabaseHandler();
 	}
 	
-	public int signInUser(SignInCode signInCode) {
+	public int signInUser(IdToken idToken) {
 		GoogleUser googleUser = null;
-		String authorizationCode = signInCode.getCode();
+		String idTokenString = idToken.getIdTokenString();
 		try {
 			File file = new File(CLIENT_SECRET_FILE);
 			OauthHelper oauthHelper = new OauthHelper(file, REDIRECT_URI);
-			googleUser = oauthHelper.getUserFromGoogle(authorizationCode);
+			googleUser = oauthHelper.getUserFromToken(idTokenString);
 		} catch (IOException e) {
 			// google has not sent a token
 			return 1;
 		} catch (EmailNotVerifiedException e) {
 			return 2;
+		} catch (InvalidTokenException e) {
+			return 4;
+		} catch (GeneralSecurityException e) {
+			return 5;
 		}
 		
 		User sogyoUser = null;
@@ -43,10 +49,14 @@ public class SignInHelper {
 			return 3;
 		}
 		
-		User libraryUser = databaseHandler.getUserWithId(sogyoUser);
-		if (libraryUser == null) {
-			libraryUser = databaseHandler.createProfile(sogyoUser);
-		}
+		System.out.println(sogyoUser.getGoogleUserId());
+		System.out.println(sogyoUser.getName());
+		System.out.println(sogyoUser.getEmail());
+		
+//		User libraryUser = databaseHandler.getUserWithId(sogyoUser);
+//		if (libraryUser == null) {
+//			libraryUser = databaseHandler.createProfile(sogyoUser);
+//		}
 
 		return 0;
 	}
