@@ -62,9 +62,7 @@
     <dependency>
     	<groupId>nl.sogyo.oauth</groupId>
     	<artifactId>java-google-signin</artifactId>
-    	<version>0.0.2-SNAPSHOT</version>
-    	<scope>system</scope>
-    	<systemPath>${project.basedir}/src/main/resources/java-google-signin-0.0.2-SNAPSHOT.jar</systemPath>
+    	<version>0.0.3-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>

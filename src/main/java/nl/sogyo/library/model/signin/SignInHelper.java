@@ -7,17 +7,13 @@ import java.security.GeneralSecurityException;
 import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.library.services.rest.libraryapi.json.IdToken;
-import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
-import nl.sogyo.oauth.javagooglesignin.GoogleUser;
-import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
-import nl.sogyo.oauth.javagooglesignin.OauthHelper;
+import nl.sogyo.oauth.javagooglesignin.*;
 
 public class SignInHelper {
 
 	private DatabaseHandler databaseHandler;
 	private static final String CLIENT_SECRET_FILE = "C:/Users/rblom/Documents/apache-tomcat/webapps/SogyoLibrary/src/main/resources/"
 			+ "client_secret_1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com.json";
-	private static final String REDIRECT_URI = "http://localhost:8081";
 	
 	public SignInHelper() {
 		databaseHandler = new DatabaseHandler();
@@ -28,7 +24,7 @@ public class SignInHelper {
 		String idTokenString = idToken.getIdTokenString();
 		try {
 			File file = new File(CLIENT_SECRET_FILE);
-			OauthHelper oauthHelper = new OauthHelper(file, REDIRECT_URI);
+			OauthHelper oauthHelper = new OauthHelper(file);
 			googleUser = oauthHelper.getUserFromToken(idTokenString);
 		} catch (IOException e) {
 			// google has not sent a token
