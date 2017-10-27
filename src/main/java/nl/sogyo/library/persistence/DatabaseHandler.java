@@ -25,6 +25,7 @@ import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.RegisterMessage;
 
 public class DatabaseHandler {
 	
@@ -51,7 +52,6 @@ public class DatabaseHandler {
 	private Book book;
 	private Author author;
 	private Copy copy;
-	private User user;
 	
 	public DatabaseHandler() {
 		connector = new DatabaseConnector();
@@ -333,32 +333,37 @@ public class DatabaseHandler {
 		return authors;
 	}
 	
-	public User getUserWithId(User userWithoutId) {
+	public RegisterMessage insertUserIfNotInTable(User user) {
+		boolean commandSucceeded = false;
+		boolean userInTable = false;
+		String errorDescription = "No error";
+		
 		try {
 			initialize();
-			userQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("googleUserId"), userWithoutId.getGoogleUserId()));
-			user = (User) session.createQuery(userQuery).setMaxResults(1).getSingleResult();
-		} catch (NoResultException e) {
-			// user is not in table, so profile has to be created
+			if (!isUserInTable(user)) {
+				session.save(user);
+				commandSucceeded = true;
+			}
+			userInTable = true;
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
+			errorDescription = "Something went wrong in the database";
 		} finally {
 			connector.disconnect(session);
 		}
-		return user;
+		
+		RegisterMessage registerMessage = new RegisterMessage(commandSucceeded, userInTable, errorDescription);
+		return registerMessage;
 	}
 	
-	public User createProfile(User userWithoutId) {
+	private boolean isUserInTable(User user) {
 		try {
-			initialize();
-			int id = (int) session.save(userWithoutId);
-			user = new User(id, userWithoutId.getGoogleUserId(), userWithoutId.getName(), userWithoutId.getEmail());
-		} catch (HibernateException e) {
-			rollbackTransaction(e);
-		} finally {
-			connector.disconnect(session);
+			userQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("googleUserId"), user.getGoogleUserId()));
+			session.createQuery(userQuery).setMaxResults(1).getSingleResult();
+			return true;
+		} catch (NoResultException e) {
+			return false;
 		}
-		return user;
 	}
 	
 	private boolean isBookIdInTable(int id) {
