@@ -93,7 +93,7 @@
                     	<execution>
                         	<phase>package</phase>
                         	<goals>
-                            	<goal>cobertura-integration-test</goal>
+                            	<goal>cobertura</goal>
                         	</goals>
                     	</execution>
                 	</executions>
