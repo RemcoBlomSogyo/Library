@@ -91,7 +91,6 @@
                 	</configuration>
                 	<executions>
                     	<execution>
-                        	<phase>build</phase>
                         	<goals>
                             	<goal>cobertura</goal>
                         	</goals>
