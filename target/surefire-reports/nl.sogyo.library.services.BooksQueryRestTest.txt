@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: nl.sogyo.library.services.BooksQueryRestTest
--------------------------------------------------------------------------------
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.3 sec

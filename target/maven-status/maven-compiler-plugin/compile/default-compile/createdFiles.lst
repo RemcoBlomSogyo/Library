@@ -1,0 +1,9 @@
+nl\sogyo\library\model\entity\Category.class
+nl\sogyo\library\model\entity\Copy.class
+nl\sogyo\library\model\helper\InputValidator.class
+nl\sogyo\library\model\entity\Author.class
+nl\sogyo\library\model\entity\Book.class
+nl\sogyo\library\model\entity\Publisher.class
+nl\sogyo\library\services\rest\libraryapi\json\message\Message.class
+nl\sogyo\library\persistence\DatabaseConnector.class
+nl\sogyo\library\services\rest\libraryapi\json\message\EditBookMessage.class
