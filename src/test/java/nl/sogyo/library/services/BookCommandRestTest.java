@@ -4,6 +4,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
@@ -24,6 +25,7 @@ import nl.sogyo.library.services.rest.libraryapi.resource.BookResource;
 public class BookCommandRestTest extends JerseyTest {
 	
 	private static int id;
+	private static final String idToken = "Bearer testIdToken";
 
 	@Override
 	public Application configure() {
@@ -35,7 +37,7 @@ public class BookCommandRestTest extends JerseyTest {
 	@Test
 	public void test01PostValidBook() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "REST", "Appress", "9784567890120");
-	    Response response = target("book").request().post(Entity.json(bookFormInput));
+	    Response response = target("book").request().header(ContainerRequest.AUTHORIZATION, idToken).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
 	    id = addBookMessage.getBookId();
 	    Assert.assertTrue(addBookMessage.getCommandSucceeded());
@@ -44,7 +46,7 @@ public class BookCommandRestTest extends JerseyTest {
 	@Test
 	public void test02UpdateCreatedBook() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-	    Response response = target("book").path(Integer.toString(id)).request().put(Entity.json(bookFormInput));
+	    Response response = target("book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, idToken).put(Entity.json(bookFormInput));
 	    EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
 	    Assert.assertTrue(editBookMessage.getCommandSucceeded());
 	}
@@ -52,43 +54,34 @@ public class BookCommandRestTest extends JerseyTest {
 	// four copy tests for copiesAvailable 
 	@Test
 	public void test03CopiesAvailableOfCreatedBookIsZero() {
-		System.out.println("test03");
-	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
-	    System.out.println(output);
+	    String output = target("book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, idToken).get(String.class);
 	    Assert.assertTrue(output.contains("\"copiesAvailable\":0"));
 	}
 	
 	@Test
 	public void test04CopiesAvailableOfCreatedBookIsOneIfOneCopyIsAdded() {
-	    Response response = target("book").path(id + "/copy").request().post(null);
-//	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
+	    Response response = target("book").path(id + "/copy").request().header(ContainerRequest.AUTHORIZATION, idToken).post(null);
 	    AddCopyMessage addCopyMessage = response.readEntity(AddCopyMessage.class);
 	    Assert.assertEquals(addCopyMessage.getCopiesOfBook(), 1);
-//	    Assert.assertTrue(output.contains("\"copiesAvailable\":1"));
 	}
 	
 	@Test
 	public void test05CopiesAvailableOfCreatedBookIsTwoIfAnotherCopyIsAdded() {
-		Response response = target("book").path(id + "/copy").request().post(null);
-//	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
+		Response response = target("book").path(id + "/copy").request().header(ContainerRequest.AUTHORIZATION, idToken).post(null);
 	    AddCopyMessage addCopyMessage = response.readEntity(AddCopyMessage.class);
 	    Assert.assertEquals(addCopyMessage.getCopiesOfBook(), 2);
-//		Assert.assertTrue(output.contains("\"copiesAvailable\":2"));
 	}
 	
 	@Test
 	public void test06CopiesAvailableOfCreatedBookIsOneIfOneCopyIsDeleted() {
-	    Response response = target("book").path(id + "/copy").request().delete();
-//	    String output = target("book").path(Integer.toString(id)).request().get(String.class);
+	    Response response = target("book").path(id + "/copy").request().header(ContainerRequest.AUTHORIZATION, idToken).delete();
 	    DeleteCopyMessage deleteCopyMessage = response.readEntity(DeleteCopyMessage.class);
 	    Assert.assertEquals(deleteCopyMessage.getCopiesOfBook(), 1);
-//	    Assert.assertTrue(output.contains("\"copiesAvailable\":1"));
 	}
 	
 	@Test
 	public void test07DeleteCreatedBook() {
-		System.out.println("test05");
-	    Response response = target("book").path(Integer.toString(id)).request().delete();
+	    Response response = target("book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, idToken).delete();
 	    DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
 	    Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
 	}
@@ -96,7 +89,7 @@ public class BookCommandRestTest extends JerseyTest {
 	@Test
 	public void test08PostBookWithInvalidIsbn() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "REST", "Appress", "9784567890125");
-	    Response response = target("book").request().post(Entity.json(bookFormInput));
+	    Response response = target("book").request().header(ContainerRequest.AUTHORIZATION, idToken).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
 	    Assert.assertFalse(addBookMessage.getCommandSucceeded());
 	}
@@ -104,7 +97,7 @@ public class BookCommandRestTest extends JerseyTest {
 	@Test
 	public void test09PostBookWithoutAuthorSurname() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "", "REST", "Appress", "9784567890120");
-	    Response response = target("book").request().post(Entity.json(bookFormInput));
+	    Response response = target("book").request().header(ContainerRequest.AUTHORIZATION, idToken).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
 	    Assert.assertFalse(addBookMessage.getCommandSucceeded());
 	}
@@ -112,7 +105,7 @@ public class BookCommandRestTest extends JerseyTest {
 	@Test
 	public void test10UpdateNotExistingBook() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "REST", "Appress", "9784567890120");
-	    Response response = target("book").path("10000000").request().put(Entity.json(bookFormInput));
+	    Response response = target("book").path("10000000").request().header(ContainerRequest.AUTHORIZATION, idToken).put(Entity.json(bookFormInput));
 	    EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
 	    if (editBookMessage == null) {
 	    	System.out.println("editbookmessage is null");
@@ -122,7 +115,7 @@ public class BookCommandRestTest extends JerseyTest {
 	
 	@Test
 	public void test11DeleteNotExistingBook() {
-	    Response response = target("book").path("10000000").request().delete();
+	    Response response = target("book").path("10000000").request().header(ContainerRequest.AUTHORIZATION, idToken).delete();
 	    DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
 	    Assert.assertFalse(deleteBookMessage.getCommandSucceeded());
 	}

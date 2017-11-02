@@ -62,43 +62,41 @@
     	<dependency>
     		<groupId>nl.sogyo.oauth</groupId>
     		<artifactId>java-google-signin</artifactId>
-    		<version>0.0.4-SNAPSHOT</version>
+    		<version>0.0.5-SNAPSHOT</version>
     		<scope>system</scope>
-    		<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/java-google-signin-0.0.4-SNAPSHOT.jar</systemPath>
+    		<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/java-google-signin-0.0.5-SNAPSHOT.jar</systemPath>
     	</dependency>
  	</dependencies>
 	<build>
-    <finalName>SogyoLibrary</finalName>
-    	
-        	<plugins>
-          		<plugin>
-                	<groupId>org.apache.maven.plugins</groupId>
-                	<artifactId>maven-compiler-plugin</artifactId>
-                	<version>2.3.2</version>
-                	<configuration>
-                    	<source>1.8</source>
-                  		<target>1.8</target>
-                	</configuration>
-            	</plugin>
-            	<plugin>
-                	<groupId>org.codehaus.mojo</groupId>
-                	<artifactId>cobertura-maven-plugin</artifactId>
-                	<version>2.7</version>
-                	<configuration>
-                    	<formats>
-                        	<format>xml</format>
-                    	</formats>
-                	</configuration>
-                	<executions>
-                    	<execution>
-                        	<phase>package</phase>
-                        	<goals>
-                            	<goal>cobertura</goal>
-                        	</goals>
-                    	</execution>
-                	</executions>
-            	</plugin>
-  			</plugins>
-  		
+ 		<finalName>SogyoLibrary</finalName>
+       	<plugins>
+      		<plugin>
+               	<groupId>org.apache.maven.plugins</groupId>
+               	<artifactId>maven-compiler-plugin</artifactId>
+               	<version>2.3.2</version>
+               	<configuration>
+                   	<source>1.8</source>
+              		<target>1.8</target>
+               	</configuration>
+           	</plugin>
+           	<plugin>
+               	<groupId>org.codehaus.mojo</groupId>
+               	<artifactId>cobertura-maven-plugin</artifactId>
+               	<version>2.7</version>
+               	<configuration>
+                  	<formats>
+                       	<format>xml</format>
+                   	</formats>
+               	</configuration>
+               	<executions>
+                   	<execution>
+                       	<phase>package</phase>
+                       	<goals>
+                           	<goal>cobertura</goal>
+                       	</goals>
+                   	</execution>
+               	</executions>
+           	</plugin>
+  		</plugins>
  	</build>
 </project>

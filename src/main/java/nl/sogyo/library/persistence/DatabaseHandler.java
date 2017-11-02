@@ -356,6 +356,26 @@ public class DatabaseHandler {
 		return registerMessage;
 	}
 	
+	public boolean isUserAuthorized(String googleUserId, int minimumUserType) {
+		boolean userAuthorized = false;
+		
+		try {
+			initialize();
+			userQuery.select(userRoot).where(criteriaBuilder.and(
+					criteriaBuilder.equal(userRoot.get("googleUserId"), googleUserId),
+					criteriaBuilder.greaterThanOrEqualTo(userRoot.get("userType"), minimumUserType)));
+			session.createQuery(userQuery).setMaxResults(1).getSingleResult();
+			userAuthorized = true;
+		} catch (NoResultException e) {
+			// userAuthorized is still false
+		} catch (HibernateException e) {
+			rollbackTransaction(e);
+		} finally {
+			connector.disconnect(session);
+		}
+		return userAuthorized;
+	}
+	
 	private boolean isUserInTable(User user) {
 		try {
 			userQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("googleUserId"), user.getGoogleUserId()));

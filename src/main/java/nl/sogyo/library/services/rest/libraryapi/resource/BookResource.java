@@ -7,7 +7,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import nl.sogyo.library.model.command.CommandHelper;
@@ -23,12 +25,15 @@ import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
 @Path("book")
 public class BookResource {
 	
+	@HeaderParam(HttpHeaders.AUTHORIZATION)
+	private String idToken;
+	
 	@GET 
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public BookInfo getBookInfo(@PathParam("id") int id) {
 		System.out.println("test");
-		QueryHelper queryHelper = new QueryHelper();
+		QueryHelper queryHelper = new QueryHelper(idToken);
 		BookInfo bookInfo = queryHelper.getBookInfo(id);
 		return bookInfo;
 	}
@@ -53,7 +58,7 @@ public class BookResource {
 		System.out.println("isbn: " + bookFormInput.getIsbn());
 		System.out.println("year: " + bookFormInput.getYearFirstPublication());
 		
-		CommandHelper library = new CommandHelper();
+		CommandHelper library = new CommandHelper(idToken);
 		AddBookMessage addBookMessage = library.addBook(bookFormInput);
 		System.out.println("addBookmessage: " + addBookMessage.getMessage());
 		return addBookMessage;
@@ -64,7 +69,7 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public EditBookMessage editBook(@PathParam("id") int id, BookFormInput bookFormInput) {
-		CommandHelper library = new CommandHelper();
+		CommandHelper library = new CommandHelper(idToken);
 		EditBookMessage editBookMessage = library.editBook(id, bookFormInput);
 		return editBookMessage;
 	}
@@ -73,7 +78,7 @@ public class BookResource {
 	@Path("{id}")
 	@Produces("application/json")
 	public DeleteBookMessage deleteBook(@PathParam("id") int id) {
-		CommandHelper library = new CommandHelper();
+		CommandHelper library = new CommandHelper(idToken);
 		DeleteBookMessage deleteBookMessage = library.deleteBook(id);
 		return deleteBookMessage;
 	}
@@ -83,7 +88,7 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public AddCopyMessage addCopy(@PathParam("bookId") int bookId) {
-		CommandHelper library = new CommandHelper();
+		CommandHelper library = new CommandHelper(idToken);
 		AddCopyMessage addCopyMessage = library.addCopy(bookId);
 		return addCopyMessage;
 	}
@@ -93,7 +98,7 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public DeleteCopyMessage deleteCopy(@PathParam("bookId") int bookId) {
-		CommandHelper library = new CommandHelper();
+		CommandHelper library = new CommandHelper(idToken);
 		DeleteCopyMessage deleteCopyMessage = library.deleteCopy(bookId);
 		System.out.println(" " + deleteCopyMessage.getCommandSucceeded()
 				+ deleteCopyMessage.getCopiesOfBook()

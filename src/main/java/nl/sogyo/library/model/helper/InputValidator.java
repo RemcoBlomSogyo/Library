@@ -2,9 +2,11 @@ package nl.sogyo.library.model.helper;
 
 import java.time.Year;
 
-public class InputValidator {
+public final class InputValidator {
 	
 	private static final int ISBN_LENGTH = 13;
+	
+	private InputValidator() {}
 	
 	public static boolean validateIsbn(String isbnInput) {
 		if (stringHasOnlyNumbers(isbnInput) && stringHasThirteenChars(isbnInput)) {
