@@ -18,20 +18,26 @@ public class TokenTest {
 
 	@Test
 	public void tokenIsNullGivesInvalidTokenException() {
+		boolean trySucceeded = false;
 		try {
 			TokenParser.getGoogleUserFromToken(null);
+			trySucceeded = true;
 		} catch (InvalidTokenException e) {
 			Assert.assertTrue(true);
 		} catch (Exception e) {
 			Assert.fail();
 		}
-		Assert.fail();
+		if (trySucceeded) {
+			Assert.fail();
+		}
 	}
 	
 	@Test
 	public void fakeTokenGivesInvalidTokenException() {
+		boolean trySucceeded = false;
 		try {
 			TokenParser.getGoogleUserFromToken("abcdefghijklm0123456789");
+			trySucceeded = true;
 		} catch (InvalidTokenException e) {
 			System.out.println("InvalidTokenException");
 			Assert.assertTrue(true);
@@ -48,7 +54,9 @@ public class TokenTest {
 			System.out.println("IllegalArgumentException");
 			Assert.fail();
 		}
-		Assert.fail();
+		if (trySucceeded) {
+			Assert.fail();
+		}
 	}
 	
 	@Test
