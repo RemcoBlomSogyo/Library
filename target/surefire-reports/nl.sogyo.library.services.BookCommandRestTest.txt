@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: nl.sogyo.library.services.BookCommandRestTest
 -------------------------------------------------------------------------------
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.794 sec
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.964 sec

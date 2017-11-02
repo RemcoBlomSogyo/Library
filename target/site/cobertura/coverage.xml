@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.8112128146453089" branch-rate="0.8402777777777778" lines-covered="709" lines-valid="874" branches-covered="121" branches-valid="144" complexity="1.5990990990990992" version="2.1.1" timestamp="1509632065666">
+<coverage line-rate="0.8112128146453089" branch-rate="0.8402777777777778" lines-covered="709" lines-valid="874" branches-covered="121" branches-valid="144" complexity="1.5990990990990992" version="2.1.1" timestamp="1509633282629">
 	<sources>
 		<source>--source</source>
 		<source>C:/Users/rblom/Documents/apache-tomcat/webapps/SogyoLibrary/src/main/java</source>
@@ -1196,75 +1196,75 @@
 						</method>
 						<method name="getGoogleUserFromToken" signature="(Ljava/lang/String;)Lnl/sogyo/oauth/javagooglesignin/GoogleUser;" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="23" hits="49" branch="false"/>
-								<line number="25" hits="49" branch="true" condition-coverage="100% (2/2)">
+								<line number="23" hits="52" branch="false"/>
+								<line number="25" hits="52" branch="true" condition-coverage="100% (2/2)">
 									<conditions>
 										<condition number="0" type="jump" coverage="100%"/>
 									</conditions>
 								</line>
 								<line number="26" hits="5" branch="false"/>
-								<line number="28" hits="44" branch="true" condition-coverage="100% (2/2)">
+								<line number="28" hits="47" branch="true" condition-coverage="100% (2/2)">
 									<conditions>
 										<condition number="0" type="jump" coverage="100%"/>
 									</conditions>
 								</line>
-								<line number="29" hits="4" branch="false"/>
-								<line number="30" hits="40" branch="true" condition-coverage="100% (2/2)">
+								<line number="29" hits="5" branch="false"/>
+								<line number="30" hits="42" branch="true" condition-coverage="100% (2/2)">
 									<conditions>
 										<condition number="0" type="jump" coverage="100%"/>
 									</conditions>
 								</line>
-								<line number="31" hits="36" branch="false"/>
-								<line number="33" hits="4" branch="false"/>
-								<line number="34" hits="4" branch="false"/>
-								<line number="35" hits="4" branch="false"/>
-								<line number="37" hits="40" branch="false"/>
+								<line number="31" hits="37" branch="false"/>
+								<line number="33" hits="5" branch="false"/>
+								<line number="34" hits="5" branch="false"/>
+								<line number="35" hits="5" branch="false"/>
+								<line number="37" hits="42" branch="false"/>
 							</lines>
 						</method>
 						<method name="isTestWithIdToken1" signature="(Ljava/lang/String;)Z" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="45" hits="44" branch="false"/>
+								<line number="45" hits="47" branch="false"/>
 							</lines>
 						</method>
 						<method name="isTestWithIdToken2" signature="(Ljava/lang/String;)Z" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="49" hits="40" branch="false"/>
+								<line number="49" hits="42" branch="false"/>
 							</lines>
 						</method>
 						<method name="removeBearerFromToken" signature="(Ljava/lang/String;)Ljava/lang/String;" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="41" hits="4" branch="false"/>
+								<line number="41" hits="5" branch="false"/>
 							</lines>
 						</method>
 					</methods>
 					<lines>
 						<line number="19" hits="0" branch="false"/>
-						<line number="23" hits="49" branch="false"/>
-						<line number="25" hits="49" branch="true" condition-coverage="100% (2/2)">
+						<line number="23" hits="52" branch="false"/>
+						<line number="25" hits="52" branch="true" condition-coverage="100% (2/2)">
 							<conditions>
 								<condition number="0" type="jump" coverage="100%"/>
 							</conditions>
 						</line>
 						<line number="26" hits="5" branch="false"/>
-						<line number="28" hits="44" branch="true" condition-coverage="100% (2/2)">
+						<line number="28" hits="47" branch="true" condition-coverage="100% (2/2)">
 							<conditions>
 								<condition number="0" type="jump" coverage="100%"/>
 							</conditions>
 						</line>
-						<line number="29" hits="4" branch="false"/>
-						<line number="30" hits="40" branch="true" condition-coverage="100% (2/2)">
+						<line number="29" hits="5" branch="false"/>
+						<line number="30" hits="42" branch="true" condition-coverage="100% (2/2)">
 							<conditions>
 								<condition number="0" type="jump" coverage="100%"/>
 							</conditions>
 						</line>
-						<line number="31" hits="36" branch="false"/>
-						<line number="33" hits="4" branch="false"/>
-						<line number="34" hits="4" branch="false"/>
-						<line number="35" hits="4" branch="false"/>
-						<line number="37" hits="40" branch="false"/>
-						<line number="41" hits="4" branch="false"/>
-						<line number="45" hits="44" branch="false"/>
-						<line number="49" hits="40" branch="false"/>
+						<line number="31" hits="37" branch="false"/>
+						<line number="33" hits="5" branch="false"/>
+						<line number="34" hits="5" branch="false"/>
+						<line number="35" hits="5" branch="false"/>
+						<line number="37" hits="42" branch="false"/>
+						<line number="41" hits="5" branch="false"/>
+						<line number="45" hits="47" branch="false"/>
+						<line number="49" hits="42" branch="false"/>
 					</lines>
 				</class>
 			</classes>

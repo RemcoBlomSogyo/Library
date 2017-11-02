@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="16" failures="0" name="nl.sogyo.library.services.AuthorizationTest" time="7.853" errors="0" skipped="0">
+<testsuite tests="16" failures="0" name="nl.sogyo.library.services.AuthorizationTest" time="8.092" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_121\jre\bin"/>
@@ -28,7 +28,7 @@
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 10"/>
     <property name="net.sourceforge.cobertura.datafile" value="C:\Users\rblom\Documents\apache-tomcat\webapps\SogyoLibrary\target\cobertura\cobertura.ser"/>
-    <property name="classworlds.conf" value="C:\Users\rblom\Documents\apache-tomcat\webapps\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf5649833794833249913.tmp"/>
+    <property name="classworlds.conf" value="C:\Users\rblom\Documents\apache-tomcat\webapps\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf1450225433241605987.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin/server;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/lib/amd64;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_131\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\atom\bin;C:\Users\rblom\AppData\Roaming\npm;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\Programs\Python\Python36-32;C:\Users\rblom\Documents\apache-maven-3.5.0-bin\apache-maven-3.5.0\bin;;C:\WINDOWS\system32;;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -63,20 +63,20 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test01GetRequestForBookInfoWithIdTokenWithUserType1GivesBookInfo" time="3.726"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test02GetRequestForBookInfoWithIdTokenWithUserType2GivesBookInfo" time="0.559"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test03GetRequestForBookInfoWithNoIdTokenGivesNoBookInfo" time="0.126"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test04GetRequestForBookInfoWithFakeIdTokenGivesNoBookInfo" time="0.128"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test05AddingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse" time="0.549"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test06AddingBookWithNoIdTokenGivesCommandSucceededIsFalse" time="0.077"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test07AddingBookWithFakeIdTokenGivesCommandSucceededIsFalse" time="0.082"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test08AddingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue" time="0.519"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test09EditingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse" time="0.518"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test10EditingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue" time="0.467"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test11EditingBookWithNoIdTokenGivesCommandSucceededIsFalse" time="0.056"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test12EditingBookWithFakeIdTokenGivesCommandSucceededIsFalse" time="0.058"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test13DeletingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse" time="0.392"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test14DeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue" time="0.472"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test15DeletingBookWithNoIdTokenGivesCommandSucceededIsFalse" time="0.066"/>
-  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test16DeletingBookWithFakeIdTokenGivesCommandSucceededIsFalse" time="0.058"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test01GetRequestForBookInfoWithIdTokenWithUserType1GivesBookInfo" time="3.861"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test02GetRequestForBookInfoWithIdTokenWithUserType2GivesBookInfo" time="0.622"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test03GetRequestForBookInfoWithNoIdTokenGivesNoBookInfo" time="0.087"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test04GetRequestForBookInfoWithFakeIdTokenGivesNoBookInfo" time="0.071"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test05AddingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse" time="0.617"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test06AddingBookWithNoIdTokenGivesCommandSucceededIsFalse" time="0.079"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test07AddingBookWithFakeIdTokenGivesCommandSucceededIsFalse" time="0.077"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test08AddingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue" time="0.514"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test09EditingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse" time="0.445"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test10EditingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue" time="0.57"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test11EditingBookWithNoIdTokenGivesCommandSucceededIsFalse" time="0.062"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test12EditingBookWithFakeIdTokenGivesCommandSucceededIsFalse" time="0.065"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test13DeletingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse" time="0.412"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test14DeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue" time="0.497"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test15DeletingBookWithNoIdTokenGivesCommandSucceededIsFalse" time="0.054"/>
+  <testcase classname="nl.sogyo.library.services.AuthorizationTest" name="test16DeletingBookWithFakeIdTokenGivesCommandSucceededIsFalse" time="0.059"/>
 </testsuite>

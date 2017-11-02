@@ -24,7 +24,7 @@ public class TokenTest {
 	}
 	
 	@Test
-	public void tokenIsFakeTokenGivesInvalidTokenException() {
+	public void fakeTokenGivesInvalidTokenException() {
 		try {
 			TokenParser.getGoogleUserFromToken("abcdefghijklm0123456789");
 		} catch (InvalidTokenException e) {
