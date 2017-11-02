@@ -1,5 +1,6 @@
 package nl.sogyo.library.services.rest.libraryapi.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -21,9 +22,13 @@ public class BooksResource {
 	@GET
 	@Produces("application/json")
 	public List<BookPreview> getBooks(@QueryParam("title") String title, @QueryParam("author") String author, @QueryParam("isbn") String isbn) {
-		System.out.println("idtoken: " + idToken);
-		QueryHelper queryHelper = new QueryHelper(idToken);
-		List<BookPreview> books = queryHelper.getBooks(title, author, isbn);
+		List<BookPreview> books;
+		try {
+			QueryHelper queryHelper = new QueryHelper(idToken);
+			books = queryHelper.getBooks(title, author, isbn);
+		} catch (Exception e) {
+			books = new ArrayList<BookPreview>();
+		}
 		return books;
 	}
 }

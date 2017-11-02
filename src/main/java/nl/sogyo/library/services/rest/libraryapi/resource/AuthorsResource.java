@@ -1,5 +1,6 @@
 package nl.sogyo.library.services.rest.libraryapi.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -20,8 +21,13 @@ public class AuthorsResource {
 	@GET
 	@Produces("application/json")
 	public List<Author> getAllAuthors() {
-		QueryHelper queryHelper = new QueryHelper(idToken);
-		List<Author> authors = queryHelper.getAllAuthors();
+		List<Author> authors;
+		try {
+			QueryHelper queryHelper = new QueryHelper(idToken);
+			authors = queryHelper.getAllAuthors();
+		} catch (Exception e) {
+			authors = new ArrayList<Author>();
+		}
 		return authors;
 	}
 }

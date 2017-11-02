@@ -1,5 +1,7 @@
 package nl.sogyo.library.model.query;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +11,12 @@ import nl.sogyo.library.model.entity.Book;
 import nl.sogyo.library.model.helper.InputValidator;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
+import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
+import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
 
 public class QueryHelper extends LibraryHelper {
 	
-	public QueryHelper(String idToken) {
+	public QueryHelper(String idToken) throws IOException, GeneralSecurityException, EmailNotVerifiedException, InvalidTokenException {
 		super(idToken);
 	}
 	

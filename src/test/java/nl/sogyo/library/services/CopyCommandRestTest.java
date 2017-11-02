@@ -18,11 +18,10 @@ import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.resource.BookResource;
+import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CopyCommandRestTest extends JerseyTest {
-	
-	private static final String idToken = "Bearer testIdToken";
 	
 	@Override
 	public Application configure() {
@@ -33,28 +32,28 @@ public class CopyCommandRestTest extends JerseyTest {
 	
 	@Test
 	public void test01AddCopyOfProRESTfulAPIs() {
-	    Response response = target("book").path("46/copy").request().header(ContainerRequest.AUTHORIZATION, idToken).post(null);
+	    Response response = target("book").path("46/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
 	    AddCopyMessage addCopyMessage = response.readEntity(AddCopyMessage.class);
 	    Assert.assertTrue(addCopyMessage.getCommandSucceeded());
 	}
 	
 	@Test
 	public void test02DeleteCopyOfProRESTfulAPIs() {
-	    Response response = target("book").path("46/copy").request().header(ContainerRequest.AUTHORIZATION, idToken).delete();
+	    Response response = target("book").path("46/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 	    DeleteCopyMessage deleteCopyMessage = response.readEntity(DeleteCopyMessage.class);
 	    Assert.assertTrue(deleteCopyMessage.getCommandSucceeded());
 	}
 	
 	@Test
 	public void test03AddCopyOfNotExistingBook() {
-	    Response response = target("book").path("10000000/copy").request().header(ContainerRequest.AUTHORIZATION, idToken).post(null);
+	    Response response = target("book").path("10000000/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
 	    AddCopyMessage addCopyMessage = response.readEntity(AddCopyMessage.class);
 	    Assert.assertFalse(addCopyMessage.getCommandSucceeded());
 	}
 	
 	@Test
 	public void test04DeleteCopyOfNotExistingBook() {
-	    Response response = target("book").path("10000000/copy").request().header(ContainerRequest.AUTHORIZATION, idToken).delete();
+	    Response response = target("book").path("10000000/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 	    DeleteCopyMessage deleteCopyMessage = response.readEntity(DeleteCopyMessage.class);
 	    Assert.assertFalse(deleteCopyMessage.getCommandSucceeded());
 	}
@@ -62,13 +61,13 @@ public class CopyCommandRestTest extends JerseyTest {
 	@Test
 	public void test05DeleteCopyOfBookWithNoCopies() {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "REST", "Appress", "9784567890120");
-	    Response addBookResponse = target("book").request().header(ContainerRequest.AUTHORIZATION, idToken).post(Entity.json(bookFormInput));
+	    Response addBookResponse = target("book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 	    
-	    Response deleteCopyResponse = target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, idToken).delete();
+	    Response deleteCopyResponse = target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 	    DeleteCopyMessage deleteCopyMessage = deleteCopyResponse.readEntity(DeleteCopyMessage.class);
 	    
-	    target("book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, idToken).delete();
+	    target("book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 	    Assert.assertFalse(deleteCopyMessage.getCommandSucceeded());
 	}
 }

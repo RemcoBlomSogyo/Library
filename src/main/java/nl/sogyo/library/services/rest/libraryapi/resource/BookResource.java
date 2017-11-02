@@ -32,9 +32,13 @@ public class BookResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public BookInfo getBookInfo(@PathParam("id") int id) {
-		System.out.println("test");
-		QueryHelper queryHelper = new QueryHelper(idToken);
-		BookInfo bookInfo = queryHelper.getBookInfo(id);
+		BookInfo bookInfo;
+		try {
+			QueryHelper queryHelper = new QueryHelper(idToken);
+			bookInfo = queryHelper.getBookInfo(id);
+		} catch (Exception e) {
+			bookInfo = new BookInfo();
+		}
 		return bookInfo;
 	}
 
@@ -42,25 +46,13 @@ public class BookResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public AddBookMessage addBook(BookFormInput bookFormInput) {
-		System.out.println("test rest");
-		System.out.println("Title: " + bookFormInput.getTitle());
-		System.out.println("subTitle: " + bookFormInput.getSubtitle());
-		System.out.println("author fore1: " + bookFormInput.getAuthorForename1());
-		System.out.println("author sur1: " + bookFormInput.getAuthorSurname1());
-		System.out.println("author fore2: " + bookFormInput.getAuthorForename2());
-		System.out.println("author sur2: " + bookFormInput.getAuthorSurname2());
-		System.out.println("author fore3: " + bookFormInput.getAuthorForename3());
-		System.out.println("author sur3: " + bookFormInput.getAuthorSurname3());
-		System.out.println("category: " + bookFormInput.getCategory());
-		System.out.println("publisher: " + bookFormInput.getPublisher());
-		System.out.println("pages: " + bookFormInput.getPages());
-		System.out.println("language: " + bookFormInput.getLanguage());
-		System.out.println("isbn: " + bookFormInput.getIsbn());
-		System.out.println("year: " + bookFormInput.getYearFirstPublication());
-		
-		CommandHelper library = new CommandHelper(idToken);
-		AddBookMessage addBookMessage = library.addBook(bookFormInput);
-		System.out.println("addBookmessage: " + addBookMessage.getMessage());
+		AddBookMessage addBookMessage;
+		try {
+			CommandHelper commandHelper = new CommandHelper(idToken);
+			addBookMessage = commandHelper.addBook(bookFormInput);
+		} catch (Exception e) {
+			addBookMessage = new AddBookMessage(0);
+		}
 		return addBookMessage;
 	}
 	
@@ -69,8 +61,13 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public EditBookMessage editBook(@PathParam("id") int id, BookFormInput bookFormInput) {
-		CommandHelper library = new CommandHelper(idToken);
-		EditBookMessage editBookMessage = library.editBook(id, bookFormInput);
+		EditBookMessage editBookMessage;
+		try {
+			CommandHelper commandHelper = new CommandHelper(idToken);
+			editBookMessage = commandHelper.editBook(id, bookFormInput);
+		} catch (Exception e) {
+			editBookMessage = new EditBookMessage(false);
+		}
 		return editBookMessage;
 	}
 	
@@ -78,8 +75,13 @@ public class BookResource {
 	@Path("{id}")
 	@Produces("application/json")
 	public DeleteBookMessage deleteBook(@PathParam("id") int id) {
-		CommandHelper library = new CommandHelper(idToken);
-		DeleteBookMessage deleteBookMessage = library.deleteBook(id);
+		DeleteBookMessage deleteBookMessage;
+		try {
+			CommandHelper commandHelper = new CommandHelper(idToken);
+			deleteBookMessage = commandHelper.deleteBook(id);
+		} catch (Exception e) {
+			deleteBookMessage = new DeleteBookMessage(false);
+		}
 		return deleteBookMessage;
 	}
 	
@@ -88,8 +90,13 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public AddCopyMessage addCopy(@PathParam("bookId") int bookId) {
-		CommandHelper library = new CommandHelper(idToken);
-		AddCopyMessage addCopyMessage = library.addCopy(bookId);
+		AddCopyMessage addCopyMessage;
+		try {
+			CommandHelper commandHelper = new CommandHelper(idToken);
+			addCopyMessage = commandHelper.addCopy(bookId);
+		} catch (Exception e) {
+			addCopyMessage = new AddCopyMessage(false, 0);
+		}
 		return addCopyMessage;
 	}
 	
@@ -98,11 +105,13 @@ public class BookResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public DeleteCopyMessage deleteCopy(@PathParam("bookId") int bookId) {
-		CommandHelper library = new CommandHelper(idToken);
-		DeleteCopyMessage deleteCopyMessage = library.deleteCopy(bookId);
-		System.out.println(" " + deleteCopyMessage.getCommandSucceeded()
-				+ deleteCopyMessage.getCopiesOfBook()
-				+ deleteCopyMessage.getMessage());
+		DeleteCopyMessage deleteCopyMessage;
+		try {
+			CommandHelper commandHelper = new CommandHelper(idToken);
+			deleteCopyMessage = commandHelper.deleteCopy(bookId);
+		} catch (Exception e) {
+			deleteCopyMessage = new DeleteCopyMessage(false, 0);
+		}
 		return deleteCopyMessage;
 	}
 }

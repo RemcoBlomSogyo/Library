@@ -1,5 +1,7 @@
 package nl.sogyo.library.model.command;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +14,12 @@ import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
+import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
+import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
 
 public class CommandHelper extends LibraryHelper {
 	
-	public CommandHelper(String idToken) {
+	public CommandHelper(String idToken) throws IOException, GeneralSecurityException, EmailNotVerifiedException, InvalidTokenException {
 		super(idToken);
 	}
 	

@@ -1,14 +1,19 @@
 package nl.sogyo.library.model.register;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import nl.sogyo.library.model.LibraryHelper;
 import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.message.RegisterMessage;
+import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
+import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
 
 public class RegisterHelper extends LibraryHelper {
 	
 	private RegisterMessage registerMessage;
 	
-	public RegisterHelper(String idToken) {
+	public RegisterHelper(String idToken) throws IOException, GeneralSecurityException, EmailNotVerifiedException, InvalidTokenException {
 		super(idToken);
 	}
 	

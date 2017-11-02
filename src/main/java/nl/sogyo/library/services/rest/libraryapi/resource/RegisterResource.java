@@ -19,9 +19,13 @@ public class RegisterResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public RegisterMessage registerUser() {
-		System.out.println("post signin");
-		RegisterHelper registerHelper = new RegisterHelper(idToken);
-		RegisterMessage registerMessage = registerHelper.registerUser();
+		RegisterMessage registerMessage;
+		try {
+			RegisterHelper registerHelper = new RegisterHelper(idToken);
+			registerMessage = registerHelper.registerUser();
+		} catch (Exception e) {
+			registerMessage = new RegisterMessage(false, false, "Token is not verified");
+		}
 		return registerMessage;
 	}
 }
