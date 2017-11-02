@@ -43,6 +43,8 @@ public class TokenTest {
 			Assert.assertTrue(true);
 		} catch (IOException e) {
 			System.out.println("IOException");
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 			Assert.fail();
 		} catch (GeneralSecurityException e) {
 			System.out.println("GeneralSecurityException");
