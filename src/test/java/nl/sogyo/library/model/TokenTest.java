@@ -4,11 +4,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.sogyo.library.model.helper.TokenParser;
+import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
 import nl.sogyo.oauth.javagooglesignin.GoogleUser;
 import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
 
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class TokenTest {
 
@@ -21,6 +25,7 @@ public class TokenTest {
 		} catch (Exception e) {
 			Assert.fail();
 		}
+		Assert.fail();
 	}
 	
 	@Test
@@ -28,10 +33,22 @@ public class TokenTest {
 		try {
 			TokenParser.getGoogleUserFromToken("abcdefghijklm0123456789");
 		} catch (InvalidTokenException e) {
+			System.out.println("InvalidTokenException");
 			Assert.assertTrue(true);
-		} catch (Exception e) {
+		} catch (IOException e) {
+			System.out.println("IOException");
 			Assert.fail();
-		} 
+		} catch (GeneralSecurityException e) {
+			System.out.println("GeneralSecurityException");
+			Assert.fail();
+		} catch (EmailNotVerifiedException e) {
+			System.out.println("EmailNotVerifiedException");
+			Assert.fail();
+		} catch (IllegalArgumentException e) {
+			System.out.println("IllegalArgumentException");
+			Assert.fail();
+		}
+		Assert.fail();
 	}
 	
 	@Test
