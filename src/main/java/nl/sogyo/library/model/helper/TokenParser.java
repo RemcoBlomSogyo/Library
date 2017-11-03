@@ -1,6 +1,5 @@
 package nl.sogyo.library.model.helper;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -11,10 +10,7 @@ import nl.sogyo.oauth.javagooglesignin.OauthHelper;
 
 public final class TokenParser {
 
-//	private static final String CLIENT_SECRET_FILE = "C:/Users/rblom/Documents/apache-tomcat/webapps/SogyoLibrary/src/main/resources/google-api/"
-//			+ "client_secret_1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com.json";
-	private static final String CLIENT_SECRET_FILE = "src/main/resources/google-api/"
-			+ "client_secret_1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com.json";
+	private static final String GOOGLE_CLIENT_ID = "1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com";
 	public static final String TEST_ID_TOKEN_1 = "Bearer testIdToken1";
 	public static final String TEST_ID_TOKEN_2 = "Bearer testIdToken2";
 	
@@ -22,7 +18,6 @@ public final class TokenParser {
 	
 	public static GoogleUser getGoogleUserFromToken(String idToken) throws IOException, GeneralSecurityException, 
 			EmailNotVerifiedException, InvalidTokenException {
-		File file = new File(CLIENT_SECRET_FILE);
 		GoogleUser googleUser;
 		if (idToken == null) {
 			throw new InvalidTokenException();
@@ -34,7 +29,7 @@ public final class TokenParser {
 		} else {
 			String idTokenWithoutBearer = removeBearerFromToken(idToken);
 			System.out.println(idTokenWithoutBearer);
-			googleUser = new OauthHelper(file).getUserFromToken(idTokenWithoutBearer);
+			googleUser = new OauthHelper(GOOGLE_CLIENT_ID).getUserFromToken(idTokenWithoutBearer);
 		}
 		return googleUser;
 	}

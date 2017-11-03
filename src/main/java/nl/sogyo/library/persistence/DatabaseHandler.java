@@ -333,16 +333,19 @@ public class DatabaseHandler {
 		return authors;
 	}
 	
-	public RegisterMessage insertUserIfNotInTable(User user) {
+	public RegisterMessage insertUserIfNotInTable(User incompleteUser) {
 		boolean commandSucceeded = false;
 		boolean userInTable = false;
 		String errorDescription = "No error";
+		User user = null;
 		
 		try {
 			initialize();
-			if (!isUserInTable(user)) {
-				session.save(user);
+			user = getUser(incompleteUser);
+			if (user == null) {
+				int id = (int) session.save(incompleteUser);
 				commandSucceeded = true;
+				user = session.get(User.class, id);
 			}
 			userInTable = true;
 		} catch (HibernateException e) {
@@ -352,7 +355,14 @@ public class DatabaseHandler {
 			connector.disconnect(session);
 		}
 		
-		RegisterMessage registerMessage = new RegisterMessage(commandSucceeded, userInTable, errorDescription);
+		RegisterMessage registerMessage = null;
+		try {
+			registerMessage = new RegisterMessage(commandSucceeded, userInTable, errorDescription,
+				user.getGivenName(), user.getFamilyName(), user.getUserType());
+		} catch (NullPointerException e) {
+			registerMessage = new RegisterMessage(commandSucceeded, userInTable, errorDescription,
+					"", "", (byte) 0);
+		}
 		return registerMessage;
 	}
 	
@@ -376,14 +386,15 @@ public class DatabaseHandler {
 		return userAuthorized;
 	}
 	
-	private boolean isUserInTable(User user) {
+	private User getUser(User incompleteUser) {
+		User user = null;
 		try {
-			userQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("googleUserId"), user.getGoogleUserId()));
-			session.createQuery(userQuery).setMaxResults(1).getSingleResult();
-			return true;
+			userQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("googleUserId"), incompleteUser.getGoogleUserId()));
+			user = session.createQuery(userQuery).setMaxResults(1).getSingleResult();
 		} catch (NoResultException e) {
-			return false;
+			// return null
 		}
+		return user;
 	}
 	
 	private boolean isBookIdInTable(int id) {

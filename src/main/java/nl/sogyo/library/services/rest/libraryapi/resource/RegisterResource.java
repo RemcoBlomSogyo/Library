@@ -24,7 +24,7 @@ public class RegisterResource {
 			RegisterHelper registerHelper = new RegisterHelper(idToken);
 			registerMessage = registerHelper.registerUser();
 		} catch (Exception e) {
-			registerMessage = new RegisterMessage(false, false, "Token is not verified");
+			registerMessage = new RegisterMessage(false, false, "Token is not verified", "", "", (byte) 0);
 		}
 		return registerMessage;
 	}

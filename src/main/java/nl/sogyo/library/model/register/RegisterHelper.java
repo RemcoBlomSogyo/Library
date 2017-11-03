@@ -18,14 +18,16 @@ public class RegisterHelper extends LibraryHelper {
 	}
 	
 	public RegisterMessage registerUser() {
+		System.out.println("registerUser");
 		try {
 			User sogyoUser = new User(googleUser);
 			System.out.println(sogyoUser.getGoogleUserId());
 			System.out.println(sogyoUser.getGivenName());
 			System.out.println(sogyoUser.getEmail());
+			System.out.println("registerUser");
 			registerMessage = databaseHandler.insertUserIfNotInTable(sogyoUser);
 		} catch (IllegalArgumentException e) {
-			registerMessage = new RegisterMessage(false, false, "Email is not a Sogyo account");
+			registerMessage = new RegisterMessage(false, false, "Email is not a Sogyo account", "", "", (byte) 0);
 		}
 		return registerMessage;
 	}

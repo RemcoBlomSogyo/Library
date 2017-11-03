@@ -5,9 +5,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,9 +22,6 @@ import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
-import nl.sogyo.library.services.rest.libraryapi.json.message.RegisterMessage;
-import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
-import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
 
 @Path("book")
 public class BookResource {
@@ -43,24 +37,8 @@ public class BookResource {
 		try {
 			QueryHelper queryHelper = new QueryHelper(idToken);
 			bookInfo = queryHelper.getBookInfo(id);
-		} catch (IOException e) {
-			bookInfo = new BookInfo();
-			System.out.println("IOException");
-		} catch (GeneralSecurityException e) {
-			bookInfo = new BookInfo();
-			System.out.println("GeneralSecurityException");
-		} catch (InvalidTokenException e) {
-			bookInfo = new BookInfo();
-			System.out.println("InvalidTokenException");
-		} catch (EmailNotVerifiedException e) {
-			bookInfo = new BookInfo();
-			System.out.println("EmailNotVerifiedException");
-		} catch (IllegalArgumentException e) {
-			bookInfo = new BookInfo();
-			System.out.println("IllegalArgumentException");
 		} catch (Exception e) {
 			bookInfo = new BookInfo();
-			System.out.println("Exception");
 		}
 		return bookInfo;
 	}
