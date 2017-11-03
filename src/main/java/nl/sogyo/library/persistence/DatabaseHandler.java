@@ -48,10 +48,12 @@ public class DatabaseHandler {
 	private List<Book> booksWithTitleInput;
 	private List<Author> authors;
 	private List<Copy> copies;
+	private List<User> users;
 	
 	private Book book;
 	private Author author;
 	private Copy copy;
+	private User user;
 	
 	public DatabaseHandler() {
 		connector = new DatabaseConnector();
@@ -333,11 +335,24 @@ public class DatabaseHandler {
 		return authors;
 	}
 	
+	public List<User> selectAllUsers() {
+		try {
+			initialize();
+			userQuery.select(userRoot);
+			users = (List<User>) session.createQuery(userQuery).list();
+			transaction.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(e);
+		} finally {
+			connector.disconnect(session);
+		}
+		return users;
+	}
+	
 	public RegisterMessage insertUserIfNotInTable(User incompleteUser) {
 		boolean commandSucceeded = false;
 		boolean userInTable = false;
 		String errorDescription = "No error";
-		User user = null;
 		
 		try {
 			initialize();

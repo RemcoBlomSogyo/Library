@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.sogyo.library.services.rest.libraryapi.resource.AuthorsResource;
+
+import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
 
 public class AuthorsQueryRestTest extends JerseyTest {
@@ -22,7 +24,16 @@ public class AuthorsQueryRestTest extends JerseyTest {
 	}
 	
 	@Test
-	public void searchForBooksWithoutQueryValuesGivesEmptyArray() {
+	public void requestForAuthorsWithTestIdToken1ReturnsAllAuthors() {
+		String output = target("authors").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).get(String.class);
+		Assert.assertTrue(output.contains("{\"forename\":\"Arshak\",")
+				&& output.contains(",\"surname\":\"Khachatrian\"}")
+				&& output.contains("{\"forename\":\"Sanjay\",")
+				&& output.contains(",\"surname\":\"Patni\"}"));
+	}
+	
+	@Test
+	public void requestForAuthorsWithTestIdToken2ReturnsAllAuthors() {
 		String output = target("authors").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
 		Assert.assertTrue(output.contains("{\"forename\":\"Arshak\",")
 				&& output.contains(",\"surname\":\"Khachatrian\"}")

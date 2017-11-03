@@ -23,7 +23,7 @@ import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AuthorizationTest extends JerseyTest {
+public class AuthorizationRestTest extends JerseyTest {
 	
 	private static int id;
 
