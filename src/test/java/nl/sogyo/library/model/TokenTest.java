@@ -11,6 +11,7 @@ import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -34,6 +35,7 @@ public class TokenTest {
 	
 	@Test
 	public void fakeTokenGivesInvalidTokenException() {
+//		System.out.println(new File("src/main/resources/google-api/").toPath().toAbsolutePath().toString());
 		boolean trySucceeded = false;
 		try {
 			TokenParser.getGoogleUserFromToken("abcdefghijklm0123456789");

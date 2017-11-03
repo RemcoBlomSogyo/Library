@@ -11,7 +11,9 @@ import nl.sogyo.oauth.javagooglesignin.OauthHelper;
 
 public final class TokenParser {
 
-	private static final String CLIENT_SECRET_FILE = "C:/Users/rblom/Documents/apache-tomcat/webapps/SogyoLibrary/src/main/resources/google-api/"
+//	private static final String CLIENT_SECRET_FILE = "C:/Users/rblom/Documents/apache-tomcat/webapps/SogyoLibrary/src/main/resources/google-api/"
+//			+ "client_secret_1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com.json";
+	private static final String CLIENT_SECRET_FILE = "src/main/resources/google-api/"
 			+ "client_secret_1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com.json";
 	public static final String TEST_ID_TOKEN_1 = "Bearer testIdToken1";
 	public static final String TEST_ID_TOKEN_2 = "Bearer testIdToken2";
