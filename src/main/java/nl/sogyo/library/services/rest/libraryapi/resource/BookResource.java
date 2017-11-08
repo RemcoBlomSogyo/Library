@@ -59,8 +59,8 @@ public class BookResource {
 	
 	@PUT 
 	@Path("{id}")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public EditBookMessage editBook(@PathParam("id") int id, BookFormInput bookFormInput) {
 		EditBookMessage editBookMessage;
 		try {
@@ -74,7 +74,7 @@ public class BookResource {
 	
 	@DELETE
 	@Path("{id}")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public DeleteBookMessage deleteBook(@PathParam("id") int id) {
 		DeleteBookMessage deleteBookMessage;
 		try {
@@ -88,8 +88,8 @@ public class BookResource {
 	
 	@POST
 	@Path("{bookId}/copy")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public AddCopyMessage addCopy(@PathParam("bookId") int bookId) {
 		AddCopyMessage addCopyMessage;
 		try {
@@ -103,8 +103,8 @@ public class BookResource {
 	
 	@DELETE
 	@Path("{bookId}/copy")
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public DeleteCopyMessage deleteCopy(@PathParam("bookId") int bookId) {
 		DeleteCopyMessage deleteCopyMessage;
 		try {

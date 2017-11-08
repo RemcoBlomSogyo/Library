@@ -8,12 +8,14 @@ import java.util.List;
 import nl.sogyo.library.model.LibraryHelper;
 import nl.sogyo.library.model.entity.Author;
 import nl.sogyo.library.model.entity.Book;
+import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.EditUsersMessage;
 import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
 import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
 
@@ -93,6 +95,16 @@ public class CommandHelper extends LibraryHelper {
 			return deleteBookMessage;
 		} else {
 			return new DeleteBookMessage(false);
+		}
+	}
+	
+	public EditUsersMessage editUsers(List<User> users) {
+		if (databaseHandler.isUserAuthorized(googleUser.getUserId(), USERTYPE_ADMIN)) {
+			boolean commandSucceeded = databaseHandler.updateUsers(users);
+			EditUsersMessage editUsersMessage = new EditUsersMessage(commandSucceeded);
+			return editUsersMessage;
+		} else {
+			return new EditUsersMessage(false);
 		}
 	}
 	

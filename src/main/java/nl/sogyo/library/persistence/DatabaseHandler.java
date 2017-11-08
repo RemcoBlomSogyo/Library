@@ -363,6 +363,7 @@ public class DatabaseHandler {
 				user = session.get(User.class, id);
 			}
 			userInTable = true;
+			transaction.commit();
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
 			errorDescription = "Something went wrong in the database";
@@ -391,6 +392,7 @@ public class DatabaseHandler {
 					criteriaBuilder.greaterThanOrEqualTo(userRoot.get("userType"), minimumUserType)));
 			session.createQuery(userQuery).setMaxResults(1).getSingleResult();
 			userAuthorized = true;
+			transaction.commit();
 		} catch (NoResultException e) {
 			// userAuthorized is still false
 		} catch (HibernateException e) {
@@ -399,6 +401,22 @@ public class DatabaseHandler {
 			connector.disconnect(session);
 		}
 		return userAuthorized;
+	}
+	
+	public boolean updateUsers(List<User> users) {
+		try {
+			initialize();
+			for (User user : users) {
+				session.update(user);
+			}
+			transaction.commit();
+			return true;
+		} catch (HibernateException e) {
+			rollbackTransaction(e);
+			return false;
+		} finally {
+			connector.disconnect(session);
+		}
 	}
 	
 	private User getUser(User incompleteUser) {

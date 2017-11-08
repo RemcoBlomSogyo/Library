@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 
 import nl.sogyo.library.model.query.QueryHelper;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
@@ -20,7 +21,7 @@ public class BooksResource {
 	private String idToken;
 	
 	@GET
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<BookPreview> getBooks(@QueryParam("title") String title, @QueryParam("author") String author, @QueryParam("isbn") String isbn) {
 		List<BookPreview> books;
 		try {
