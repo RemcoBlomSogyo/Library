@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="11" failures="0" name="nl.sogyo.library.services.BookCommandRestTest" time="4.955" errors="0" skipped="0">
+<testsuite tests="11" failures="0" name="nl.sogyo.library.services.BookCommandRestTest" time="4.94" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_121\jre\bin"/>
@@ -28,9 +28,9 @@
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 10"/>
     <property name="net.sourceforge.cobertura.datafile" value="C:\Users\rblom\Documents\apache-tomcat\webapps\SogyoLibrary\target\cobertura\cobertura.ser"/>
-    <property name="classworlds.conf" value="C:\Users\rblom\Documents\apache-tomcat\webapps\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf1450225433241605987.tmp"/>
+    <property name="classworlds.conf" value="C:\Users\rblom\Documents\apache-tomcat\webapps\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf2126165032362902279.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin/server;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/lib/amd64;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_131\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\atom\bin;C:\Users\rblom\AppData\Roaming\npm;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\Programs\Python\Python36-32;C:\Users\rblom\Documents\apache-maven-3.5.0-bin\apache-maven-3.5.0\bin;;C:\WINDOWS\system32;;."/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin/server;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/lib/amd64;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_131\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\atom\bin;C:\Users\rblom\AppData\Roaming\npm;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\Programs\Python\Python36-32;C:\Users\rblom\Documents\apache-maven-3.5.0-bin\apache-maven-3.5.0\bin;;C:\WINDOWS\System32;;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="52.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -63,15 +63,15 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test01PostValidBook" time="0.548"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test02UpdateCreatedBook" time="0.485"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test03CopiesAvailableOfCreatedBookIsZero" time="0.474"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test04CopiesAvailableOfCreatedBookIsOneIfOneCopyIsAdded" time="0.43"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test05CopiesAvailableOfCreatedBookIsTwoIfAnotherCopyIsAdded" time="0.377"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test06CopiesAvailableOfCreatedBookIsOneIfOneCopyIsDeleted" time="0.385"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test07DeleteCreatedBook" time="0.739"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test08PostBookWithInvalidIsbn" time="0.372"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test09PostBookWithoutAuthorSurname" time="0.403"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test10UpdateNotExistingBook" time="0.368"/>
-  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test11DeleteNotExistingBook" time="0.374"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test01PostValidBook" time="0.632"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test02UpdateCreatedBook" time="0.387"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test03CopiesAvailableOfCreatedBookIsZero" time="0.445"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test04CopiesAvailableOfCreatedBookIsOneIfOneCopyIsAdded" time="0.445"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test05CopiesAvailableOfCreatedBookIsTwoIfAnotherCopyIsAdded" time="0.355"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test06CopiesAvailableOfCreatedBookIsOneIfOneCopyIsDeleted" time="0.686"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test07DeleteCreatedBook" time="0.425"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test08PostBookWithInvalidIsbn" time="0.441"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test09PostBookWithoutAuthorSurname" time="0.406"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test10UpdateNotExistingBook" time="0.346"/>
+  <testcase classname="nl.sogyo.library.services.BookCommandRestTest" name="test11DeleteNotExistingBook" time="0.372"/>
 </testsuite>

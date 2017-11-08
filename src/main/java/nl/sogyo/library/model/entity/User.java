@@ -1,9 +1,15 @@
 package nl.sogyo.library.model.entity;
 
+import java.io.Serializable;
+
 import nl.sogyo.oauth.javagooglesignin.GoogleUser;
 
-public class User {
+public class User implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 64520863579408695L;
 	private int id;
 	private String googleUserId;
 	private String givenName;
