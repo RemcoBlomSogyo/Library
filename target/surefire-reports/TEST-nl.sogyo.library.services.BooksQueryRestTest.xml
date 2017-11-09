@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="11" failures="0" name="nl.sogyo.library.services.BooksQueryRestTest" time="4.124" errors="0" skipped="0">
+<testsuite tests="11" failures="0" name="nl.sogyo.library.services.BooksQueryRestTest" time="3.954" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_121\jre\bin"/>
@@ -28,7 +28,7 @@
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 10"/>
     <property name="net.sourceforge.cobertura.datafile" value="C:\Users\rblom\Documents\apache-tomcat\webapps\SogyoLibrary\target\cobertura\cobertura.ser"/>
-    <property name="classworlds.conf" value="C:\Users\rblom\Documents\apache-tomcat\webapps\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf2126165032362902279.tmp"/>
+    <property name="classworlds.conf" value="C:\Users\rblom\Documents\apache-tomcat\webapps\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf741121579448473605.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin/server;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/lib/amd64;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_131\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\atom\bin;C:\Users\rblom\AppData\Roaming\npm;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\Programs\Python\Python36-32;C:\Users\rblom\Documents\apache-maven-3.5.0-bin\apache-maven-3.5.0\bin;;C:\WINDOWS\System32;;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -63,15 +63,15 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksOfArshakKhachatrianGivesGettingStartedWithPolymer" time="0.392"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksOfArshakGivesGettingStartedWithPolymer" time="0.418"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForTitlePolymerGivesGettingStartedPolymerInJson" time="0.347"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksOfNotExistingAuthorGivesEmptyArray" time="0.442"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksWithExistingIsbnGivesJsonOfBook" time="0.359"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksWithTitlesWithAGivesStatus200" time="0.389"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForNotExistingWordInAnyTitleGivesEmptyArray" time="0.367"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksWithoutQueryValuesGivesEmptyArray" time="0.336"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForExactlyTheSameTitleGivesTheBookInJson" time="0.355"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksOfNotExistingForenameAndSurnameGivesEmptyArray" time="0.376"/>
-  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksWithNotExistingIsbnGivesEmptyArray" time="0.343"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksOfArshakKhachatrianGivesGettingStartedWithPolymer" time="0.417"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksOfArshakGivesGettingStartedWithPolymer" time="0.41"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForTitlePolymerGivesGettingStartedPolymerInJson" time="0.366"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksOfNotExistingAuthorGivesEmptyArray" time="0.396"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksWithExistingIsbnGivesJsonOfBook" time="0.346"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksWithTitlesWithAGivesStatus200" time="0.362"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForNotExistingWordInAnyTitleGivesEmptyArray" time="0.32"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksWithoutQueryValuesGivesEmptyArray" time="0.324"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForExactlyTheSameTitleGivesTheBookInJson" time="0.327"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksOfNotExistingForenameAndSurnameGivesEmptyArray" time="0.375"/>
+  <testcase classname="nl.sogyo.library.services.BooksQueryRestTest" name="searchForBooksWithNotExistingIsbnGivesEmptyArray" time="0.311"/>
 </testsuite>

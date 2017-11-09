@@ -23,8 +23,6 @@ public class QueryHelper extends LibraryHelper {
 	
 	public List<BookPreview> getBooks(String titleInput, String authorInput, String isbnInput) {
 		List<Book> books = null;
-		System.out.println(databaseHandler);
-		System.out.println(googleUser);
 		if (databaseHandler.isUserAuthorized(googleUser.getUserId(), USERTYPE_USER)) {
 			if (isbnInput.isEmpty()) {
 				if (titleInput.isEmpty()) {
@@ -60,11 +58,6 @@ public class QueryHelper extends LibraryHelper {
 	public BookInfo getBookInfo(int id) {
 		if (databaseHandler.isUserAuthorized(googleUser.getUserId(), USERTYPE_USER)) {
 			BookInfo bookInfo = databaseHandler.selectBookById(id);
-			System.out.println("copies: " + bookInfo.getCopiesAvailable());
-			System.out.println("title: " + bookInfo.getBook().getTitle());
-			System.out.println("subtitle: " + bookInfo.getBook().getSubtitle());
-			System.out.println("category: " + bookInfo.getBook().getCategory().getName());
-			System.out.println("publisher: " + bookInfo.getBook().getPublisher().getName());
 			return bookInfo;
 		} else {
 			return new BookInfo();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="nl.sogyo.library.services.CopyCommandRestTest" time="2.345" errors="0" skipped="0">
+<testsuite tests="8" failures="0" name="nl.sogyo.library.services.CopyCommandRestTest" time="5.4" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_121\jre\bin"/>
@@ -28,7 +28,7 @@
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 10"/>
     <property name="net.sourceforge.cobertura.datafile" value="C:\Users\rblom\Documents\apache-tomcat\webapps\SogyoLibrary\target\cobertura\cobertura.ser"/>
-    <property name="classworlds.conf" value="C:\Users\rblom\Documents\apache-tomcat\webapps\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf2126165032362902279.tmp"/>
+    <property name="classworlds.conf" value="C:\Users\rblom\Documents\apache-tomcat\webapps\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf741121579448473605.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin/server;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/bin;C:/Program Files/Java/jdk1.8.0_121/bin/../jre/lib/amd64;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_131\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\atom\bin;C:\Users\rblom\AppData\Roaming\npm;C:\Users\rblom\AppData\Local\Microsoft\WindowsApps;C:\Users\rblom\AppData\Local\Programs\Python\Python36-32;C:\Users\rblom\Documents\apache-maven-3.5.0-bin\apache-maven-3.5.0\bin;;C:\WINDOWS\System32;;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -63,9 +63,12 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="test01AddCopyOfProRESTfulAPIs" time="0.33"/>
-  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="test02DeleteCopyOfProRESTfulAPIs" time="0.365"/>
-  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="test03AddCopyOfNotExistingBook" time="0.34"/>
-  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="test04DeleteCopyOfNotExistingBook" time="0.316"/>
-  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="test05DeleteCopyOfBookWithNoCopies" time="0.994"/>
+  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="copiesAvailableOfCreatedBookIsOneIfOneCopyIsDeletedAfterTwoCopiesAreAdded" time="1.183"/>
+  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="copiesAvailableOfCreatedBookIsTwoIfTwoTimesCopyIsAdded" time="0.906"/>
+  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="addBookAnddeleteCopyGivesCommandSucceededIsFalseDeleteBookGivesCommandSucceededIsTrue" time="0.921"/>
+  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="addAndDeleteCopyOfProRESTfulAPIsGivesCommandSucceededIsTrue" time="0.585"/>
+  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="copiesAvailableOfCreatedBookIsZero" time="0.607"/>
+  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="copiesAvailableOfCreatedBookIsOneIfOneCopyIsAdded" time="0.594"/>
+  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="deleteCopyOfNotExistingBookGivesCommandSucceededIsFalse" time="0.307"/>
+  <testcase classname="nl.sogyo.library.services.CopyCommandRestTest" name="addCopyOfNotExistingBookGivesCommandSucceededIsFalse" time="0.297"/>
 </testsuite>
