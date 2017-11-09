@@ -479,6 +479,7 @@ public class DatabaseHandler {
 				author = (Author) session.createQuery(authorQuery).setMaxResults(1).getSingleResult();
 				book.getAuthors().set(i, author);
 			} catch (NoResultException e) {
+				System.out.println("save author");
 				session.save(book.getAuthors().get(i));
 			} 
 		}
