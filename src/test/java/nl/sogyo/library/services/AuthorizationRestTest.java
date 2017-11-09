@@ -260,7 +260,7 @@ public class AuthorizationRestTest extends JerseyTest {
 			}
 		}		
 	}
-	
+
 	private void deleteBook(int bookId) {
 		target("/book").path(Integer.toString(bookId)).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 	}

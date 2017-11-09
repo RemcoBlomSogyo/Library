@@ -99,7 +99,7 @@ public class CopyCommandRestTest extends JerseyTest {
 	public void copiesAvailableOfCreatedBookIsTwoIfTwoTimesCopyIsAdded() {
 		Response addBookResponse = target("book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
-		target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
+		target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 		Response addCopyResponse = target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 	    AddCopyMessage addCopyMessage = addCopyResponse.readEntity(AddCopyMessage.class);
 	    Assert.assertEquals(addCopyMessage.getCopiesOfBook(), 2);
@@ -109,8 +109,8 @@ public class CopyCommandRestTest extends JerseyTest {
 	public void copiesAvailableOfCreatedBookIsOneIfOneCopyIsDeletedAfterTwoCopiesAreAdded() {
 		Response addBookResponse = target("book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
-		target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
-		target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
+		target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
+		target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 		Response deleteCopyResponse = target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 	    DeleteCopyMessage deleteCopyMessage = deleteCopyResponse.readEntity(DeleteCopyMessage.class);
 	    Assert.assertEquals(deleteCopyMessage.getCopiesOfBook(), 1);

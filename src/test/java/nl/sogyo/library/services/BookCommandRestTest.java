@@ -87,6 +87,39 @@ public class BookCommandRestTest extends JerseyTest {
 	}
 	
 	@Test
+	public void postBookWithoutAuthorForenameGivesCommandSucceededIsFalse() {
+		BookFormInput bookFormInput = new BookFormInput("title", "", "Patni", "REST", "Appress", "9784567890120");
+	    Response response = target("book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
+	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
+	    if (addBookMessage.getCommandSucceeded()) {
+	    	deleteBook(addBookMessage.getBookId());
+	    }
+	    Assert.assertFalse(addBookMessage.getCommandSucceeded());
+	}
+	
+	@Test
+	public void postBookWithTwoAuthorsGivesCommandSucceededIsTrue() {
+		BookFormInput bookFormInput = new BookFormInput("title", "", "Sanjay", "Patni", "Arshak", "Khachatrian", "", "", "REST", "Appress", "", "9784567890120", "", "");
+	    Response response = target("book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
+	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
+	    if (addBookMessage.getCommandSucceeded()) {
+	    	deleteBook(addBookMessage.getBookId());
+	    }
+	    Assert.assertTrue(addBookMessage.getCommandSucceeded());
+	}
+	
+	@Test
+	public void postBookWithThreeAuthorsGivesCommandSucceededIsTrue() {
+		BookFormInput bookFormInput = new BookFormInput("title", "", "Sanjay", "Patni", "Arshak", "Khachatrian", "Konda", "Madhusudhan", "REST", "Appress", "", "9784567890120", "", "");
+	    Response response = target("book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
+	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
+	    if (addBookMessage.getCommandSucceeded()) {
+	    	deleteBook(addBookMessage.getBookId());
+	    }
+	    Assert.assertTrue(addBookMessage.getCommandSucceeded());
+	}
+	
+	@Test
 	public void updateNotExistingBookGivesCommandSucceededIsFalse() {
 	    Response response = target("book").path("10000000").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).put(Entity.json(bookFormInput));
 	    EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);

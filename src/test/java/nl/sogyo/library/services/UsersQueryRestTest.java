@@ -15,6 +15,8 @@ import org.junit.Test;
 import nl.sogyo.library.services.rest.libraryapi.resource.UsersResource;
 
 public class UsersQueryRestTest extends JerseyTest {
+	
+	private static final String emptyJsonArray = "[]";
 
 	@Override
 	public Application configure() {
@@ -26,7 +28,6 @@ public class UsersQueryRestTest extends JerseyTest {
 	@Test
 	public void requestForUsersWithTestIdToken1ReturnsNoUsers() {
 		String output = target("users").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).get(String.class);
-		final String emptyJsonArray = "[]";
 		Assert.assertEquals(emptyJsonArray, output);
 	}
 	
@@ -38,5 +39,17 @@ public class UsersQueryRestTest extends JerseyTest {
 				&& output.contains("\"familyName\":\"van Test\"")
 				&& output.contains("\"email\":\"tdtest@sogyo.nl\"")
 				&& output.contains("\"email\":\"tvtest@sogyo.nl\""));
+	}
+	
+	@Test
+	public void requestForUsersWithFakeIdTokenReturnsNoUsers() {
+		String output = target("users").request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").get(String.class);
+		Assert.assertEquals(emptyJsonArray, output);
+	}
+	
+	@Test
+	public void requestForUsersWithoutIdTokenReturnsNoUsers() {
+		String output = target("users").request().get(String.class);
+		Assert.assertEquals(emptyJsonArray, output);
 	}
 }

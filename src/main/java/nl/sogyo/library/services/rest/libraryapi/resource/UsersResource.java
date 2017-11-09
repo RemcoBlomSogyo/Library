@@ -40,7 +40,6 @@ public class UsersResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public EditUsersMessage editUsers(List<User> users) {
-		System.out.println("test");
 		EditUsersMessage editUsersMessage;
 		try {
 			CommandHelper commandHelper = new CommandHelper(idToken);

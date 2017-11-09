@@ -15,6 +15,8 @@ import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
 
 public class AuthorsQueryRestTest extends JerseyTest {
+	
+	private static final String emptyJsonArray = "[]";
 
 	@Override
 	public Application configure() {
@@ -39,5 +41,17 @@ public class AuthorsQueryRestTest extends JerseyTest {
 				&& output.contains(",\"surname\":\"Khachatrian\"}")
 				&& output.contains("{\"forename\":\"Sanjay\",")
 				&& output.contains(",\"surname\":\"Patni\"}"));
+	}
+	
+	@Test
+	public void requestForAuthorsWithFakeIdTokenReturnsNoAuthors() {
+		String output = target("authors").request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").get(String.class);
+		Assert.assertEquals(emptyJsonArray, output);
+	}
+	
+	@Test
+	public void requestForAuthorsWithoutIdTokenReturnsNoAuthors() {
+		String output = target("authors").request().get(String.class);
+		Assert.assertEquals(emptyJsonArray, output);
 	}
 }
