@@ -26,7 +26,8 @@ public class UsersQueryRestTest extends JerseyTest {
 	@Test
 	public void requestForUsersWithTestIdToken1ReturnsNoUsers() {
 		String output = target("users").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).get(String.class);
-		Assert.assertEquals("[]", output);
+		final String emptyJsonArray = "[]";
+		Assert.assertEquals(emptyJsonArray, output);
 	}
 	
 	@Test
