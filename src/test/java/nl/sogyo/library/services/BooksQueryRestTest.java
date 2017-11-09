@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import nl.sogyo.library.services.rest.libraryapi.resource.BooksResource;
+
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
 
 import org.glassfish.jersey.server.ContainerRequest;
@@ -44,7 +45,7 @@ public class BooksQueryRestTest extends JerseyTest {
 	
 	@Test
 	public void searchForBooksWithExistingIsbnGivesJsonOfBook() {
-		String output = target("/books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889370").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
+		String output = target("books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889370").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
 		Assert.assertTrue(output.contains("Getting Started with Polymer"));
 	}
 	
