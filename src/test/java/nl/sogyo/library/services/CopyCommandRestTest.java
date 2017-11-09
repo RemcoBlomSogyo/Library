@@ -32,7 +32,7 @@ public class CopyCommandRestTest extends JerseyTest {
 	
 	@Test
 	public void addAndDeleteCopyOfProRESTfulAPIsGivesCommandSucceededIsTrue() {
-	    Response response1 = target("book").path("46/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
+	    Response response1 = target("book").path("46/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 	    AddCopyMessage addCopyMessage = response1.readEntity(AddCopyMessage.class);
 	    if(!addCopyMessage.getCommandSucceeded()) {
 	    	Assert.fail();
@@ -45,7 +45,7 @@ public class CopyCommandRestTest extends JerseyTest {
 	
 	@Test
 	public void addCopyOfNotExistingBookGivesCommandSucceededIsFalse() {
-	    Response response = target("book").path("10000000/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
+	    Response response = target("book").path("10000000/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 	    AddCopyMessage addCopyMessage = response.readEntity(AddCopyMessage.class);
 	    Assert.assertFalse(addCopyMessage.getCommandSucceeded());
 	}
@@ -90,7 +90,7 @@ public class CopyCommandRestTest extends JerseyTest {
 	public void copiesAvailableOfCreatedBookIsOneIfOneCopyIsAdded() {
 		Response addBookResponse = target("book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
-		Response addCopyResponse = target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
+		Response addCopyResponse = target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 	    AddCopyMessage addCopyMessage = addCopyResponse.readEntity(AddCopyMessage.class);
 	    Assert.assertEquals(addCopyMessage.getCopiesOfBook(), 1);
 	}
@@ -100,7 +100,7 @@ public class CopyCommandRestTest extends JerseyTest {
 		Response addBookResponse = target("book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
-		Response addCopyResponse = target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(null);
+		Response addCopyResponse = target("book").path(addBookMessage.getBookId() + "/copy").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 	    AddCopyMessage addCopyMessage = addCopyResponse.readEntity(AddCopyMessage.class);
 	    Assert.assertEquals(addCopyMessage.getCopiesOfBook(), 2);
 	}
