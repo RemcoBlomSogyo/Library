@@ -15,9 +15,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Assert;
-import org.junit.FixMethodOrder;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import com.google.gson.Gson;
 
@@ -25,7 +24,6 @@ import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditUsersMessage;
 import nl.sogyo.library.services.rest.libraryapi.resource.UsersResource;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UsersCommandRestTest extends JerseyTest {
 
 	private static List<User> users;
@@ -37,26 +35,25 @@ public class UsersCommandRestTest extends JerseyTest {
 		return new ResourceConfig(UsersResource.class);
 	}
 	
-	@Test
-	public void test01GetUsers() {
+	@Before
+	public void getUsers() {
 		try {
 			Response response = target("users").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get();
 			users = response.readEntity(new GenericType<List<User>>(){});
-			Assert.assertTrue(true);
 		} catch (Exception e) {
 			Assert.fail();
 		}
 	}
 	
 	@Test
-	public void test02UpdateUsersWithTestIdToken1ReturnsCommandSucceededIsFalse() {
+	public void updateUsersWithTestIdToken1ReturnsCommandSucceededIsFalse() {
 		Response response = target("users").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).put(Entity.json(new Gson().toJson(users)));
 		EditUsersMessage editUsersMessage = response.readEntity(EditUsersMessage.class);
 		Assert.assertFalse(editUsersMessage.getCommandSucceeded());
 	}
 	
 	@Test
-	public void test03UpdateUsersWithTestIdToken2ReturnsCommandSucceededIsTrue() {
+	public void updateUsersWithTestIdToken2ReturnsCommandSucceededIsTrue() {
 		Response response = target("users").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).put(Entity.json(new Gson().toJson(users)));
 		EditUsersMessage editUsersMessage = response.readEntity(EditUsersMessage.class);
 		Assert.assertTrue(editUsersMessage.getCommandSucceeded());

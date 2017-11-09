@@ -9,9 +9,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Assert;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
@@ -22,10 +20,10 @@ import nl.sogyo.library.services.rest.libraryapi.resource.BookResource;
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
 import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AuthorizationRestTest extends JerseyTest {
 	
-	private static int id;
+	private static final BookFormInput addBookFormInput = new BookFormInput("title", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
+	private static final BookFormInput editBookFormInput = new BookFormInput("title2", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
 
 	@Override
 	public Application configure() {
@@ -35,121 +33,235 @@ public class AuthorizationRestTest extends JerseyTest {
 	}
 	
 	@Test
-	public void test01GetRequestForBookInfoWithIdTokenWithUserType1GivesBookInfo() {
+	public void getRequestForBookInfoWithIdTokenWithUserType1GivesBookInfo() {
 		String output = target("/book").path("47").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).get(String.class);
 		Assert.assertTrue(output.contains("Getting Started with Polymer") && output.contains("9781785889370") 
 				&& output.contains("Arshak") && output.contains("Engels"));
 	}
 	
 	@Test
-	public void test02GetRequestForBookInfoWithIdTokenWithUserType2GivesBookInfo() {
+	public void getRequestForBookInfoWithIdTokenWithUserType2GivesBookInfo() {
 		String output = target("/book").path("47").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
 		Assert.assertTrue(output.contains("Getting Started with Polymer") && output.contains("9781785889370") 
 				&& output.contains("Arshak") && output.contains("Engels"));
 	}
 	
 	@Test
-	public void test03GetRequestForBookInfoWithNoIdTokenGivesNoBookInfo() {
+	public void getRequestForBookInfoWithNoIdTokenGivesNoBookInfo() {
 		String output = target("/book").path("47").request().get(String.class);
 		Assert.assertEquals("{\"copiesAvailable\":0}", output);
 	}
 	
 	@Test
-	public void test04GetRequestForBookInfoWithFakeIdTokenGivesNoBookInfo() {
+	public void getRequestForBookInfoWithFakeIdTokenGivesNoBookInfo() {
 		String output = target("/book").path("47").request().header(ContainerRequest.AUTHORIZATION, "test").get(String.class);
 		Assert.assertEquals("{\"copiesAvailable\":0}", output);
 	}
 	
 	@Test
-	public void test05AddingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse() {
-		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-		Response response = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).post(Entity.json(bookFormInput));
+	public void addingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse() {
+		Response response = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
+		if (addBookMessage.getCommandSucceeded()) {
+			deleteBook(addBookMessage.getBookId());
+		}
 		Assert.assertFalse(addBookMessage.getCommandSucceeded());
 	}
 	
 	@Test
-	public void test06AddingBookWithNoIdTokenGivesCommandSucceededIsFalse() {
-		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-		Response response = target("/book").request().post(Entity.json(bookFormInput));
+	public void addingBookWithNoIdTokenGivesCommandSucceededIsFalse() {
+		Response response = target("/book").request().post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
+		if (addBookMessage.getCommandSucceeded()) {
+			deleteBook(addBookMessage.getBookId());
+		}
 		Assert.assertFalse(addBookMessage.getCommandSucceeded());
 	}
 	
 	@Test
-	public void test07AddingBookWithFakeIdTokenGivesCommandSucceededIsFalse() {
-		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-		Response response = target("/book").request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").post(Entity.json(bookFormInput));
+	public void addingBookWithFakeIdTokenGivesCommandSucceededIsFalse() {
+		Response response = target("/book").request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
+		if (addBookMessage.getCommandSucceeded()) {
+			deleteBook(addBookMessage.getBookId());
+		}
 		Assert.assertFalse(addBookMessage.getCommandSucceeded());
 	}
 	
 	@Test
-	public void test08AddingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
-		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-		Response response = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response response = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-		id = addBookMessage.getBookId();
+		deleteBook(addBookMessage.getBookId());
 		Assert.assertTrue(addBookMessage.getCommandSucceeded());
 	}
 	
 	@Test
-	public void test09EditingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse() {
-		BookFormInput bookFormInput = new BookFormInput("title2", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-		Response response = target("/book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).put(Entity.json(bookFormInput));
-		EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
-		Assert.assertFalse(editBookMessage.getCommandSucceeded());
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrueEditingWithIdToken1GivesCommandSucceededIsFalseDeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response addBookResponse = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
+		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		
+		if (!addBookMessage.getCommandSucceeded()) {
+			Assert.fail();
+		} else {
+			Response editBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).put(Entity.json(editBookFormInput));
+			EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
+			
+			if (editBookMessage.getCommandSucceeded()) {
+				deleteBook(addBookMessage.getBookId());
+				Assert.fail();
+			} else {
+				Response deleteBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
+				DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
+				Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+			}
+		}		
 	}
 	
 	@Test
-	public void test10EditingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
-		BookFormInput bookFormInput = new BookFormInput("title2", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-		Response response = target("/book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).put(Entity.json(bookFormInput));
-		EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
-		Assert.assertTrue(editBookMessage.getCommandSucceeded());
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrueEditingWithFakeIdTokenGivesCommandSucceededIsFalseDeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response addBookResponse = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
+		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		
+		if (!addBookMessage.getCommandSucceeded()) {
+			Assert.fail();
+		} else {
+			Response editBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").put(Entity.json(editBookFormInput));
+			EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
+			
+			if (editBookMessage.getCommandSucceeded()) {
+				deleteBook(addBookMessage.getBookId());
+				Assert.fail();
+			} else {
+				Response deleteBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
+				DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
+				Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+			}
+		}		
 	}
 	
 	@Test
-	public void test11EditingBookWithNoIdTokenGivesCommandSucceededIsFalse() {
-		BookFormInput bookFormInput = new BookFormInput("title2", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-		Response response = target("/book").path(Integer.toString(id)).request().put(Entity.json(bookFormInput));
-		EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
-		Assert.assertFalse(editBookMessage.getCommandSucceeded());
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrueEditingWithNoIdTokenGivesCommandSucceededIsFalseDeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response addBookResponse = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
+		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		
+		if (!addBookMessage.getCommandSucceeded()) {
+			Assert.fail();
+		} else {
+			Response editBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().put(Entity.json(editBookFormInput));
+			EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
+			
+			if (editBookMessage.getCommandSucceeded()) {
+				deleteBook(addBookMessage.getBookId());
+				Assert.fail();
+			} else {
+				Response deleteBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
+				DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
+				Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+			}
+		}		
 	}
 	
 	@Test
-	public void test12EditingBookWithFakeIdTokenGivesCommandSucceededIsFalse() {
-		BookFormInput bookFormInput = new BookFormInput("title2", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
-		Response response = target("/book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").put(Entity.json(bookFormInput));
-		EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
-		Assert.assertFalse(editBookMessage.getCommandSucceeded());
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrueEditingWithIdToken2GivesCommandSucceededIsTrueDeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response addBookResponse = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
+		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		
+		if (!addBookMessage.getCommandSucceeded()) {
+			Assert.fail();
+		} else {
+			Response editBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).put(Entity.json(editBookFormInput));
+			EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
+			
+			if (!editBookMessage.getCommandSucceeded()) {
+				deleteBook(addBookMessage.getBookId());
+				Assert.fail();
+			} else {
+				Response deleteBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
+				DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
+				Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+			}
+		}		
 	}
 	
 	@Test
-	public void test13DeletingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse() {
-		Response response = target("/book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).delete();
-		DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
-		Assert.assertFalse(deleteBookMessage.getCommandSucceeded());
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrueDeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response addBookResponse = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
+		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		
+		if (!addBookMessage.getCommandSucceeded()) {
+			Assert.fail();
+		} else {
+			Response deleteBookResponse = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
+			DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
+			Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+		}		
 	}
 	
 	@Test
-	public void test14DeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
-		Response response = target("/book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
-		DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
-		Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrueDeletingWithIdToken1GivesCommandSucceededIsFalseDeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response addBookResponse = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
+		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		
+		if (!addBookMessage.getCommandSucceeded()) {
+			Assert.fail();
+		} else {
+			Response deleteBookResponse1 = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).delete();
+			DeleteBookMessage deleteBookMessage1 = deleteBookResponse1.readEntity(DeleteBookMessage.class);
+
+			if (deleteBookMessage1.getCommandSucceeded()) {
+				Assert.fail();
+			} else {
+				Response deleteBookResponse2 = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
+				DeleteBookMessage deleteBookMessage2 = deleteBookResponse2.readEntity(DeleteBookMessage.class);
+				Assert.assertTrue(deleteBookMessage2.getCommandSucceeded());
+			}
+		}		
 	}
 	
 	@Test
-	public void test15DeletingBookWithNoIdTokenGivesCommandSucceededIsFalse() {
-		Response response = target("/book").path(Integer.toString(id)).request().delete();
-		DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
-		Assert.assertFalse(deleteBookMessage.getCommandSucceeded());
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrueDeletingWithFakeIdTokenGivesCommandSucceededIsFalseDeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response addBookResponse = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
+		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		
+		if (!addBookMessage.getCommandSucceeded()) {
+			Assert.fail();
+		} else {
+			Response deleteBookResponse1 = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").delete();
+			DeleteBookMessage deleteBookMessage1 = deleteBookResponse1.readEntity(DeleteBookMessage.class);
+			
+			if (deleteBookMessage1.getCommandSucceeded()) {
+				Assert.fail();
+			} else {
+				Response deleteBookResponse2 = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
+				DeleteBookMessage deleteBookMessage2 = deleteBookResponse2.readEntity(DeleteBookMessage.class);
+				Assert.assertTrue(deleteBookMessage2.getCommandSucceeded());
+			}
+		}		
 	}
 	
 	@Test
-	public void test16DeletingBookWithFakeIdTokenGivesCommandSucceededIsFalse() {
-		Response response = target("/book").path(Integer.toString(id)).request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").delete();
-		DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
-		Assert.assertFalse(deleteBookMessage.getCommandSucceeded());
+	public void addingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrueDeletingWithNoIdTokenGivesCommandSucceededIsFalseDeletingBookWithIdTokenWithUserType2GivesCommandSucceededIsTrue() {
+		Response addBookResponse = target("/book").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
+		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		
+		if (!addBookMessage.getCommandSucceeded()) {
+			Assert.fail();
+		} else {
+			Response deleteBookResponse1 = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().delete();
+			DeleteBookMessage deleteBookMessage1 = deleteBookResponse1.readEntity(DeleteBookMessage.class);
+			
+			if (deleteBookMessage1.getCommandSucceeded()) {
+				Assert.fail();
+			} else {
+				Response deleteBookResponse2 = target("/book").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
+				DeleteBookMessage deleteBookMessage2 = deleteBookResponse2.readEntity(DeleteBookMessage.class);
+				Assert.assertTrue(deleteBookMessage2.getCommandSucceeded());
+			}
+		}		
+	}
+	
+	private void deleteBook(int bookId) {
+		target("/book").path(Integer.toString(bookId)).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 	}
 }
