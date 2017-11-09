@@ -29,8 +29,7 @@ public class CommandHelper extends LibraryHelper {
 		if (databaseHandler.isUserAuthorized(googleUser.getUserId(), USERTYPE_ADMIN)) {
 			int bookId;
 			List<Author> authors = getAuthorsFromBookFormInput(bookFormInput);
-			
-			System.out.println("test libary: " + bookFormInput.getTitle());
+
 			try {
 				Book book = new Book(bookFormInput.getId(), bookFormInput.getTitle(),
 						bookFormInput.getSubtitle(), authors, bookFormInput.getCategory(),
@@ -41,7 +40,6 @@ public class CommandHelper extends LibraryHelper {
 				System.out.println(e.getMessage());
 				bookId = -2;
 			}
-			System.out.println("bookId out of try: " + bookId);
 			return new AddBookMessage(bookId);
 		} else {
 			return new AddBookMessage(-3);
@@ -51,8 +49,6 @@ public class CommandHelper extends LibraryHelper {
 	public AddCopyMessage addCopy(int bookId) {
 		if (databaseHandler.isUserAuthorized(googleUser.getUserId(), USERTYPE_ADMIN)) {
 			AddCopyMessage addCopyMessage = databaseHandler.insertCopy(bookId);
-			System.out.println("Copymessage: " + addCopyMessage.getCommandSucceeded());
-			System.out.println("Copymessage: " + addCopyMessage.getCopiesOfBook());
 			return addCopyMessage;
 		} else {
 			return new AddCopyMessage(false, 0);
@@ -72,7 +68,6 @@ public class CommandHelper extends LibraryHelper {
 			} catch (IllegalArgumentException e) {
 				commandSucceeded = false;
 			}
-			System.out.println("commandsucceeded: " + commandSucceeded);
 			return new EditBookMessage(commandSucceeded);
 		} else {
 			return new EditBookMessage(false);
