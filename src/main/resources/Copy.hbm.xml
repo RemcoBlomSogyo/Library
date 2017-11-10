@@ -10,5 +10,7 @@
       	</id>
        	<many-to-one name="book" class="nl.sogyo.library.model.entity.Book"
         	column="BookID" not-null="true" cascade="all"/>
+        <many-to-one name="user" class="nl.sogyo.library.model.entity.User"
+        	column="UserID" not-null="false" cascade="all"/>	
    	</class>
 </hibernate-mapping>
