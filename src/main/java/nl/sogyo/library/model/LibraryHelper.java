@@ -13,8 +13,8 @@ public abstract class LibraryHelper {
 
 	protected GoogleUser googleUser;
 	protected DatabaseHandler databaseHandler;
-	protected static final int USERTYPE_USER = 1;
-	protected static final int USERTYPE_ADMIN = 2;
+	protected static final byte USERTYPE_USER = 1;
+	protected static final byte USERTYPE_ADMIN = 2;
 	
 	public LibraryHelper(String idToken) throws IOException, GeneralSecurityException, EmailNotVerifiedException, InvalidTokenException {
 		googleUser = TokenParser.getGoogleUserFromToken(idToken);

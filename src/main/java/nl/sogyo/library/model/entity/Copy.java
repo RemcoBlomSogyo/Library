@@ -4,6 +4,7 @@ public class Copy {
 
 	private int id;
 	private Book book;
+	private User user;
 	
 	public Copy() {}
 	
@@ -31,5 +32,13 @@ public class Copy {
 	
 	public void setBook(Book book) {
 		this.book = book;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

@@ -104,7 +104,7 @@ public class BooksResource {
 	}
 	
 	@POST
-	@Path("{bookId}/copy")
+	@Path("{bookId}/copies")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public AddCopyMessage addCopy(@PathParam("bookId") int bookId) {
@@ -119,7 +119,7 @@ public class BooksResource {
 	}
 	
 	@DELETE
-	@Path("{bookId}/copy")
+	@Path("{bookId}/copies")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public DeleteCopyMessage deleteCopy(@PathParam("bookId") int bookId) {

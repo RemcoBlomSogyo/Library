@@ -382,7 +382,7 @@ public class DatabaseHandler {
 		return registerMessage;
 	}
 	
-	public boolean isUserAuthorized(String googleUserId, int minimumUserType) {
+	public boolean isUserAuthorized(String googleUserId, byte minimumUserType) {
 		boolean userAuthorized = false;
 		
 		try {
@@ -393,9 +393,26 @@ public class DatabaseHandler {
 			session.createQuery(userQuery).setMaxResults(1).getSingleResult();
 			userAuthorized = true;
 			transaction.commit();
-		} catch (NoResultException e) {
-			// userAuthorized is still false
-		} catch (HibernateException e) {
+		} catch (Exception e) {
+			rollbackTransaction(e);
+		} finally {
+			connector.disconnect(session);
+		}
+		return userAuthorized;
+	}
+	
+	public boolean isUserAuthorized(String googleUserId, int userId) {
+		boolean userAuthorized = false;
+		
+		try {
+			initialize();
+			userQuery.select(userRoot).where(criteriaBuilder.and(
+					criteriaBuilder.equal(userRoot.get("googleUserId"), googleUserId),
+					criteriaBuilder.equal(userRoot.get("id"), userId)));
+			session.createQuery(userQuery).setMaxResults(1).getSingleResult();
+			userAuthorized = true;
+			transaction.commit();
+		} catch (Exception e) {
 			rollbackTransaction(e);
 		} finally {
 			connector.disconnect(session);
@@ -417,6 +434,28 @@ public class DatabaseHandler {
 		} finally {
 			connector.disconnect(session);
 		}
+	}
+	
+	public boolean borrowCopy(int userId, int bookId) {
+		boolean commandSucceeded = false;
+		try {
+			initialize();
+			User user = session.get(User.class, userId);
+			Book book = session.get(Book.class, bookId);
+			if (book != null) {
+				copyQuery.select(copyRoot).where(criteriaBuilder.and(
+						criteriaBuilder.equal(copyRoot.get("book"), book),
+						criteriaBuilder.equal(copyRoot.get("user"), null)));
+				Copy copy = session.createQuery(copyQuery).setMaxResults(1).getSingleResult();
+				copy.setUser(user);
+				session.update(copy);
+				commandSucceeded = true;
+			}
+			transaction.commit();
+		} catch (Exception e) {
+			rollbackTransaction(e);
+		}
+		return commandSucceeded;
 	}
 	
 	private User getUser(User incompleteUser) {
@@ -534,7 +573,7 @@ public class DatabaseHandler {
 		}
 	}
 	
-	private void rollbackTransaction(HibernateException e) {
+	private void rollbackTransaction(Exception e) {
 		System.err.println("ERRORMESSAGE: " + e.getMessage());
 		if (transaction != null) {
 			transaction.rollback();

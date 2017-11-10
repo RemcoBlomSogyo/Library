@@ -12,6 +12,7 @@ import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.BorrowCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
@@ -100,6 +101,16 @@ public class CommandHelper extends LibraryHelper {
 			return editUsersMessage;
 		} else {
 			return new EditUsersMessage(false);
+		}
+	}
+	
+	public BorrowCopyMessage borrowCopy(int userId, int bookId) {
+		if (databaseHandler.isUserAuthorized(googleUser.getUserId(), userId)) {
+			boolean commandSucceeded = databaseHandler.borrowCopy(userId, bookId);
+			BorrowCopyMessage borrowCopyMessage = new BorrowCopyMessage(commandSucceeded);
+			return borrowCopyMessage;
+		} else {
+			return new BorrowCopyMessage(false);
 		}
 	}
 	
