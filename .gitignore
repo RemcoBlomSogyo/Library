@@ -1,5 +1,9 @@
+# Files and folders ignored by Git
 
-.settings/
+# compiled output
 target/
+
+# IDEs and editors
+.settings/
 .classpath
 .project

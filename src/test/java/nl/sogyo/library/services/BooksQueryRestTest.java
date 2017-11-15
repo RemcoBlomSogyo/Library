@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 
 public class BooksQueryRestTest extends JerseyTest {
 	
+	private static final String emptyJsonArray = "[]";
 	@Override
 	public Application configure() {
 		enable(TestProperties.LOG_TRAFFIC);
@@ -34,13 +35,13 @@ public class BooksQueryRestTest extends JerseyTest {
 	@Test
 	public void searchForBooksWithoutQueryValuesGivesEmptyArray() {
 		String output = target("books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
-		Assert.assertEquals("[]", output);
+		Assert.assertEquals(emptyJsonArray, output);
 	}
 	
 	@Test
 	public void searchForBooksWithNotExistingIsbnGivesEmptyArray() {
 		String output = target("books").queryParam("title", "").queryParam("author", "").queryParam("isbn", "9781785889372").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
-		Assert.assertEquals("[]", output);
+		Assert.assertEquals(emptyJsonArray, output);
 	}
 	
 	@Test
@@ -64,13 +65,13 @@ public class BooksQueryRestTest extends JerseyTest {
 	@Test
 	public void searchForBooksOfNotExistingAuthorGivesEmptyArray() {
 		String output = target("books").queryParam("title", "").queryParam("author", "Schaapgeitkoekip").queryParam("isbn", "").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
-		Assert.assertEquals("[]", output);
+		Assert.assertEquals(emptyJsonArray, output);
 	}
 	
 	@Test
 	public void searchForBooksOfNotExistingForenameAndSurnameGivesEmptyArray() {
 		String output = target("books").queryParam("title", "").queryParam("author", "Henk Westbroek").queryParam("isbn", "").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
-		Assert.assertEquals("[]", output);
+		Assert.assertEquals(emptyJsonArray, output);
 	}
 	
 	@Test
@@ -82,7 +83,7 @@ public class BooksQueryRestTest extends JerseyTest {
 	@Test
 	public void searchForNotExistingWordInAnyTitleGivesEmptyArray() {
 		String output = target("books").queryParam("title", "jongbelegenkaas").queryParam("author", "").queryParam("isbn", "").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).get(String.class);
-		Assert.assertEquals("[]", output);
+		Assert.assertEquals(emptyJsonArray, output);
 	}
 	
 	@Test
