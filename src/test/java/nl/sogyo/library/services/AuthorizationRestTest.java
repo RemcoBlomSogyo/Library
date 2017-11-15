@@ -49,13 +49,13 @@ public class AuthorizationRestTest extends JerseyTest {
 	@Test
 	public void getRequestForBookInfoWithNoIdTokenGivesNoBookInfo() {
 		String output = target("books").path("47").request().get(String.class);
-		Assert.assertEquals("{\"copiesAvailable\":0}", output);
+		Assert.assertTrue(output.contains("\"copiesAvailable\":0") && output.contains("\"copiesBorrowed\":0"));
 	}
 	
 	@Test
 	public void getRequestForBookInfoWithFakeIdTokenGivesNoBookInfo() {
 		String output = target("books").path("47").request().header(ContainerRequest.AUTHORIZATION, "test").get(String.class);
-		Assert.assertEquals("{\"copiesAvailable\":0}", output);
+		Assert.assertTrue(output.contains("\"copiesAvailable\":0") && output.contains("\"copiesBorrowed\":0"));
 	}
 	
 	@Test

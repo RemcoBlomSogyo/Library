@@ -48,7 +48,6 @@ public class DatabaseHandler {
 	private List<Book> books;
 	private List<Book> booksWithTitleInput;
 	private List<Author> authors;
-	private List<Copy> copies;
 	private List<User> users;
 	
 	private Book book;
