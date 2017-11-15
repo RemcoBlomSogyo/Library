@@ -4,6 +4,7 @@ public class RegisterMessage extends Message {
 
 	private boolean userInTable;
 	private String errorDescription;
+	private int userId;
 	private String userGivenName;
 	private String userFamilyName;
 	private byte userType;
@@ -13,10 +14,11 @@ public class RegisterMessage extends Message {
 	public RegisterMessage() {}
 	
 	public RegisterMessage(boolean commandSucceeded, boolean userInTable, String errorDescription,
-			String userGivenName, String userFamilyName, byte userType) {
+			int userId, String userGivenName, String userFamilyName, byte userType) {
 		super(commandSucceeded, messagePositive, messageNegative);
 		this.userInTable = userInTable;
 		this.errorDescription = errorDescription;
+		this.userId = userId;
 		this.userGivenName = userGivenName;
 		this.userFamilyName = userFamilyName;
 		this.userType = userType;
@@ -36,6 +38,14 @@ public class RegisterMessage extends Message {
 
 	public void setErrorDescription(String errorDescription) {
 		this.errorDescription = errorDescription;
+	}
+	
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 	public String getUserGivenName() {

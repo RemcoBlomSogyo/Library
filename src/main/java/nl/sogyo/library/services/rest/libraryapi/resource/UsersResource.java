@@ -50,7 +50,7 @@ public class UsersResource {
 			registerMessage = registerHelper.registerUser();
 		} catch (Exception e) {
 			System.out.println("exception register: " + e.getMessage());
-			registerMessage = new RegisterMessage(false, false, "Token is not verified", "", "", (byte) 0);
+			registerMessage = new RegisterMessage(false, false, "Token is not verified", 0, "", "", (byte) 0);
 		}
 		return registerMessage;
 	}
@@ -76,10 +76,14 @@ public class UsersResource {
 	public BorrowCopyMessage borrowCopy(@PathParam("userId") int userId, @PathParam("bookId") int bookId) {
 		BorrowCopyMessage borrowCopyMessage;
 		try {
+			System.out.println("borrow rest try 1");
 			CommandHelper commandHelper = new CommandHelper(idToken);
+			System.out.println("borrow rest try 2");
 			borrowCopyMessage = commandHelper.borrowCopy(userId, bookId);
+			System.out.println("borrow rest try 3");
 		} catch (Exception e) {
-			borrowCopyMessage = new BorrowCopyMessage(false);
+			System.out.println("borrow rest catch 1");
+			borrowCopyMessage = new BorrowCopyMessage(false, 0, 0);
 		}
 		return borrowCopyMessage;
 	}

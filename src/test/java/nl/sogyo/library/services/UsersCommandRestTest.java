@@ -49,13 +49,13 @@ public class UsersCommandRestTest extends JerseyTest {
 	public void updateUsersWithTestIdToken1ReturnsCommandSucceededIsFalse() {
 		Response response = target("users").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).put(Entity.json(new Gson().toJson(users)));
 		EditUsersMessage editUsersMessage = response.readEntity(EditUsersMessage.class);
-		Assert.assertFalse(editUsersMessage.getCommandSucceeded());
+		Assert.assertFalse(editUsersMessage.isCommandSucceeded());
 	}
 	
 	@Test
 	public void updateUsersWithTestIdToken2ReturnsCommandSucceededIsTrue() {
 		Response response = target("users").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).put(Entity.json(new Gson().toJson(users)));
 		EditUsersMessage editUsersMessage = response.readEntity(EditUsersMessage.class);
-		Assert.assertTrue(editUsersMessage.getCommandSucceeded());
+		Assert.assertTrue(editUsersMessage.isCommandSucceeded());
 	}
 }

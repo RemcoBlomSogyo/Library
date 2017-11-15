@@ -11,6 +11,7 @@ import nl.sogyo.library.model.entity.Book;
 import nl.sogyo.library.model.entity.Category;
 import nl.sogyo.library.model.entity.Copy;
 import nl.sogyo.library.model.entity.Publisher;
+import nl.sogyo.library.model.entity.User;
 
 public class DatabaseConnector {
 
@@ -38,6 +39,7 @@ public class DatabaseConnector {
 		configuration.addAnnotatedClass(Category.class);
 		configuration.addAnnotatedClass(Publisher.class);
 		configuration.addAnnotatedClass(Copy.class);
+		configuration.addAnnotatedClass(User.class);
 		configuration.addResource("Book.hbm.xml");
 		configuration.addResource("Author.hbm.xml");
 		configuration.addResource("Category.hbm.xml");

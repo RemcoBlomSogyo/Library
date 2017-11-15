@@ -62,30 +62,30 @@ public class AuthorizationRestTest extends JerseyTest {
 	public void addingBookWithIdTokenWithUserType1GivesCommandSucceededIsFalse() {
 		Response response = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-		if (addBookMessage.getCommandSucceeded()) {
+		if (addBookMessage.isCommandSucceeded()) {
 			deleteBook(addBookMessage.getBookId());
 		}
-		Assert.assertFalse(addBookMessage.getCommandSucceeded());
+		Assert.assertFalse(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
 	public void addingBookWithNoIdTokenGivesCommandSucceededIsFalse() {
 		Response response = target("books").request().post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-		if (addBookMessage.getCommandSucceeded()) {
+		if (addBookMessage.isCommandSucceeded()) {
 			deleteBook(addBookMessage.getBookId());
 		}
-		Assert.assertFalse(addBookMessage.getCommandSucceeded());
+		Assert.assertFalse(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
 	public void addingBookWithFakeIdTokenGivesCommandSucceededIsFalse() {
 		Response response = target("books").request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-		if (addBookMessage.getCommandSucceeded()) {
+		if (addBookMessage.isCommandSucceeded()) {
 			deleteBook(addBookMessage.getBookId());
 		}
-		Assert.assertFalse(addBookMessage.getCommandSucceeded());
+		Assert.assertFalse(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
@@ -93,7 +93,7 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response response = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
 		deleteBook(addBookMessage.getBookId());
-		Assert.assertTrue(addBookMessage.getCommandSucceeded());
+		Assert.assertTrue(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
@@ -101,19 +101,19 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		
-		if (!addBookMessage.getCommandSucceeded()) {
+		if (!addBookMessage.isCommandSucceeded()) {
 			Assert.fail();
 		} else {
 			Response editBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).put(Entity.json(editBookFormInput));
 			EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
 			
-			if (editBookMessage.getCommandSucceeded()) {
+			if (editBookMessage.isCommandSucceeded()) {
 				deleteBook(addBookMessage.getBookId());
 				Assert.fail();
 			} else {
 				Response deleteBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 				DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
-				Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+				Assert.assertTrue(deleteBookMessage.isCommandSucceeded());
 			}
 		}		
 	}
@@ -123,19 +123,19 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		
-		if (!addBookMessage.getCommandSucceeded()) {
+		if (!addBookMessage.isCommandSucceeded()) {
 			Assert.fail();
 		} else {
 			Response editBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").put(Entity.json(editBookFormInput));
 			EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
 			
-			if (editBookMessage.getCommandSucceeded()) {
+			if (editBookMessage.isCommandSucceeded()) {
 				deleteBook(addBookMessage.getBookId());
 				Assert.fail();
 			} else {
 				Response deleteBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 				DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
-				Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+				Assert.assertTrue(deleteBookMessage.isCommandSucceeded());
 			}
 		}		
 	}
@@ -145,19 +145,19 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		
-		if (!addBookMessage.getCommandSucceeded()) {
+		if (!addBookMessage.isCommandSucceeded()) {
 			Assert.fail();
 		} else {
 			Response editBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().put(Entity.json(editBookFormInput));
 			EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
 			
-			if (editBookMessage.getCommandSucceeded()) {
+			if (editBookMessage.isCommandSucceeded()) {
 				deleteBook(addBookMessage.getBookId());
 				Assert.fail();
 			} else {
 				Response deleteBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 				DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
-				Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+				Assert.assertTrue(deleteBookMessage.isCommandSucceeded());
 			}
 		}		
 	}
@@ -167,19 +167,19 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		
-		if (!addBookMessage.getCommandSucceeded()) {
+		if (!addBookMessage.isCommandSucceeded()) {
 			Assert.fail();
 		} else {
 			Response editBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).put(Entity.json(editBookFormInput));
 			EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
 			
-			if (!editBookMessage.getCommandSucceeded()) {
+			if (!editBookMessage.isCommandSucceeded()) {
 				deleteBook(addBookMessage.getBookId());
 				Assert.fail();
 			} else {
 				Response deleteBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 				DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
-				Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+				Assert.assertTrue(deleteBookMessage.isCommandSucceeded());
 			}
 		}		
 	}
@@ -189,12 +189,12 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		
-		if (!addBookMessage.getCommandSucceeded()) {
+		if (!addBookMessage.isCommandSucceeded()) {
 			Assert.fail();
 		} else {
 			Response deleteBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 			DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
-			Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+			Assert.assertTrue(deleteBookMessage.isCommandSucceeded());
 		}		
 	}
 	
@@ -203,18 +203,18 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		
-		if (!addBookMessage.getCommandSucceeded()) {
+		if (!addBookMessage.isCommandSucceeded()) {
 			Assert.fail();
 		} else {
 			Response deleteBookResponse1 = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_1).delete();
 			DeleteBookMessage deleteBookMessage1 = deleteBookResponse1.readEntity(DeleteBookMessage.class);
 
-			if (deleteBookMessage1.getCommandSucceeded()) {
+			if (deleteBookMessage1.isCommandSucceeded()) {
 				Assert.fail();
 			} else {
 				Response deleteBookResponse2 = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 				DeleteBookMessage deleteBookMessage2 = deleteBookResponse2.readEntity(DeleteBookMessage.class);
-				Assert.assertTrue(deleteBookMessage2.getCommandSucceeded());
+				Assert.assertTrue(deleteBookMessage2.isCommandSucceeded());
 			}
 		}		
 	}
@@ -224,18 +224,18 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		
-		if (!addBookMessage.getCommandSucceeded()) {
+		if (!addBookMessage.isCommandSucceeded()) {
 			Assert.fail();
 		} else {
 			Response deleteBookResponse1 = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, "fakeIdToken").delete();
 			DeleteBookMessage deleteBookMessage1 = deleteBookResponse1.readEntity(DeleteBookMessage.class);
 			
-			if (deleteBookMessage1.getCommandSucceeded()) {
+			if (deleteBookMessage1.isCommandSucceeded()) {
 				Assert.fail();
 			} else {
 				Response deleteBookResponse2 = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 				DeleteBookMessage deleteBookMessage2 = deleteBookResponse2.readEntity(DeleteBookMessage.class);
-				Assert.assertTrue(deleteBookMessage2.getCommandSucceeded());
+				Assert.assertTrue(deleteBookMessage2.isCommandSucceeded());
 			}
 		}		
 	}
@@ -245,18 +245,18 @@ public class AuthorizationRestTest extends JerseyTest {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(addBookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
 		
-		if (!addBookMessage.getCommandSucceeded()) {
+		if (!addBookMessage.isCommandSucceeded()) {
 			Assert.fail();
 		} else {
 			Response deleteBookResponse1 = target("books").path(Integer.toString(addBookMessage.getBookId())).request().delete();
 			DeleteBookMessage deleteBookMessage1 = deleteBookResponse1.readEntity(DeleteBookMessage.class);
 			
-			if (deleteBookMessage1.getCommandSucceeded()) {
+			if (deleteBookMessage1.isCommandSucceeded()) {
 				Assert.fail();
 			} else {
 				Response deleteBookResponse2 = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 				DeleteBookMessage deleteBookMessage2 = deleteBookResponse2.readEntity(DeleteBookMessage.class);
-				Assert.assertTrue(deleteBookMessage2.getCommandSucceeded());
+				Assert.assertTrue(deleteBookMessage2.isCommandSucceeded());
 			}
 		}		
 	}

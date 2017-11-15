@@ -18,6 +18,12 @@ public class Copy {
 		this.book = book;
 	}
 	
+	public Copy(int id, Book book, User user) {
+		this.id = id;
+		this.book = book;
+		this.user = user;
+	}
+	
 	public int getId() {
 		return id;
 	}

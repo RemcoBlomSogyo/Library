@@ -16,19 +16,19 @@ public abstract class Message {
 			this.message = messageNegative;
 		}
 	}
-	
-	public boolean getCommandSucceeded() {
+
+	public boolean isCommandSucceeded() {
 		return commandSucceeded;
 	}
-	
+
 	public void setCommandSucceeded(boolean commandSucceeded) {
 		this.commandSucceeded = commandSucceeded;
 	}
-	
+
 	public String getMessage() {
 		return message;
 	}
-	
+
 	public void setMessage(String message) {
 		this.message = message;
 	}

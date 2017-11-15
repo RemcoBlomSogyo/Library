@@ -24,6 +24,7 @@ import nl.sogyo.library.model.entity.Publisher;
 import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
+import nl.sogyo.library.services.rest.libraryapi.json.message.BorrowCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.RegisterMessage;
 
@@ -181,7 +182,8 @@ public class DatabaseHandler {
 	}
 	
 	public BookInfo selectBookById(int id) {
-		int numberCopies = 0;
+		long copiesAvailable = 0;
+		long copiesBorrowed = 0;
 		
 		try {
 			initialize();
@@ -189,20 +191,20 @@ public class DatabaseHandler {
 			if (book == null) {
 				book = new Book(0, "", "", new ArrayList<Author>(), "", "", (short) 0, "", (short) 0, "");
 			} else {
+				copiesAvailable = getCopiesAvailable(book.getId());
+				copiesBorrowed = getCopiesBorrowed(book.getId());
 				initializeReferencedEntities(book);
 			}
 			
-			copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book").get("id"), id));
-			copies = (List<Copy>) session.createQuery(copyQuery).list();
-			numberCopies = copies.size();
 			transaction.commit();
 		} catch (HibernateException e) {
+			System.out.println("hibernateexception");
 			rollbackTransaction(e);
 		} finally {
 			connector.disconnect(session);
 		}
 		
-		BookInfo bookInfo = new BookInfo(book, numberCopies);
+		BookInfo bookInfo = new BookInfo(book, copiesAvailable, copiesBorrowed);
 		return bookInfo;
 	}
 	
@@ -249,13 +251,10 @@ public class DatabaseHandler {
 			} else {
 				copy = new Copy(book);
 				session.save(copy);
-
-				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
-				copies = (List<Copy>) session.createQuery(copyQuery).list();
-				int numberCopies = copies.size();
+				long copiesAvailable = getCopiesAvailable(book.getId());
 				
 				transaction.commit();
-				return new AddCopyMessage(true, numberCopies);
+				return new AddCopyMessage(true, copiesAvailable);
 			}
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
@@ -266,35 +265,34 @@ public class DatabaseHandler {
 	}
 	
 	public DeleteCopyMessage deleteCopy(int bookId) {
+		DeleteCopyMessage deleteCopyMessage;
 		try {
 			initialize();
 			book = session.get(Book.class, bookId);
 			if (book == null) {
 				throw new HibernateException("Book ID is not in table");
 			} else {
-				copyQuery.select(copyRoot).where(criteriaBuilder.equal(copyRoot.get("book"), book));
-				copies = (List<Copy>) session.createQuery(copyQuery).list();
-				if (copies.size() == 0) {
-					throw new HibernateException("TEST0 No copies of book in table");
-				} else {
-					copy = copies.remove(0);
-					copy.setBook(null);
-					session.delete(copy);
-				}
+				copyQuery.select(copyRoot).where(criteriaBuilder.and(criteriaBuilder.equal(copyRoot.get("book"), book), criteriaBuilder.isNull(copyRoot.get("user"))));
+				copy = session.createQuery(copyQuery).setMaxResults(1).getSingleResult();
+				System.out.println(copy == null);
+				copy.setBook(null);
+				session.delete(copy);
 				
-				int numberCopies = copies.size();
+				long copiesAvailable = getCopiesAvailable(book.getId());
 				transaction.commit();
-				return new DeleteCopyMessage(true, numberCopies);
+				deleteCopyMessage = new DeleteCopyMessage(true, copiesAvailable);
 			}
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
-			return new DeleteCopyMessage(false, 0);
+			deleteCopyMessage = new DeleteCopyMessage(false, 0);
 		} finally {
 			connector.disconnect(session);
 		}
+		return deleteCopyMessage;
 	}
 	
 	public boolean deleteBookAndCopies(int bookId) {
+		boolean commandSucceeded = false;
 		try {
 			initialize();
 			book = session.get(Book.class, bookId);
@@ -311,14 +309,14 @@ public class DatabaseHandler {
 				bookDelete.where(criteriaBuilder.equal(bookRoot.get("id"), bookId));
 				session.createQuery(bookDelete).executeUpdate();
 				transaction.commit();
-				return true;
+				commandSucceeded = true;
 			}
 		} catch (HibernateException e) {
 			rollbackTransaction(e);
-			return false;
 		} finally {
 			connector.disconnect(session);
 		}
+		return commandSucceeded;
 	}
 	
 	public List<Author> selectAllAuthors() {
@@ -374,10 +372,10 @@ public class DatabaseHandler {
 		RegisterMessage registerMessage = null;
 		try {
 			registerMessage = new RegisterMessage(commandSucceeded, userInTable, errorDescription,
-				user.getGivenName(), user.getFamilyName(), user.getUserType());
+				user.getId(), user.getGivenName(), user.getFamilyName(), user.getUserType());
 		} catch (NullPointerException e) {
 			registerMessage = new RegisterMessage(commandSucceeded, userInTable, errorDescription,
-					"", "", (byte) 0);
+					0, "", "", (byte) 0);
 		}
 		return registerMessage;
 	}
@@ -436,26 +434,38 @@ public class DatabaseHandler {
 		}
 	}
 	
-	public boolean borrowCopy(int userId, int bookId) {
+	public BorrowCopyMessage borrowCopy(int userId, int bookId) {
 		boolean commandSucceeded = false;
+		long copiesBorrowed = 0;
+		long copiesAvailable = 0;
+		
 		try {
 			initialize();
 			User user = session.get(User.class, userId);
 			Book book = session.get(Book.class, bookId);
+			
 			if (book != null) {
-				copyQuery.select(copyRoot).where(criteriaBuilder.and(
-						criteriaBuilder.equal(copyRoot.get("book"), book),
-						criteriaBuilder.equal(copyRoot.get("user"), null)));
-				Copy copy = session.createQuery(copyQuery).setMaxResults(1).getSingleResult();
-				copy.setUser(user);
-				session.update(copy);
-				commandSucceeded = true;
+				copiesBorrowed = getCopiesBorrowed(book.getId());
+				copiesAvailable = getCopiesAvailable(book.getId());
+				
+				if (copiesAvailable > 0) {
+					copyQuery.select(copyRoot).where(criteriaBuilder.and(
+							criteriaBuilder.equal(copyRoot.get("book"), book),
+							criteriaBuilder.isNull(copyRoot.get("user"))));
+					Copy copy = session.createQuery(copyQuery).setMaxResults(1).getSingleResult();
+					copy.setUser(user);
+					session.update(copy);
+					commandSucceeded = true;
+					copiesBorrowed++;
+					copiesAvailable--;
+				}
 			}
 			transaction.commit();
 		} catch (Exception e) {
 			rollbackTransaction(e);
 		}
-		return commandSucceeded;
+		BorrowCopyMessage borrowCopyMessage = new BorrowCopyMessage(commandSucceeded, copiesAvailable, copiesBorrowed);
+		return borrowCopyMessage;
 	}
 	
 	private User getUser(User incompleteUser) {
@@ -571,6 +581,26 @@ public class DatabaseHandler {
 				}
 			}
 		}
+	}
+	
+	private long getCopiesAvailable(int bookId) {
+		long copiesAvailable = 0;
+		try {
+			copiesAvailable = (long) session.createQuery("select count(*) from Copy where bookId = " + bookId + " and userId is null").getSingleResult();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return copiesAvailable;
+	}
+	
+	private long getCopiesBorrowed(int bookId) {
+		long copiesBorrowed = 0;
+		try {
+			copiesBorrowed = (long) session.createQuery("select count(*) from Copy where bookId = " + bookId + " and userId is not null").getSingleResult();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return copiesBorrowed;
 	}
 	
 	private void rollbackTransaction(Exception e) {

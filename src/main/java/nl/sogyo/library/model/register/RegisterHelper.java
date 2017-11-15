@@ -27,7 +27,7 @@ public class RegisterHelper extends LibraryHelper {
 			System.out.println("registerUser");
 			registerMessage = databaseHandler.insertUserIfNotInTable(sogyoUser);
 		} catch (IllegalArgumentException e) {
-			registerMessage = new RegisterMessage(false, false, "Email is not a Sogyo account", "", "", (byte) 0);
+			registerMessage = new RegisterMessage(false, false, "Email is not a Sogyo account", 0, "", "", (byte) 0);
 		}
 		return registerMessage;
 	}

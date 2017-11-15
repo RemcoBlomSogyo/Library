@@ -5,13 +5,15 @@ import nl.sogyo.library.model.entity.Book;
 public class BookInfo {
 	
 	private Book book;
-	private int copiesAvailable;
+	private long copiesAvailable;
+	private long copiesBorrowed;
 	
 	public BookInfo() {}
 	
-	public BookInfo(Book book, int copiesAvailable) {
+	public BookInfo(Book book, long copiesAvailable, long copiesBorrowed) {
 		this.book = book;
 		this.copiesAvailable = copiesAvailable;
+		this.copiesBorrowed = copiesBorrowed;
 	}
 	
 	public Book getBook() {
@@ -22,11 +24,19 @@ public class BookInfo {
 		this.book = book;
 	}
 	
-	public int getCopiesAvailable() {
+	public long getCopiesAvailable() {
 		return copiesAvailable;
 	}
 	
-	public void setCopiesAvailable(int copiesAvailable) {
+	public void setCopiesAvailable(long copiesAvailable) {
 		this.copiesAvailable = copiesAvailable;
+	}
+	
+	public long getCopiesBorrowed() {
+		return copiesBorrowed;
+	}
+	
+	public void setCopiesBorrowed(long copiesBorrowed) {
+		this.copiesBorrowed = copiesBorrowed;
 	}
 }

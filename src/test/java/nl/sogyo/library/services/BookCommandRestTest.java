@@ -34,12 +34,12 @@ public class BookCommandRestTest extends JerseyTest {
 	public void postAndDeleteValidBook() {
 	    Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
-	    if (!addBookMessage.getCommandSucceeded()) {
+	    if (!addBookMessage.isCommandSucceeded()) {
 	    	Assert.fail();
 	    } else {
 		    Response deleteBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 		    DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
-		    Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+		    Assert.assertTrue(deleteBookMessage.isCommandSucceeded());
 	    }
 	}
 	
@@ -47,19 +47,19 @@ public class BookCommandRestTest extends JerseyTest {
 	public void postUpdateAndDeleteValidBook() {
 	    Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
-	    if (!addBookMessage.getCommandSucceeded()) {
+	    if (!addBookMessage.isCommandSucceeded()) {
 	    	Assert.fail();
 	    } else {
 	    	BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "Polymer", "Appress", "9784567890120");
 		    Response editBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).put(Entity.json(bookFormInput));
 		    EditBookMessage editBookMessage = editBookResponse.readEntity(EditBookMessage.class);
-		    if (!editBookMessage.getCommandSucceeded()) {
+		    if (!editBookMessage.isCommandSucceeded()) {
 		    	deleteBook(addBookMessage.getBookId());
 		    	Assert.fail();
 		    } else {
 			    Response deleteBookResponse = target("books").path(Integer.toString(addBookMessage.getBookId())).request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 			    DeleteBookMessage deleteBookMessage = deleteBookResponse.readEntity(DeleteBookMessage.class);
-			    Assert.assertTrue(deleteBookMessage.getCommandSucceeded());
+			    Assert.assertTrue(deleteBookMessage.isCommandSucceeded());
 		    }
 	    }
 	}
@@ -69,10 +69,10 @@ public class BookCommandRestTest extends JerseyTest {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "Patni", "REST", "Appress", "9784567890125");
 	    Response response = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-	    if (addBookMessage.getCommandSucceeded()) {
+	    if (addBookMessage.isCommandSucceeded()) {
 	    	deleteBook(addBookMessage.getBookId());
 	    }
-	    Assert.assertFalse(addBookMessage.getCommandSucceeded());
+	    Assert.assertFalse(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
@@ -80,10 +80,10 @@ public class BookCommandRestTest extends JerseyTest {
 		BookFormInput bookFormInput = new BookFormInput("title", "Sanjay", "", "REST", "Appress", "9784567890120");
 	    Response response = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-	    if (addBookMessage.getCommandSucceeded()) {
+	    if (addBookMessage.isCommandSucceeded()) {
 	    	deleteBook(addBookMessage.getBookId());
 	    }
-	    Assert.assertFalse(addBookMessage.getCommandSucceeded());
+	    Assert.assertFalse(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
@@ -91,10 +91,10 @@ public class BookCommandRestTest extends JerseyTest {
 		BookFormInput bookFormInput = new BookFormInput("title", "", "Patni", "REST", "Appress", "9784567890120");
 	    Response response = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-	    if (addBookMessage.getCommandSucceeded()) {
+	    if (addBookMessage.isCommandSucceeded()) {
 	    	deleteBook(addBookMessage.getBookId());
 	    }
-	    Assert.assertFalse(addBookMessage.getCommandSucceeded());
+	    Assert.assertFalse(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
@@ -102,10 +102,10 @@ public class BookCommandRestTest extends JerseyTest {
 		BookFormInput bookFormInput = new BookFormInput("title", "", "Sanjay", "Patni", "Arshak", "Khachatrian", "", "", "REST", "Appress", "", "9784567890120", "", "");
 	    Response response = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-	    if (addBookMessage.getCommandSucceeded()) {
+	    if (addBookMessage.isCommandSucceeded()) {
 	    	deleteBook(addBookMessage.getBookId());
 	    }
-	    Assert.assertTrue(addBookMessage.getCommandSucceeded());
+	    Assert.assertTrue(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
@@ -113,24 +113,24 @@ public class BookCommandRestTest extends JerseyTest {
 		BookFormInput bookFormInput = new BookFormInput("title", "", "Sanjay", "Patni", "Arshak", "Khachatrian", "Konda", "Madhusudhan", "REST", "Appress", "", "9784567890120", "", "");
 	    Response response = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 	    AddBookMessage addBookMessage = response.readEntity(AddBookMessage.class);
-	    if (addBookMessage.getCommandSucceeded()) {
+	    if (addBookMessage.isCommandSucceeded()) {
 	    	deleteBook(addBookMessage.getBookId());
 	    }
-	    Assert.assertTrue(addBookMessage.getCommandSucceeded());
+	    Assert.assertTrue(addBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
 	public void updateNotExistingBookGivesCommandSucceededIsFalse() {
 	    Response response = target("books").path("10000000").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).put(Entity.json(bookFormInput));
 	    EditBookMessage editBookMessage = response.readEntity(EditBookMessage.class);
-	    Assert.assertFalse(editBookMessage.getCommandSucceeded());
+	    Assert.assertFalse(editBookMessage.isCommandSucceeded());
 	}
 	
 	@Test
 	public void deleteNotExistingBookGivesCommandSucceededIsFalse() {
 	    Response response = target("books").path("10000000").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).delete();
 	    DeleteBookMessage deleteBookMessage = response.readEntity(DeleteBookMessage.class);
-	    Assert.assertFalse(deleteBookMessage.getCommandSucceeded());
+	    Assert.assertFalse(deleteBookMessage.isCommandSucceeded());
 	}
 	
 	private void deleteBook(int bookId) {
