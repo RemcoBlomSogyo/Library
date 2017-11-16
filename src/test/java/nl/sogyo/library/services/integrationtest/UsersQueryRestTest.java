@@ -1,7 +1,7 @@
-package nl.sogyo.library.services;
+package nl.sogyo.library.services.integrationtest;
 
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_1;
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_2;
 
 import javax.ws.rs.core.Application;
 
@@ -12,7 +12,7 @@ import org.glassfish.jersey.test.TestProperties;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.sogyo.library.services.rest.libraryapi.resource.UsersResource;
+import nl.sogyo.library.services.logic.UsersResource;
 
 public class UsersQueryRestTest extends JerseyTest {
 	

@@ -1,14 +1,14 @@
-package nl.sogyo.library.model;
+package nl.sogyo.library.model.unittest;
+
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_1;
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_2;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.model.helper.TokenParser;
-import nl.sogyo.oauth.javagooglesignin.GoogleUser;
-import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
-
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
+import nl.sogyo.oauth.javagooglesignin.exception.InvalidTokenException;
 
 public class TokenTest {
 
@@ -16,7 +16,7 @@ public class TokenTest {
 	public void tokenIsNullGivesInvalidTokenException() {
 		boolean trySucceeded = false;
 		try {
-			TokenParser.getGoogleUserFromToken(null);
+			TokenParser.getUserFromToken(null);
 			trySucceeded = true;
 		} catch (InvalidTokenException e) {
 			Assert.assertTrue(true);
@@ -32,7 +32,7 @@ public class TokenTest {
 	public void fakeTokenGivesInvalidTokenException() {
 		boolean trySucceeded = false;
 		try {
-			TokenParser.getGoogleUserFromToken("abcdefghijklm0123456789");
+			TokenParser.getUserFromToken("abcdefghijklm0123456789");
 			trySucceeded = true;
 		} catch (InvalidTokenException e) {
 			Assert.assertTrue(true);
@@ -47,8 +47,8 @@ public class TokenTest {
 	@Test
 	public void testToken1ReturnsTestDeTestGoogleUser() {
 		try {
-			GoogleUser googleUser = TokenParser.getGoogleUserFromToken(TEST_ID_TOKEN_1);
-			Assert.assertEquals("tdtest@sogyo.nl", googleUser.getEmail());
+			User user = nl.sogyo.library.model.logic.helper.TokenParser.getUserFromToken(TEST_ID_TOKEN_1);
+			Assert.assertEquals("tdtest@sogyo.nl", user.getEmail());
 		} catch (Exception e) {
 			Assert.fail();
 		}
@@ -57,8 +57,8 @@ public class TokenTest {
 	@Test
 	public void testToken2ReturnsTestVanTestGoogleUser() {
 		try {
-			GoogleUser googleUser = TokenParser.getGoogleUserFromToken(TEST_ID_TOKEN_2);
-			Assert.assertEquals("tvtest@sogyo.nl", googleUser.getEmail());
+			User user = nl.sogyo.library.model.logic.helper.TokenParser.getUserFromToken(TEST_ID_TOKEN_2);
+			Assert.assertEquals("tvtest@sogyo.nl", user.getEmail());
 		} catch (Exception e) {
 			Assert.fail();
 		}

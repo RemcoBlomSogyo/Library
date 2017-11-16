@@ -1,4 +1,4 @@
-package nl.sogyo.library.services.rest.libraryapi.resource;
+package nl.sogyo.library.services.logic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import nl.sogyo.library.model.command.CommandHelper;
+import nl.sogyo.library.model.logic.command.CommandHelper;
 import nl.sogyo.library.model.entity.User;
-import nl.sogyo.library.model.query.QueryHelper;
+import nl.sogyo.library.model.logic.query.QueryHelper;
 import nl.sogyo.library.model.register.RegisterHelper;
 import nl.sogyo.library.services.rest.libraryapi.json.message.BorrowCopyMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditUsersMessage;

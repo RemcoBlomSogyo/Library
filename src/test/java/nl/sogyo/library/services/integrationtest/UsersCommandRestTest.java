@@ -1,7 +1,7 @@
-package nl.sogyo.library.services;
+package nl.sogyo.library.services.integrationtest;
 
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_1;
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_2;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 
 import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditUsersMessage;
-import nl.sogyo.library.services.rest.libraryapi.resource.UsersResource;
+import nl.sogyo.library.services.logic.UsersResource;
 
 public class UsersCommandRestTest extends JerseyTest {
 

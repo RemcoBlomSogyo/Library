@@ -1,4 +1,7 @@
-package nl.sogyo.library.services;
+package nl.sogyo.library.services.integrationtest;
+
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_1;
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_2;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
@@ -15,10 +18,7 @@ import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.DeleteBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.EditBookMessage;
-import nl.sogyo.library.services.rest.libraryapi.resource.BooksResource;
-
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_1;
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
+import nl.sogyo.library.services.logic.BooksResource;
 
 public class AuthorizationRestTest extends JerseyTest {
 	

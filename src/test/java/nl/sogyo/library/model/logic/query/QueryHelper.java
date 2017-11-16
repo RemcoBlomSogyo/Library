@@ -1,22 +1,22 @@
-package nl.sogyo.library.model.query;
+package nl.sogyo.library.model.logic.query;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.sogyo.library.model.LibraryHelper;
 import nl.sogyo.library.model.entity.Author;
 import nl.sogyo.library.model.entity.Book;
 import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.model.helper.InputValidator;
+import nl.sogyo.library.model.logic.LibraryHelper;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
 import nl.sogyo.oauth.javagooglesignin.exception.EmailNotVerifiedException;
 import nl.sogyo.oauth.javagooglesignin.exception.InvalidTokenException;
 
 public class QueryHelper extends LibraryHelper {
-	
+
 	public QueryHelper(String idToken) throws IOException, GeneralSecurityException, EmailNotVerifiedException, InvalidTokenException {
 		super(idToken);
 	}

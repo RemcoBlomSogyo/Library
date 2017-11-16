@@ -1,16 +1,16 @@
-package nl.sogyo.library.services;
+package nl.sogyo.library.services.integrationtest;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import nl.sogyo.library.services.rest.libraryapi.resource.BooksResource;
-
-import static nl.sogyo.library.model.helper.TokenParser.TEST_ID_TOKEN_2;
+import nl.sogyo.library.services.logic.BooksResource;
 
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
+
+import static nl.sogyo.library.model.logic.helper.TokenParser.TEST_ID_TOKEN_2;
 
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;

@@ -1,4 +1,4 @@
-package nl.sogyo.library.model;
+package nl.sogyo.library.model.unittest;
 
 import java.time.Year;
 import java.util.ArrayList;

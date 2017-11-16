@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import nl.sogyo.library.model.LibraryHelper;
-import nl.sogyo.library.model.entity.User;
 import nl.sogyo.library.services.rest.libraryapi.json.message.RegisterMessage;
-import nl.sogyo.oauth.javagooglesignin.EmailNotVerifiedException;
-import nl.sogyo.oauth.javagooglesignin.InvalidTokenException;
+import nl.sogyo.oauth.javagooglesignin.exception.EmailNotVerifiedException;
+import nl.sogyo.oauth.javagooglesignin.exception.InvalidTokenException;
 
 public class RegisterHelper extends LibraryHelper {
 	
@@ -18,17 +17,7 @@ public class RegisterHelper extends LibraryHelper {
 	}
 	
 	public RegisterMessage registerUser() {
-		System.out.println("registerUser");
-		try {
-			User sogyoUser = new User(googleUser);
-			System.out.println(sogyoUser.getGoogleUserId());
-			System.out.println(sogyoUser.getGivenName());
-			System.out.println(sogyoUser.getEmail());
-			System.out.println("registerUser");
-			registerMessage = databaseHandler.insertUserIfNotInTable(sogyoUser);
-		} catch (IllegalArgumentException e) {
-			registerMessage = new RegisterMessage(false, false, "Email is not a Sogyo account", 0, "", "", (byte) 0);
-		}
+		registerMessage = databaseHandler.insertUserIfNotInTable(user);
 		return registerMessage;
 	}
 }

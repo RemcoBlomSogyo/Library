@@ -1,10 +1,10 @@
-package nl.sogyo.library.model;
+package nl.sogyo.library.model.logic;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import nl.sogyo.library.model.entity.User;
-import nl.sogyo.library.model.helper.TokenParser;
+import nl.sogyo.library.model.logic.helper.TokenParser;
 import nl.sogyo.library.persistence.DatabaseHandler;
 import nl.sogyo.oauth.javagooglesignin.exception.EmailNotVerifiedException;
 import nl.sogyo.oauth.javagooglesignin.exception.InvalidTokenException;

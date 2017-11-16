@@ -1,4 +1,4 @@
-package nl.sogyo.library.services.rest.libraryapi.resource;
+package nl.sogyo.library.services.logic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import nl.sogyo.library.model.command.CommandHelper;
-import nl.sogyo.library.model.query.QueryHelper;
+import nl.sogyo.library.model.logic.command.CommandHelper;
+import nl.sogyo.library.model.logic.query.QueryHelper;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.BookInfo;
 import nl.sogyo.library.services.rest.libraryapi.json.BookPreview;
@@ -45,6 +45,7 @@ public class BooksResource extends RestResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public BookInfo getBookInfo(@PathParam("id") int id) {
+		System.out.println("testclass");
 		BookInfo bookInfo;
 		try {
 			QueryHelper queryHelper = new QueryHelper(idToken);

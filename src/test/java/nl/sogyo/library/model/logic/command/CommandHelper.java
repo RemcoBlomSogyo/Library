@@ -1,14 +1,14 @@
-package nl.sogyo.library.model.command;
+package nl.sogyo.library.model.logic.command;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.sogyo.library.model.LibraryHelper;
 import nl.sogyo.library.model.entity.Author;
 import nl.sogyo.library.model.entity.Book;
 import nl.sogyo.library.model.entity.User;
+import nl.sogyo.library.model.logic.LibraryHelper;
 import nl.sogyo.library.services.rest.libraryapi.json.BookFormInput;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddBookMessage;
 import nl.sogyo.library.services.rest.libraryapi.json.message.AddCopyMessage;
