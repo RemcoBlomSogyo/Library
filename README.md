@@ -12,7 +12,7 @@
 #### REST API:
 | Function                        | Method | URI                                                            |
 | ------------------------------- | ------ | -------------------------------------------------------------- |
-| Get list of books with criteria | GET    | books?title={titleInput]&author={authorInput}&isbn={isbnInput} |
+| Get list of books with criteria | GET    | books?title={titleInput}&author={authorInput}&isbn={isbnInput} |
 | Get book by id                  | GET    | books/{id}                                                     |
 | Add book                        | POST   | books                                                          |
 | Update book                     | PUT    | books                                                          |                                    

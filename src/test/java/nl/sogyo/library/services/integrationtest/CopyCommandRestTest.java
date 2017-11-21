@@ -100,6 +100,7 @@ public class CopyCommandRestTest extends JerseyTest {
 	public void copiesAvailableOfCreatedBookIsTwoIfTwoTimesCopyIsAdded() {
 		Response addBookResponse = target("books").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json(bookFormInput));
 		AddBookMessage addBookMessage = addBookResponse.readEntity(AddBookMessage.class);
+		System.out.println("why this one: " + (addBookMessage == null));
 		target("books").path(addBookMessage.getBookId() + "/copies").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 		Response addCopyResponse = target("books").path(addBookMessage.getBookId() + "/copies").request().header(ContainerRequest.AUTHORIZATION, TEST_ID_TOKEN_2).post(Entity.json("{}"));
 	    AddCopyMessage addCopyMessage = addCopyResponse.readEntity(AddCopyMessage.class);
