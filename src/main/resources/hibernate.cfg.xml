@@ -4,6 +4,8 @@
 
 <hibernate-configuration>
    <session-factory>
+   
+   <!-- Change if you not use Microsoft SQL Server 2012 or higher -->
    <property name="hibernate.dialect">
       org.hibernate.dialect.SQLServer2012Dialect
    </property>
@@ -11,7 +13,7 @@
       com.microsoft.sqlserver.jdbc.SQLServerDriver
    </property>
 
-   <!-- Assume test is the database name -->
+	<!-- Change to your own machine, database name and user -->
    <property name="hibernate.connection.url">
       jdbc:sqlserver://10.10.2.95:1433;databaseName=Library
    </property>
@@ -20,6 +22,11 @@
    </property>
    <property name="hibernate.connection.password">
       javaLogin
+   </property>
+   
+   <!-- This auto creates the tables in the database -->
+   <property name="hibernate.hbm2ddl.auto">
+      update
    </property>
 
    <!-- List of XML mapping files -->
