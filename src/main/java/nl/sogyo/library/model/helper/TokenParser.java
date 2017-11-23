@@ -11,6 +11,7 @@ import nl.sogyo.oauth.javagooglesignin.OauthHelper;
 
 public final class TokenParser {
 
+	// please create your own Google Client ID: https://console.developers.google.com/
 	private static final String GOOGLE_CLIENT_ID = "1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com";
 	
 	private TokenParser() {}
@@ -22,7 +23,7 @@ public final class TokenParser {
 			throw new InvalidTokenException();
 		} else {
 			String idTokenWithoutBearer = removeBearerFromToken(idToken);
-			System.out.println(idTokenWithoutBearer);
+			System.out.println("Token: " + idTokenWithoutBearer);
 			googleUser = new OauthHelper(GOOGLE_CLIENT_ID).getUserFromToken(idTokenWithoutBearer);
 		}
 		User user = new User(googleUser);

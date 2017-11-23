@@ -12,6 +12,7 @@ public class CORSResponseFilter implements ContainerResponseFilter{
 	public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
 		MultivaluedMap<String, Object> headers = responseContext.getHeaders();
 
+		// please change port if frontend is not on 8081
 		headers.add("Access-Control-Allow-Origin", "http://localhost:8081");
 		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, HEAD");			
 		headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia, Authorization");

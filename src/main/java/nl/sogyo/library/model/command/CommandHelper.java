@@ -106,11 +106,7 @@ public class CommandHelper extends LibraryHelper {
 	
 	public BorrowCopyMessage borrowCopy(int userId, int bookId) {
 		if (databaseHandler.isUserAuthorized(user.getGoogleUserId(), userId)) {
-			System.out.println("borrow commandhelper if1");
 			BorrowCopyMessage borrowCopyMessage = databaseHandler.borrowCopy(userId, bookId);
-			System.out.println("borrow commandhelper if2");
-//			BorrowCopyMessage borrowCopyMessage = new BorrowCopyMessage(commandSucceeded);
-			System.out.println("borrow commandhelper if3");
 			return borrowCopyMessage;
 		} else {
 			System.out.println("borrow commandhelper else");

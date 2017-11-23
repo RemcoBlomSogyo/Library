@@ -53,6 +53,7 @@ public class BookPreview {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	
 	public String getIsbn() {
 		return isbn;
 	}

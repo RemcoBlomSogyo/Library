@@ -182,7 +182,6 @@ public class Book {
 		if (numberInput.isEmpty()) {
 			numberInput = "0";
 		}
-		System.out.println("test: " + numberInput);
 		return numberInput;
 	}
 }

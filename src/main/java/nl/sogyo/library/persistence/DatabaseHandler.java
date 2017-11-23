@@ -197,7 +197,6 @@ public class DatabaseHandler {
 			
 			transaction.commit();
 		} catch (HibernateException e) {
-			System.out.println("hibernateexception");
 			rollbackTransaction(e);
 		} finally {
 			connector.disconnect(session);
@@ -273,7 +272,6 @@ public class DatabaseHandler {
 			} else {
 				copyQuery.select(copyRoot).where(criteriaBuilder.and(criteriaBuilder.equal(copyRoot.get("book"), book), criteriaBuilder.isNull(copyRoot.get("user"))));
 				copy = session.createQuery(copyQuery).setMaxResults(1).getSingleResult();
-				System.out.println(copy == null);
 				copy.setBook(null);
 				session.delete(copy);
 				
@@ -527,7 +525,6 @@ public class DatabaseHandler {
 				author = (Author) session.createQuery(authorQuery).setMaxResults(1).getSingleResult();
 				book.getAuthors().set(i, author);
 			} catch (NoResultException e) {
-				System.out.println("save author");
 				session.save(book.getAuthors().get(i));
 			} 
 		}
