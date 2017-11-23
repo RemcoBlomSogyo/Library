@@ -15,7 +15,7 @@
 
 	<!-- Change to your own machine, database name and user -->
    <property name="hibernate.connection.url">
-      jdbc:sqlserver://10.10.2.71:1433;databaseName=Library
+      jdbc:sqlserver://10.10.2.95:1433;databaseName=Library
    </property>
    <property name="hibernate.connection.username">
       javaLogin
