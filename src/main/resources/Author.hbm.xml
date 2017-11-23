@@ -8,7 +8,7 @@
       <id name="id" type="int" column="ID">
          <generator class="native"/>
       </id>
-      <property name="forename" column="Forename" type="string"/>
-      <property name="surname" column="Surname" type="string"/>
+      <property name="forename" column="Forename" type="string" not-null="true"/>
+      <property name="surname" column="Surname" type="string" not-null="true"/>
    </class>
 </hibernate-mapping>

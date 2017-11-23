@@ -8,7 +8,7 @@
     	<id name="id" type="int" column="ID">
          	<generator class="native"/>
       	</id>
-      	<property name="title" column="Title" type="string"/>
+      	<property name="title" column="Title" type="string" not-null="true"/>
       	<property name="subtitle" column="Subtitle" type="string"/>
       	<bag name="authors" cascade="all" table="BooksAuthors">
          	<key column="BookID"/>
@@ -19,7 +19,7 @@
       	<many-to-one name="publisher" class="nl.sogyo.library.model.entity.Publisher"
         	column="PublisherID" not-null="true" cascade="all" />
       	<property name="yearFirstPublication" column="YearFirstPublication" type="short"/>
-      	<property name="isbn" column="ISBN" type="string"/>
+      	<property name="isbn" column="ISBN" type="string" not-null="true"/>
       	<property name="pages" column="Pages" type="short"/>
       	<property name="language" column="Language" type="string"/>
    	</class>
